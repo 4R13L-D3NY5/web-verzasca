@@ -15,14 +15,12 @@ return new class extends Migration
             $table->id(); // Clave primaria
             $table->date('fechaPedido')->nullable(); // Fecha del pedido
             $table->date('fechaEntrega')->nullable(); // Fecha de entrega estimada
-            $table->date('fechaMaxima')->nullable(); // Fecha máxima para crédito
-            // si el distribuidor vende directamente al cliente no se tendra personal_id, lo propio del personal, si es pedido se tendra los 2 id
-            $table->tinyInteger('estadoPedido')->default(1); // Estado (0: cancelado, 1: pedido, 2: vendido)
+            $table->date('fechaMaxima')->nullable(); // Fecha máxima para crédito            
+            $table->tinyInteger('estadoPedido')->default(1); // Estado (0: cancelado, 1: pedido, 2: vendido o entregado)
             $table->tinyInteger('estadoPago')->default(1); // Estado (0: parcial, 1: completo)
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade'); // Relación con Cliente
             $table->foreignId('personal_id')->constrained('personals')->onDelete('cascade'); // Relación con Personal
             $table->foreignId('personalEntrega_id')->nullable()->constrained('personals')->onDelete('cascade'); // Relación con Personal
-            // $table->foreignId('distribucion_id')->nullable()->constrained('distribucions')->onDelete('cascade'); // Relación con Personal
             $table->timestamps(); // created_at y updated_at
         });
     }

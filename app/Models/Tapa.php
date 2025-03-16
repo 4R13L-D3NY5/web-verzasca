@@ -2,11 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tapa extends Model
 {
-    /** @use HasFactory<\Database\Factories\TapaFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'color',
+        'tipo',
+    ];
+
+    /**
+     * Relación: Una tapa puede ser utilizada en múltiples bases.
+     */
+    // public function bases()
+    // {
+    //     return $this->hasMany(Base::class);
+    // }
+    public function existencias()
+    {
+        return $this->morphMany(Existencia::class, 'existenciable');
+    }
 }
