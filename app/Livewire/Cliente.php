@@ -11,7 +11,7 @@ class Cliente extends Component
     use WithPagination;
 
     // Propiedad para búsqueda (opcional, pero útil con paginación)
-    public $search = '', $modal = 1, $accion;
+    public $search = '', $modal = 0, $accion;
 
     // Propiedades para los campos del formulario
     public $nombre = '';
