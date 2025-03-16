@@ -3,3 +3,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .input1 {
+        @apply block mt-1 p-1  text-gray-700 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm;
+    }
+    .select1 {
+        @apply block mt-1 p-1 text-gray-700 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm;
+    }
+    .label1 {
+        @apply block text-sm font-medium text-gray-700 dark:text-gray-300;
+    }    
+}
