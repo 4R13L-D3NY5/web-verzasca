@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('compras', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // Clave primaria
+            $table->date('fecha'); // Fecha de la compra
+            $table->text('observaciones')->nullable(); // Observaciones (opcional)
+            $table->foreignId('proveedor_id')->constrained('proveedors')->onDelete('cascade'); // Relación con Proveedor
+            $table->foreignId('personal_id')->constrained('personals')->onDelete('cascade'); // Relación con Personal
+            $table->timestamps(); // Campos created_at y updated_at
         });
     }
 

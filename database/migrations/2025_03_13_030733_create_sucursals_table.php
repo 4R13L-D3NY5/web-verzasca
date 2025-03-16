@@ -12,8 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sucursals', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // Clave primaria
+            $table->string('nombre'); // Nombre de la sucursal
+            $table->string('direccion'); // Dirección de la sucursal
+            $table->string('telefono', 15); // Teléfono de contacto
+            $table->string('zona')->nullable(); // Zona (opcional)
+            $table->foreignId('empresa_id')->constrained('empresas')->onDelete('cascade'); // Relación con empresa
+            $table->timestamps(); // Campos created_at y updated_at
         });
     }
 

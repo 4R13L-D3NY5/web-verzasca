@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Cliente;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,12 @@ class EtiquetaFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'imagen' => $this->faker->imageUrl(100, 100),
+            'capacidad' => $this->faker->numberBetween(500, 2000) . 'ml',
+            'estado' => $this->faker->boolean,
+            'cliente_id' => Cliente::get()->random()->id,
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

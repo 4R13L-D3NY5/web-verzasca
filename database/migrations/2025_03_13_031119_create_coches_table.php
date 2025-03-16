@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('coches', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // Clave primaria
+            $table->integer('movil'); // Marca del coche
+            $table->string('marca'); // Marca del coche
+            $table->string('modelo'); // Modelo del coche
+            $table->integer('anio'); // Año del coche
+            $table->string('color'); // Color del coche
+            $table->string('placa')->unique(); // Placa única del coche
+            $table->boolean('estado')->default(1); // Estado del coche (1: activo, 0: inactivo)
+            $table->timestamps(); // Campos created_at y updated_at
         });
     }
 

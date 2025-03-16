@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Compra;
+use App\Models\Existencia;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,12 @@ class ItemcompraFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'cantidad' => $this->faker->numberBetween(10, 100),
+            'precio' => $this->faker->randomFloat(2, 1, 50),
+            'existencia_id' => Existencia::get()->random()->id,
+            'compra_id' => Compra::get()->random()->id,
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

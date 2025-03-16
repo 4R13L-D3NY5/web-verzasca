@@ -11,9 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('embotellados', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('enbotellados', function (Blueprint $table) {
+            $table->id(); // Clave primaria
+            $table->foreignId('existencia_base_id')->constrained('existencias')->onDelete('cascade');
+            $table->foreignId('existencia_tapa_id')->constrained('existencias')->onDelete('cascade');
+            $table->foreignId('existencia_producto_id')->nullable()->constrained('existencias')->nullOnDelete(); // Producto generado
+            $table->foreignId('personal_id')->constrained('personals')->onDelete('cascade'); // Encargado del proceso
+            $table->integer('cantidad_base_usada');
+            $table->integer('cantidad_tapa_usada');
+            $table->integer('cantidad_generada')->nullable();
+            $table->date('fecha_embotellado');
+            $table->text('observaciones')->nullable();
+            $table->timestamps(); // created_at y updated_at
         });
     }
 

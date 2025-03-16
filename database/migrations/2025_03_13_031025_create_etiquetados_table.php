@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('etiquetados', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('existencia_producto_id')->constrained('existencias')->onDelete('cascade'); // Producto
+            $table->foreignId('existencia_etiqueta_id')->constrained('existencias')->onDelete('cascade'); // Etiqueta
+            $table->foreignId('existencia_stock_id')->nullable()->constrained('existencias')->nullOnDelete(); // Stock generado
+            $table->foreignId('personal_id')->constrained('personals')->onDelete('cascade'); // Encargado del proceso
+            $table->integer('cantidad_producto_usado');
+            $table->integer('cantidad_etiqueta_usada');
+            $table->integer('cantidad_generada')->nullable();
+            $table->date('fecha_etiquetado');
+            $table->text('observaciones')->nullable();
             $table->timestamps();
         });
     }

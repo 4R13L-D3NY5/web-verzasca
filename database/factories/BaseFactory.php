@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Elaboracion;
+use App\Models\Preforma;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,13 @@ class BaseFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'cantidad' => $this->faker->numberBetween(10, 100),
+            'capacidad' => $this->faker->numberBetween(500, 2000),
+            'estado' => $this->faker->boolean,
+            'observaciones' => $this->faker->optional()->sentence,
+            'preforma_id' => Preforma::get()->random()->id,
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

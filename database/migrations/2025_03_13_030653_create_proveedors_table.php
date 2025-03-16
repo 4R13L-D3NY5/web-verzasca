@@ -13,6 +13,17 @@ return new class extends Migration
     {
         Schema::create('proveedors', function (Blueprint $table) {
             $table->id();
+            $table->string('razonSocial');
+            $table->string('nombreContacto')->nullable();
+            $table->string('direccion');
+            $table->integer('telefono');
+            $table->string('correo');
+            $table->string('tipo'); // tapas, preformas, etiquetas
+            $table->string('servicio'); // soplado, transporte
+            $table->string('descripcion');
+            $table->double('precio');
+            $table->string('tiempoEntrega');
+            $table->tinyInteger('estado')->default(1);
             $table->timestamps();
         });
     }

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('existencias', function (Blueprint $table) {
             $table->id();
+            $table->morphs('existenciable'); // Relación polimórfica para Tapa, Base, Preforma, Etiqueta
+            $table->integer('cantidad')->default(0); // Cantidad en existencia
+            $table->foreignId('sucursal_id')->constrained('sucursals')->onDelete('cascade'); // Relación con Sucursal
             $table->timestamps();
         });
     }

@@ -12,8 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stocks', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // Clave primaria
+            $table->date('fechaElaboracion'); // Fecha de elaboración del lote
+            $table->date('fechaVencimiento'); // Fecha de vencimiento del lote
+            // $table->integer('tapas'); // Número de tapas en el lote
+            // $table->integer('cantidad'); // Cantidad en el lote
+            $table->text('observaciones')->nullable(); // Observaciones (opcional)
+            $table->foreignId('etiqueta_id')->constrained('etiquetas')->onDelete('cascade'); // Relación con Producto
+            $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade'); // Relación con Producto
+            // $table->foreignId('sucursal_id')->constrained('sucursals')->onDelete('cascade'); // Relación con Sucursal
+            $table->timestamps(); // created_at y updated_at
         });
     }
 

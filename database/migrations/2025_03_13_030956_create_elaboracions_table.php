@@ -12,8 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('elaboracions', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // Clave primaria
+            $table->foreignId('existencia_entrada_id')->constrained('existencias')->onDelete('cascade'); // Preformas
+            $table->foreignId('existencia_salida_id')->nullable()->constrained('existencias')->nullOnDelete(); // Bases Generadas
+            $table->foreignId('personal_id')->constrained('personals')->onDelete('cascade'); // Encargado del proceso
+            $table->integer('cantidad_entrada'); // Preformas usadas
+            $table->integer('cantidad_salida')->nullable(); // Bases generadas
+            $table->date('fecha_elaboracion');
+            $table->text('observaciones')->nullable();       
+
+            $table->timestamps(); // Campos created_at y updated_at
         });
     }
 

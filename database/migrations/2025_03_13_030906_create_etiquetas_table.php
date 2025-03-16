@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('etiquetas', function (Blueprint $table) {
             $table->id();
+            $table->string('imagen');
+            $table->string('capacidad');
+            $table->tinyInteger('estado'); 
+            $table->foreignId('cliente_id')->nullable()->constrained('clientes')->nullOnDelete(); // Relación opcional con Preforma
             $table->timestamps();
         });
     }

@@ -12,8 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bases', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // Clave primaria
+            $table->integer('cantidad'); // Cantidad de base
+            $table->integer('capacidad'); // Capacidad de la base
+            $table->boolean('estado')->default(1); // Estado (1: activo, 0: inactivo)
+            $table->text('observaciones')->nullable(); // Observaciones (opcional)
+
+            $table->foreignId('preforma_id')->constrained('preformas')->onDelete('cascade');
+            $table->timestamps(); // created_at y updated_at
         });
     }
 

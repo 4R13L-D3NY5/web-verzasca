@@ -2,39 +2,57 @@
 
     <header class="dark:bg-gray-900 ">
         <div class="container-fluid">
-            <div class="flex justify-end items-center py-2">
+            <div class="flex justify-between items-center py-2">
+                <!-- Menú Toggle (al inicio) -->
                 <div class="flex items-center space-x-3">
-                    <button id="menu-toggle"
-                        class="bg-black text-white px-4 py-2 rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-300"
-                        title="Toggle Menu">
-                        Toggle Menu
+                    <label>
+                        <div class="w-9 h-10 cursor-pointer flex flex-col items-center justify-center">
+                            <input class="hidden peer" type="checkbox" id="menu-toggle" />
+                            <div
+                                class="w-[50%] h-[2px] bg-black rounded-sm transition-all duration-300 origin-left translate-y-[0.45rem] peer-checked:rotate-[-45deg]">
+                            </div>
+                            <div
+                                class="w-[50%] h-[2px] bg-black rounded-md transition-all duration-300 origin-center peer-checked:hidden">
+                            </div>
+                            <div
+                                class="w-[50%] h-[2px] bg-black rounded-md transition-all duration-300 origin-left -translate-y-[0.45rem] peer-checked:rotate-[45deg]">
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Logo en el centro (sin que se mueva) -->
+                <div class="flex justify-center items-center flex-grow">
+                    <img src="{{ asset('images/ejemplo.jpg') }}" alt="Logo" class="h-12">
+                </div>
+
+                <!-- Cerrar sesión (al final) -->
+                <div class="flex items-center space-x-3">
+                    <button
+                        class="group flex items-center justify-start w-11 h-11 bg-red-600 rounded-full cursor-pointer relative overflow-hidden transition-all duration-200 shadow-lg hover:w-32 hover:rounded-lg active:translate-x-1 active:translate-y-1"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                        title="Cerrar sesión">
+                        <div
+                            class="flex items-center justify-center w-full transition-all duration-300 group-hover:justify-start group-hover:px-3">
+                            <svg class="w-4 h-4" viewBox="0 0 512 512" fill="white">
+                                <path
+                                    d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div
+                            class="absolute right-5 transform translate-x-full opacity-0 text-white text-lg font-semibold transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+                            Logout
+                        </div>
                     </button>
-                    <button class="text-white font-medium">
-                        <h6>{{ Auth::user()->name }}</h6>
-                    </button>
+
+                    <!-- El formulario de logout permanece oculto -->
                     <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
                         @csrf
                     </form>
-
-                    <button title="Cerrar sesión"
-                        class="group flex items-center justify-center relative z-10 [transition:all_0.5s_ease] rounded-[0.375rem] p-[5px] cursor-pointer border border-[#999] outline-none focus-visible:outline-0"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <svg fill="white" stroke="none" stroke-width="0" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="w-7 h-7 overflow-visible [transition:transform_.35s_ease] group-hover:[transition-delay:.25s] [&_path]:[transition:transform_.35s_ease] group-hover:rotate-45">
-                            <path class="group-hover:[transform:rotate(112.5deg)_translate(-27.2%,-80.2%)]"
-                                d="m3.45,8.83c-.39,0-.76-.23-.92-.62-.21-.51.03-1.1.54-1.31L14.71,2.08c.51-.21,1.1.03,1.31.54.21.51-.03,1.1-.54,1.31L3.84,8.75c-.13.05-.25.08-.38.08Z">
-                            </path>
-                            <path class="group-hover:[transform:rotate(22.5deg)_translate(15.5%,-23%)]"
-                                d="m2.02,17.13c-.39,0-.76-.23-.92-.62-.21-.51.03-1.1.54-1.31L21.6,6.94c.51-.21,1.1.03,1.31.54.21.51-.03,1.1-.54,1.31L2.4,17.06c-.13.05-.25.08-.38.08Z">
-                            </path>
-                            <path class="group-hover:[transform:rotate(112.5deg)_translate(-15%,-149.5%)]"
-                                d="m8.91,21.99c-.39,0-.76-.23-.92-.62-.21-.51.03-1.1.54-1.31l11.64-4.82c.51-.21,1.1.03,1.31.54.21.51-.03,1.1-.54,1.31l-11.64,4.82c-.13.05-.25.08-.38.08Z">
-                            </path>
-                        </svg>
-                    </button>
                 </div>
             </div>
+
         </div>
     </header>
 
