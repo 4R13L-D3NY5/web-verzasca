@@ -1,6 +1,6 @@
 <div>
     <header
-        class="bg-slate-900 bg-opacity-95 backdrop-blur-md rounded-full px-6 py-3 shadow-lg w-[calc(100%-1cm)] mx-auto mt-4 transition-all duration-300 hover:shadow-xl hover:bg-opacity-100 max-w-full fixed top-0 left-0 right-0 z-50">
+    class="bg-slate-900 bg-opacity-95 backdrop-blur-md rounded-full px-6 py-3 shadow-lg w-[calc(100%-1cm)] mx-auto mt-4 transition-all duration-300 hover:shadow-xl hover:bg-opacity-100 max-w-full fixed top-0 left-0 right-0 z-10">
         <div class="flex justify-between items-center">
             <!-- Menú Toggle -->
             <button id="menu-toggle"
