@@ -1,58 +1,39 @@
 <div>
+    <header
+        class="bg-slate-900 bg-opacity-95 backdrop-blur-md rounded-full px-6 py-3 shadow-lg w-[calc(100%-1cm)] mx-auto mt-4 transition-all duration-300 hover:shadow-xl hover:bg-opacity-100 max-w-full fixed top-0 left-0 right-0 z-50">
+        <div class="flex justify-between items-center">
+            <!-- Menú Toggle -->
+            <button id="menu-toggle"
+                class="text-white hover:text-red-400 transition-transform duration-200 ease-in-out hover:scale-110 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full p-2 md:p-3"
+                title="Menú">
+                <svg class="w-6 h-6 md:w-8 md:h-8" viewBox="0 0 24 24" fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
 
-    <header class="dark:bg-gray-900 ">
-        <div class="container-fluid">
-            <div class="flex justify-between items-center py-2">
-                <!-- Menú Toggle (al inicio) -->
-                <div class="flex items-center space-x-3">
-                    <label>
-                        <div class="w-9 h-10 cursor-pointer flex flex-col items-center justify-center">
-                            <input class="hidden peer" type="checkbox" id="menu-toggle" />
-                            <div
-                                class="w-[50%] h-[2px] bg-black rounded-sm transition-all duration-300 origin-left translate-y-[0.45rem] peer-checked:rotate-[-45deg]">
-                            </div>
-                            <div
-                                class="w-[50%] h-[2px] bg-black rounded-md transition-all duration-300 origin-center peer-checked:hidden">
-                            </div>
-                            <div
-                                class="w-[50%] h-[2px] bg-black rounded-md transition-all duration-300 origin-left -translate-y-[0.45rem] peer-checked:rotate-[45deg]">
-                            </div>
-                        </div>
-                    </label>
-                </div>
-
-                <!-- Logo en el centro (sin que se mueva) -->
-                <div class="flex justify-center items-center flex-grow">
-                    <img src="{{ asset('images/ejemplo.jpg') }}" alt="Logo" class="h-12">
-                </div>
-
-                <!-- Cerrar sesión (al final) -->
-                <div class="flex items-center space-x-3">
-                    <button
-                        class="group flex items-center justify-start w-11 h-11 bg-red-600 rounded-full cursor-pointer relative overflow-hidden transition-all duration-200 shadow-lg hover:w-32 hover:rounded-lg active:translate-x-1 active:translate-y-1"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                        title="Cerrar sesión">
-                        <div
-                            class="flex items-center justify-center w-full transition-all duration-300 group-hover:justify-start group-hover:px-3">
-                            <svg class="w-4 h-4" viewBox="0 0 512 512" fill="white">
-                                <path
-                                    d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
-                                </path>
-                            </svg>
-                        </div>
-                        <div
-                            class="absolute right-5 transform translate-x-full opacity-0 text-white text-lg font-semibold transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-                            Logout
-                        </div>
-                    </button>
-
-                    <!-- El formulario de logout permanece oculto -->
-                    <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
-                        @csrf
-                    </form>
-                </div>
+        
+            <div class="flex justify-center items-center flex-grow">
+                <img src="{{ asset('images/ejemplo.jpg') }}" alt="Logo" class="h-12 md:h-14">
             </div>
 
+            <!-- Botón de Logout -->
+            <button
+                class="text-white hover:text-red-400 transition-transform duration-200 ease-in-out hover:scale-110 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full p-2 md:p-3"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                title="Cerrar sesión">
+                <svg class="w-6 h-6 md:w-8 md:h-8" viewBox="0 0 512 512" fill="currentColor">
+                    <path
+                        d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
+                    </path>
+                </svg>
+            </button>
+
+            <!-- Formulario de logout oculto -->
+            <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
+                @csrf
+            </form>
         </div>
     </header>
 
@@ -576,102 +557,105 @@
                 </li>
             </ul>
         </nav>
-        <main class="w-full min-h-screen dark:bg-gray-900 p-0">
-            <div class="w-full p-1">
-                @if ($seleccion == 'Compras')
-                    @livewire('compras')
-                @endif
-                @if ($seleccion == 'Personal')
-                    @livewire('personal')
-                @endif
-                @if ($seleccion == 'Proveedores')
-                    @livewire('proveedores')
-                @endif
-                @if ($seleccion == 'Roles')
-                    @livewire('roles')
-                @endif
-                @if ($seleccion == 'Elaboracion')
-                    @livewire('elaboracion')
-                @endif
-                @if ($seleccion == 'Etiquetas')
-                    @livewire('Etiquetas')
-                @endif
-                @if ($seleccion == 'Preformas')
-                    @livewire('preformas')
-                @endif
-                @if ($seleccion == 'Tapas')
-                    @livewire('tapas')
-                @endif
-                @if ($seleccion == 'Raiz')
-                    @livewire('raiz')
-                @endif
-                @if ($seleccion == 'Productos')
-                    @livewire('productos')
-                @endif
-                @if ($seleccion == 'Embotellado')
-                    @livewire('embotellado')
-                @endif
-                @if ($seleccion == 'Stock')
-                    @livewire('stock')
-                @endif
-                @if ($seleccion == 'Egresoingreso')
-                    @livewire('egresoingreso')
-                @endif
-                @if ($seleccion == 'Cliente')
-                    @livewire('cliente')
-                @endif
-                @if ($seleccion == 'Venta')
-                    @livewire('venta')
-                @endif
-                @if ($seleccion == 'Distribucion')
-                    @livewire('distribucion')
-                @endif
-                @if ($seleccion == 'Pedidos')
-                    @livewire('pedidos')
-                @endif
-                @if ($seleccion == 'Asignacion')
-                    @livewire('asignacion')
-                @endif
-                @if ($seleccion == 'Coche')
-                    @livewire('coche')
-                @endif
-                @if ($seleccion == 'Empresa')
-                    @livewire('empresa')
-                @endif
-                @if ($seleccion == 'Sucursal')
-                    @livewire('sucursal')
-                @endif
-                @if ($seleccion == 'Trabajador')
-                    @livewire('trabajador')
-                @endif
-                @if ($seleccion == 'Ingreso')
-                    @livewire('ingreso')
-                @endif
-                @if ($seleccion == 'Credito')
-                    @livewire('credito')
-                @endif
-                @if ($seleccion == 'Salario')
-                    @livewire('salario')
-                @endif
-                @if ($seleccion == 'Reporteventa')
-                    @livewire('reporteventa')
-                @endif
-                @if ($seleccion == 'Reportecompra')
-                    @livewire('reportecompra')
-                @endif
-                @if ($seleccion == 'Reportestock')
-                    @livewire('reportestock')
-                @endif
-                @if ($seleccion == 'Reportecredito')
-                    @livewire('reportecredito')
-                @endif
-            </div>
-        </main>
+        
+        <main class="w-full min-h-screen dark:bg-gray-900 p-2 mt-20"> <!-- Agregado margen superior -->
+    <div class="w-full p-2">
+        @if ($seleccion == 'Compras')
+            @livewire('compras')
+        @endif
+        @if ($seleccion == 'Personal')
+            @livewire('personal')
+        @endif
+        @if ($seleccion == 'Proveedores')
+            @livewire('proveedores')
+        @endif
+        @if ($seleccion == 'Roles')
+            @livewire('roles')
+        @endif
+        @if ($seleccion == 'Elaboracion')
+            @livewire('elaboracion')
+        @endif
+        @if ($seleccion == 'Etiquetas')
+            @livewire('Etiquetas')
+        @endif
+        @if ($seleccion == 'Preformas')
+            @livewire('preformas')
+        @endif
+        @if ($seleccion == 'Tapas')
+            @livewire('tapas')
+        @endif                
+        @if ($seleccion == 'Raiz')
+            @livewire('raiz')
+        @endif
+        @if ($seleccion == 'Productos')
+            @livewire('productos')
+        @endif
+        @if ($seleccion == 'Embotellado')
+            @livewire('embotellado')
+        @endif
+        @if ($seleccion == 'Stock')
+            @livewire('stock')
+        @endif
+        @if ($seleccion == 'Egresoingreso')
+            @livewire('egresoingreso')
+        @endif
+        @if ($seleccion == 'Cliente')
+            @livewire('cliente')
+        @endif
+        @if ($seleccion == 'Venta')
+            @livewire('venta')
+        @endif
+        @if ($seleccion == 'Distribucion')
+            @livewire('distribucion')
+        @endif
+        @if ($seleccion == 'Pedidos')
+            @livewire('pedidos')
+        @endif
+        @if ($seleccion == 'Asignacion')
+            @livewire('asignacion')
+        @endif
+        @if ($seleccion == 'Coche')
+            @livewire('coche')
+        @endif
+        @if ($seleccion == 'Empresa')
+            @livewire('empresa')
+        @endif
+        @if ($seleccion == 'Sucursal')
+            @livewire('sucursal')
+        @endif
+        @if ($seleccion == 'Trabajador')
+            @livewire('trabajador')
+        @endif
+        @if ($seleccion == 'Ingreso')
+            @livewire('ingreso')
+        @endif
+        @if ($seleccion == 'Credito')
+            @livewire('credito')
+        @endif
+        @if ($seleccion == 'Salario')
+            @livewire('salario')
+        @endif
+        @if ($seleccion == 'Reporteventa')
+            @livewire('reporteventa')
+        @endif
+        @if ($seleccion == 'Reportecompra')
+            @livewire('reportecompra')
+        @endif
+        @if ($seleccion == 'Reportestock')
+            @livewire('reportestock')
+        @endif
+        @if ($seleccion == 'Reportecredito')
+            @livewire('reportecredito')
+        @endif
     </div>
+        </main>
 
+    </div>
 </div>
+
 <script>
-    document.getElementById('menu-toggle').addEventListener('click', function () {
-        document.getElementById('menu').classList.toggle('hidden');
+    document.getElementById("menu-toggle").addEventListener("click", function () {
+        let menu = document.getElementById("menu");
+        menu.classList.toggle("hidden");
     });
 </script>
