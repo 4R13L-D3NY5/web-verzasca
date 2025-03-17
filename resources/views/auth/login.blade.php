@@ -8,14 +8,14 @@
             @csrf
 
             <div class="mb-4">
-                <input type="email" name="email" class="form-input w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email') border-red-500 @enderror" placeholder="{{ __('Email') }}" required autofocus>
+                <input type="email" name="email" class="form-input w-full px-4 py-2 border  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email') border-red-500 @enderror" placeholder="{{ __('Email') }}" required autofocus>
                 @error('email')
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="mb-4">
-                <input type="password" name="password" class="form-input w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('password') border-red-500 @enderror" placeholder="{{ __('Password') }}" required>
+                <input type="password" name="password" class="form-input w-full px-4 py-2 border  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('password') border-red-500 @enderror" placeholder="{{ __('Password') }}" required>
                 @error('password')
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                 @enderror
