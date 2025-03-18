@@ -66,6 +66,14 @@
                             <span class="text-custom">ROLES</span>
                         </a>
                     </li>
+                    <li class="nav-item @if($seleccion == 'Pruebaestilo') bg-emerald-500 @endif">
+                        <a wire:click="$set('seleccion', 'Pruebaestilo')" class="flex items-center space-x-2">
+                            <span class="icon">
+                                <!-- Icono de Roles -->
+                            </span>
+                            <span class="text-custom">Pruebaestilo</span>
+                        </a>
+                    </li>
                 </div>
                 <!-- Gestión de Compras -->
                 <div>
@@ -541,6 +549,9 @@
             @endif
             @if ($seleccion == 'Reportecredito')
                 @livewire('reportecredito')
+            @endif
+            @if ($seleccion == 'Pruebaestilo')
+                @livewire('pruebaestilo')
             @endif
 
         </div>
