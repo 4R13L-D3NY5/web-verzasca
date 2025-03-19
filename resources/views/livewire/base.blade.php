@@ -457,6 +457,7 @@
                         </a>
                     </li>
                 </div>
+         
             </ul>
         </div>
     </nav>
@@ -594,5 +595,19 @@
             menu.classList.remove("backdrop-blur-md", "z-20"); // Eliminar desenfoque y z-index cuando se oculta
             setTimeout(() => menu.classList.add("hidden"), 300);
         }
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        var map = L.map('mapa').setView([19.4326, -99.1332], 13); // Coordenadas iniciales (CDMX)
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker = L.marker([19.4326, -99.1332], { draggable: true }).addTo(map);
+
+        marker.on('dragend', function (e) {
+            var latlng = marker.getLatLng();
+            Livewire.emit('actualizarUbicacion', latlng.lat, latlng.lng); // Enviar datos a Livewire
+        });
     });
 </script>
