@@ -283,7 +283,10 @@
                                             <option value="">Seleccione un producto</option>
                                             @foreach ($existencias as $existencia)
                                             <option value="{{ $existencia->id }}">{{
-                                                $existencia->existenciable->producto->nombre }}</option>
+                                                $existencia->existenciable->producto->nombre }} 
+                                                [Cant:{{ $existencia->cantidad }}]
+                                                [Etiq: {{ $existencia->existenciable->etiqueta->cliente->empresa ?? $existencia->existenciable->etiqueta->cliente->nombre }}]
+                                            </option>
                                             @endforeach
                                         </select>
                                         @error('existencia_id') <span class="text-red-600 text-xs">{{ $message }}</span>
