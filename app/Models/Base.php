@@ -25,5 +25,9 @@ class Base extends Model
     {
         return $this->morphMany(Existencia::class, 'existenciable');
     }
+    public function preforma()
+    {
+        return $this->belongsTo(Preforma::class, 'preforma_id');
+    }
 }
 

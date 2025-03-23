@@ -14,7 +14,7 @@
 </head>
 <body>
     @livewire('base')
-    <div id="mapa" class="w-99 h-80 rounded-lg shadow-md"></div>
+    <!-- <div id="mapa" class="w-99 h-80 rounded-lg shadow-md"></div> -->
 <!-- ========= All Javascript files linkup ======== -->
 @vite('resources/js/app.js')
 <!-- <script src="{{ asset('js/main.js') }}"></script> -->
