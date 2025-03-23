@@ -4,72 +4,91 @@ namespace App\Livewire;
 
 use App\Models\Tapa;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 
 class Tapas extends Component
 {
-    public $tapas, $color, $tipo, $cantidad, $tapa_id;
+    use WithPagination;
+
+    public $search = '';
     public $modal = false;
+    public $tapa_id = null;
+    public $color = '';
+    public $tipo = '';
+    public $estado = 1;
+    public $accion = 'create';
+
+    protected $paginationTheme = 'tailwind';
+
+    protected $rules = [
+        'color' => 'required|string',
+        'tipo' => 'required|string',
+
+    ];
 
     public function render()
     {
-        $this->tapas = Tapa::all();
-        return view('livewire.tapas');
+        $tapas = Tapa::when($this->search, function ($query) {
+            $query->where('color', 'like', '%' . $this->search . '%')
+                  ->orWhere('tipo', 'like', '%' . $this->search . '%');
+        })->paginate(4);
+
+        return view('livewire.tapas', compact('tapas'));
     }
 
-    public function abrirModal()
+    public function updatingSearch()
     {
-        $this->limpiarCampos();
+        $this->resetPage();
+    }
+
+    public function abrirModal($accion = 'create', $id = null)
+    {
+        $this->reset(['color', 'tipo', 'estado']);
+        $this->accion = $accion;
+        if ($accion === 'edit' && $id) {
+            $this->editar($id);
+        }
         $this->modal = true;
+    }
+
+    public function editar($id)
+    {
+        $tapa = Tapa::findOrFail($id);
+        $this->tapa_id = $tapa->id;
+        $this->color = $tapa->color;
+        $this->tipo = $tapa->tipo;
+        $this->estado = $tapa->estado;
+        $this->accion = 'edit';
+    }
+
+    public function guardar()
+    {
+        $this->validate();
+
+        try {
+            Tapa::updateOrCreate(['id' => $this->tapa_id], [
+                'color' => $this->color,
+                'tipo' => $this->tipo,
+                'estado' => $this->estado,
+            ]);
+
+            LivewireAlert::title($this->tapa_id ? 'Tapa actualizada con éxito.' : 'Tapa creada con éxito.')
+                ->success()
+                ->show();
+
+            $this->cerrarModal();
+        } catch (\Exception $e) {
+            LivewireAlert::title('Ocurrió un error: ' . $e->getMessage())
+                ->error()
+                ->show();
+        }
     }
 
     public function cerrarModal()
     {
         $this->modal = false;
-    }
-
-    public function limpiarCampos()
-    {
-        $this->tapa_id = null;
-        $this->color = '';
-        $this->tipo = '';
-        $this->cantidad = '';
-    }
-
-    public function guardar()
-    {
-        $this->validate([
-            'color' => 'required|string',
-            'tipo' => 'required|string',
-            'cantidad' => 'required|integer', // Validación para cantidad
-        ]);
-
-        // Crear o actualizar la tapa
-        Tapa::updateOrCreate(
-            ['id' => $this->tapa_id], // Si existe un id, lo actualizará, si no, lo creará
-            [
-                'color' => $this->color,
-                'tipo' => $this->tipo,
-                'cantidad' => $this->cantidad,
-            ]
-        );
-
-        session()->flash('message', $this->tapa_id ? 'Tapa actualizada exitosamente' : 'Tapa creada exitosamente');
-        
-        $this->cerrarModal();
-    }
-
-    public function editar($id)
-    {
-        // Obtener la tapa que se desea editar
-        $tapa = Tapa::findOrFail($id);
-
-        // Asignar los valores del modelo a las propiedades del componente
-        $this->tapa_id = $id;
-        $this->color = $tapa->color;
-        $this->tipo = $tapa->tipo;
-        $this->cantidad = $tapa->cantidad;
-
-        // Abrir el modal para editar
-        $this->modal = true;
+        $this->reset(['color', 'tipo', 'estado', 'tapa_id']);
+        $this->resetErrorBag();
     }
 }

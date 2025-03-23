@@ -12,8 +12,6 @@ class Stock extends Model
     protected $fillable = [
         'fechaElaboracion',
         'fechaVencimiento',
-        'etiquetas',
-        // 'cantidad',
         'observaciones',
         'etiqueta_id',
         'producto_id',

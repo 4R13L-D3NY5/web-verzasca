@@ -106,14 +106,7 @@
                             <span class="text-custom">ELABORACION</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Etiquetas') bg-emerald-500 @endif">
-                        <a wire:click="$set('seleccion', 'Etiquetas')" class="flex items-center space-x-2">
-                            <span class="icon">
-                                <!-- Icono de Etiquetas -->
-                            </span>
-                            <span class="text-custom">ETIQUETAS</span>
-                        </a>
-                    </li>
+                  
                 </div>
                 <div>
                     <h3 class="text-violet-500">ALMACEN</h3>
