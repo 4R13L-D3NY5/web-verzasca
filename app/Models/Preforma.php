@@ -15,7 +15,6 @@ class Preforma extends Model
         'descripcion',
         'capacidad',
         'color',
-        'cantidad',
         'estado',
         'observaciones',
     ];

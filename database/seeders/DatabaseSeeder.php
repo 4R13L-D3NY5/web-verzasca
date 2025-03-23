@@ -105,7 +105,6 @@ class DatabaseSeeder extends Seeder
                 Existencia::create([
                     'existenciable_id' => $preforma->id,
                     'existenciable_type' => Preforma::class,
-                    'cantidad' => rand(10, 100),
                     'sucursal_id' => $sucursal->id,
                 ]);
             }
@@ -115,7 +114,6 @@ class DatabaseSeeder extends Seeder
                 Existencia::create([
                     'existenciable_id' => $base->id,
                     'existenciable_type' =>Base::class,
-                    'cantidad' => rand(10, 100),
                     'sucursal_id' => $sucursal->id,
                 ]);
             }
@@ -125,7 +123,6 @@ class DatabaseSeeder extends Seeder
                 Existencia::create([
                     'existenciable_id' => $tapa->id,
                     'existenciable_type' =>Tapa::class,
-                    'cantidad' => rand(10, 100),
                     'sucursal_id' => $sucursal->id,
                 ]);
             }
@@ -135,7 +132,6 @@ class DatabaseSeeder extends Seeder
                 Existencia::create([
                     'existenciable_id' => $producto->id,
                     'existenciable_type' => Producto::class,
-                    'cantidad' => rand(10, 100),
                     'sucursal_id' => $sucursal->id,
                 ]);
             }
@@ -145,7 +141,6 @@ class DatabaseSeeder extends Seeder
                 Existencia::create([
                     'existenciable_id' => $etiqueta->id,
                     'existenciable_type' => Etiqueta::class,
-                    'cantidad' => rand(10, 100),
                     'sucursal_id' => $sucursal->id,
                 ]);
             }
@@ -155,7 +150,6 @@ class DatabaseSeeder extends Seeder
                 Existencia::create([
                     'existenciable_id' => $stock->id,
                     'existenciable_type' => Stock::class,
-                    'cantidad' => rand(10, 100),
                     'sucursal_id' => $sucursal->id,
                 ]);
             }

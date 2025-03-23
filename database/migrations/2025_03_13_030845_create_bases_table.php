@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('bases', function (Blueprint $table) {
             $table->id(); // Clave primaria
-            $table->integer('cantidad'); // Cantidad de base
             $table->integer('capacidad'); // Capacidad de la base
             $table->boolean('estado')->default(1); // Estado (1: activo, 0: inactivo)
             $table->text('observaciones')->nullable(); // Observaciones (opcional)

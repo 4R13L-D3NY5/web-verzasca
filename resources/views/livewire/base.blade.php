@@ -125,14 +125,6 @@
                             <span class="text-custom">Stocks</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Egresoingreso') bg-emerald-500 @endif">
-                        <a wire:click="$set('seleccion', 'Egresoingreso')" class="flex items-center space-x-2">
-                            <span class="icon">
-
-                            </span>
-                            <span class="text-custom">Egresoingreso</span>
-                        </a>
-                    </li>
                     <li class="nav-item @if($seleccion == 'Tapas') bg-emerald-500 @endif">
                         <a wire:click="$set('seleccion', 'Tapas')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -483,8 +475,8 @@
         </div>
     </nav>
 
-    <main class="w-full min-h-screen dark:bg-gray-900 p-2 mt-10" id="main-content">
-        <div class="w-full p-2">
+    <main class="w-full min-h-screen dark:bg-gray-900" id="main-content">
+    <div class="w-full p-2  dark:bg-gray-900">
             @if ($seleccion == 'Compras')
                 @livewire('compras')
             @endif
