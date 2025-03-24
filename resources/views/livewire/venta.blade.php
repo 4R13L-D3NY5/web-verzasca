@@ -243,16 +243,16 @@
                                             </div>
                                             <div>
                                                 <label class="label1">A cuenta</label>
-                                                <input type="number" step="0.01" wire:model="montoACuenta"
+                                                <input type="number" step="0.01" wire:model="monto"
                                                     class="input1" placeholder="0.00">
-                                                @error('montoACuenta') <span class="text-red-600 text-xs">{{ $message
+                                                @error('monto') <span class="text-red-600 text-xs">{{ $message
                                                     }}</span> @enderror
                                             </div>
                                             <div>
                                                 <label class="label1">Código de pago</label>
-                                                <input type="text" wire:model="codigoPago" class="input1"
+                                                <input type="text" wire:model="codigo" class="input1"
                                                     placeholder="Ej. 12345">
-                                                @error('codigoPago') <span class="text-red-600 text-xs">{{ $message
+                                                @error('codigo') <span class="text-red-600 text-xs">{{ $message
                                                     }}</span> @enderror
                                             </div>
                                         </div>
@@ -263,13 +263,13 @@
                                 <!-- Tipo de pago -->
                                 <div>
                                     <label class="label1">Tipo de pago</label>
-                                    <select wire:model="estadoPedido" class="select1">
+                                    <select wire:model="tipo" class="select1">
                                         <option value="0">Efectivo</option>
                                         <option value="1">QR</option>
                                         <option value="2">Cheque</option>
                                         <option value="3">Transferencia bancaria</option>
                                     </select>
-                                    @error('estadoPedido') <span class="text-red-600 text-xs">{{ $message }}</span>
+                                    @error('tipo') <span class="text-red-600 text-xs">{{ $message }}</span>
                                     @enderror
                                 </div>
 
@@ -278,8 +278,8 @@
                                     <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Agregar Ítems
                                         de Venta</h4>
                                     <div>
-                                        <label class="label1">Producto</label>
-                                        <select wire:model="existencia_id" class="select1">
+                                        <label for="producto" class="label1">Producto</label>
+                                        <select id="producto" wire:change='obtenerPrecio()' wire:model.lazy="existencia_id" class="select1">
                                             <option value="">Seleccione un producto</option>
                                             @foreach ($existencias as $existencia)
                                             <option value="{{ $existencia->id }}">{{
@@ -505,8 +505,7 @@
                         <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Pagos Registrados</h4>
                         <div class="mt-2 overflow-x-auto">
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                <thead
-                                    class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
                                     <tr>
                                         <th scope="col" class="px-4 py-2">Tipo</th>
                                         <th scope="col" class="px-4 py-2">Monto</th>
@@ -530,10 +529,14 @@
                                 </tbody>
                             </table>
                         </div>
-                        <!-- Total de pagos -->
-                        <div class="mt-2 flex justify-end">
+                        <!-- Totales -->
+                        <div class="mt-2 flex justify-end space-x-4">
                             <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                                Total Pagado: {{ number_format($ventaSeleccionada->pagos->sum('monto'), 2) }}
+                                Total a Pagar: {{ number_format($ventaSeleccionada->itemVentas->sum(fn($item) => $item->cantidad * $item->precio), 1) }}
+                            </span>
+                            <br>
+                            <span class="text-sm font-semibold text-gray-900 dark:text-white">
+                                Total Pagado: {{ number_format($ventaSeleccionada->pagos->sum('monto'), 1) }}
                             </span>
                         </div>
                     </div>

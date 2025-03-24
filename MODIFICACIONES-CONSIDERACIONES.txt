@@ -1,6 +1,7 @@
 el proceso,  
 
 cliente depuracion, verificacion de la base de datos del excel eliminando duplicados etc. categorizacion para antiguos.
+agregar 2 campos, verificado, categoria, 
 
 reportes, 
 
