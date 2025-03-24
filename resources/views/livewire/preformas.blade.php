@@ -1,99 +1,123 @@
-<div class="p-6 bg-white shadow-md rounded-lg max-w-7xl mx-auto">
-  <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
-    <h2 class="text-xl font-bold">Lista de Preformas</h2>
-    <button wire:click="abrirModal" class="bg-blue-500 text-white px-4 py-2 rounded mt-2 sm:mt-0">Agregar
-      Preforma</button>
-  </div>
+<div class="text-white p-2 mt-10 flex justify-center">
+  <div class="w-full max-w-screen-xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
+    <div class="relative flex w-full flex-col rounded-xl  text-gray-700 shadow-md">
+      <h6 class="text-center text-xl font-bold text-gray-800 dark:text-white mb-4 px-4">Gestión de Preformas</h6>
+      <div
+        class="flex overflow-hidden border divide-x rounded-lg rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700">
+        <button title="Registrar preforma" wire:click='abrirModal("create")'
+          class="group cursor-pointer outline-none hover:rotate-90 duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 24 24"
+            class="stroke-zinc-400 fill-none group-hover:fill-zinc-800 group-active:stroke-zinc-200 group-active:fill-zinc-600 group-active:duration-0 duration-300">
+            <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+              stroke-width="1.5"></path>
+            <path d="M8 12H16" stroke-width="1.5"></path>
+            <path d="M12 16V8" stroke-width="1.5"></path>
+          </svg>
+        </button>
+        <input type="text" wire:model.live="search" placeholder="Buscar..."
+          class="px-4 py-2 w-full sm:w-64 text-gray-600 dark:text-gray-300 dark:bg-gray-900 focus:outline-none" />
+      </div>
+      <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full table-auto text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
+            <tr>
+              <th scope="col" class="w-40 text-right p-2">Acciones</th>
+              <th scope="col" class="px-6 py-3">Insumo</th>
+              <th scope="col" class="px-6 py-3">Descripción</th>
+              <th scope="col" class="px-6 py-3">Capacidad</th>
+              <th scope="col" class="px-6 py-3">Color</th>
+              <th scope="col" class="px-6 py-3">Estado</th>
 
-  @if(session()->has('message'))
-    <div class="bg-green-200 text-green-800 p-2 rounded mb-2">
-    {{ session('message') }}
-    </div>
-  @endif
+            </tr>
+          </thead>
+          <tbody>
+            @forelse ($preformas as $preforma)
+        <tr class="border-b border-gray-200 dark:border-gray-700">
+          <td class="bg-gray-50 dark:bg-gray-800 w-40 text-right p-2">
+          <div class="flex justify-end">
+            <button wire:click="abrirModal('edit', {{ $preforma->id }})"
+            class="text-gray-600 hover:text-gray-800 mx-1 transition-all duration-200 ease-in-out hover:rotate-12 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+              d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.85 3 20l1.15-4.5L16.862 3.487z" />
+            </svg>
+            </button>
+          </div>
+          </td>
+          <td class="px-6 py-4">{{ $preforma->insumo }}</td>
+          <td class="px-6 py-4">{{ $preforma->descripcion }}</td>
+          <td class="px-6 py-4">{{ $preforma->capacidad }}</td>
+          <td class="px-6 py-4">{{ $preforma->color }}</td>
+          <td class="px-6 py-4">
+          <span
+            class="text-{{ $preforma->estado ? 'green' : 'red' }}-500">{{ $preforma->estado ? 'Activo' : 'Inactivo' }}</span>
+          </td>
 
-  <div class="overflow-x-auto">
-    <table class="w-full border-collapse border border-gray-300 text-sm">
-      <thead>
-        <tr class="bg-gray-100 text-left">
-          <th class="border px-4 py-2">Insumo</th>
-          <th class="border px-4 py-2">Capacidad</th>
-          <th class="border px-4 py-2">Color</th>
-          <th class="border px-4 py-2">Cantidad</th>
-          <th class="border px-4 py-2">Estado</th>
-          <th class="border px-4 py-2">Acciones</th>
         </tr>
-      </thead>
-      <tbody>
-        @foreach($preformas as $preforma)
-      <tr class="hover:bg-gray-50">
-        <td class="border px-4 py-2">{{ $preforma->insumo }}</td>
-        <td class="border px-4 py-2">{{ $preforma->capacidad }}</td>
-        <td class="border px-4 py-2">{{ $preforma->color }}</td>
-        <td class="border px-4 py-2">{{ $preforma->cantidad }}</td>
-        <td class="border px-4 py-2">
-        <span class="{{ $preforma->estado ? 'text-green-600' : 'text-red-600' }}">
-          {{ $preforma->estado ? 'Activo' : 'Inactivo' }}
-        </span>
-        </td>
-        <td class="border px-4 py-2">
-        <button wire:click="editar({{ $preforma->id }})"
-          class="bg-yellow-500 text-white px-2 py-1 rounded">Editar</button>
-        </td>
-      </tr>
-    @endforeach
-      </tbody>
-    </table>
+      @empty
+    <tr>
+      <td colspan="6" class="text-center py-4 text-gray-600 dark:text-gray-400">No hay preformas registradas.
+      </td>
+    </tr>
+  @endforelse
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-4 flex justify-center">
+        {{ $preformas->links() }}
+      </div>
+    </div>
   </div>
 
-  @if($modal)
-    <!-- Fondo Oscuro (NO cierra al hacer clic fuera) -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
-
-    <!-- Modal (Siempre por encima del header) -->
-    <div class="fixed inset-0 flex items-center justify-center p-4 z-50">
-    <div class="bg-white w-full max-w-lg rounded-lg shadow-lg overflow-hidden">
-      <div class="p-6 max-h-[80vh] overflow-y-auto">
-      <h2 class="text-xl font-bold mb-4">{{ $preforma_id ? 'Editar Preforma' : 'Nueva Preforma' }}</h2>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-        <label class="block">Insumo:</label>
-        <input type="text" wire:model="insumo" class="w-full border p-2 rounded">
+  @if ($modal)
+    <div class="relative z-10 flex items-center justify-center min-h-screen" aria-labelledby="modal-title" role="dialog"
+    aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500/75 dark:bg-black transition-opacity" aria-hidden="true"></div>
+    <div class="fixed inset-0 z-10 flex items-center justify-center w-full">
+      <div
+      class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-full max-w-md mx-4 sm:mx-0">
+      <div class="px-6 py-6 flex flex-col items-center">
+        <h3 id="modal-title" class="text-lg font-semibold text-black text-center">
+        {{ $accion === 'create' ? 'Registrar Preforma' : 'Editar Preforma' }}
+        </h3>
+        <div class="mt-4 w-full flex flex-col gap-3 max-h-[80vh] overflow-y-auto">
+        <div class="input-container">
+          <input placeholder="Insumo" type="text" wire:model="insumo" class="input-field">
         </div>
-        <div>
-        <label class="block">Capacidad:</label>
-        <input type="number" wire:model="capacidad" class="w-full border p-2 rounded">
+        @error('insumo') <span class="error-message">{{ $message }}</span> @enderror
+        <div class="input-container">
+          <input placeholder="Descripción" type="text" wire:model="descripcion" class="input-field">
         </div>
-        <div>
-        <label class="block">Color:</label>
-        <input type="text" wire:model="color" class="w-full border p-2 rounded">
+        @error('descripcion') <span class="error-message">{{ $message }}</span> @enderror
+        <div class="input-container">
+          <input placeholder="Capacidad" type="number" wire:model="capacidad" class="input-field">
         </div>
-        <div>
-        <label class="block">Cantidad:</label>
-        <input type="number" wire:model="cantidad" class="w-full border p-2 rounded">
+        @error('capacidad') <span class="error-message">{{ $message }}</span> @enderror
+        <div class="input-container">
+          <input placeholder="Color" type="text" wire:model="color" class="input-field">
         </div>
-        <div class="col-span-2">
-        <label class="block">Descripción:</label>
-        <textarea wire:model="descripcion" class="w-full border p-2 rounded"></textarea>
+        @error('color') <span class="error-message">{{ $message }}</span> @enderror
+        <div class="input-container">
+          <select wire:model="estado" class="input-field appearance-none">
+          <option value="1" class="option-style">Activo</option>
+          <option value="0" class="option-style">Inactivo</option>
+          </select>
         </div>
-        <div class="col-span-2">
-        <label class="block">Estado:</label>
-        <select wire:model="estado" class="w-full border p-2 rounded">
-          <option value="1">Activo</option>
-          <option value="0">Inactivo</option>
-        </select>
+        @error('estado') <span class="error-message">{{ $message }}</span> @enderror
+        <div class="input-container h-[60px]">
+          <textarea placeholder="Observaciones" wire:model="observaciones"
+          class="input-field resize-none"></textarea>
         </div>
-        <div class="col-span-2">
-        <label class="block">Observaciones:</label>
-        <textarea wire:model="observaciones" class="w-full border p-2 rounded"></textarea>
+        @error('observaciones') <span class="error-message">{{ $message }}</span> @enderror
+        </div>
+        <div class="mt-6 flex justify-center w-full space-x-4">
+        <div class="botonmodal">
+          <button type="button" wire:click="guardar">Guardar</button>
+          <button type="button" wire:click="cerrarModal">Cancelar</button>
+        </div>
         </div>
       </div>
-      </div>
-
-      <!-- Botones (Siempre visibles abajo) -->
-      <div class="p-4 bg-gray-100 flex justify-end">
-      <button wire:click="cerrarModal" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancelar</button>
-      <button wire:click="guardar" class="bg-blue-500 text-white px-4 py-2 rounded">Guardar</button>
       </div>
     </div>
     </div>

@@ -10,7 +10,6 @@ class Base extends Model
     use HasFactory;
 
     protected $fillable = [
-        'cantidad',
         'capacidad',
         'estado',
         'observaciones',

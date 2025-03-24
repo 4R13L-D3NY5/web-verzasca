@@ -19,7 +19,6 @@ class BaseFactory extends Factory
     public function definition(): array
     {
         return [
-            'cantidad' => $this->faker->numberBetween(10, 100),
             'capacidad' => $this->faker->numberBetween(500, 2000),
             'estado' => $this->faker->boolean,
             'observaciones' => $this->faker->optional()->sentence,

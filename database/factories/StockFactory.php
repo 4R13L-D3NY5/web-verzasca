@@ -21,8 +21,6 @@ class StockFactory extends Factory
         return [
             'fechaElaboracion' => $this->faker->date,
             'fechaVencimiento' => $this->faker->date,
-            // 'etiquetas' => $this->faker->imageUrl(100, 100),
-            // 'cantidad' => $this->faker->numberBetween(10, 100),
             'observaciones' => $this->faker->optional()->sentence,
             'etiqueta_id' => Producto::get()->random()->id,
             'producto_id' => Etiqueta::get()->random()->id,

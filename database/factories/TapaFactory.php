@@ -18,7 +18,6 @@ class TapaFactory extends Factory
     {
         return [
             'color' => $this->faker->safeColorName,
-            'cantidad' => $this->faker->numberBetween(10, 200),
             'tipo' => $this->faker->randomElement(['rosca', 'botellon']),
             'created_at' => now(),
             'updated_at' => now(),

@@ -6,93 +6,71 @@ use App\Models\Producto;
 use App\Models\Base;
 use App\Models\Tapa;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 
 class Productos extends Component
 {
-    use WithFileUploads;
+    use WithPagination, WithFileUploads;
 
-    public $productos, $nombre, $imagen, $tipoContenido, $tipoProducto, $capacidad, $precioReferencia, $observaciones, $estado = 1, $base_id, $tapa_id;
-    public $producto_id;
+    public $search = '';
     public $modal = false;
+    public $producto_id = null;
+    public $nombre = '';
+    public $imagen = null;
+    public $tipoContenido = '';
+    public $tipoProducto = '';
+    public $capacidad = '';
+    public $precioReferencia = '';
+    public $observaciones = '';
+    public $estado = 1;
+    public $base_id = '';
+    public $tapa_id = '';
+    public $accion = 'create';
+
+    protected $paginationTheme = 'tailwind';
+
+    protected $rules = [
+        'nombre' => 'required|string',
+        'capacidad' => 'required|integer',
+        'precioReferencia' => 'required|numeric',
+        'estado' => 'required|boolean',
+        'base_id' => 'required|exists:bases,id',
+        'tapa_id' => 'nullable|exists:tapas,id',
+    ];
 
     public function render()
     {
-        $this->productos = Producto::all();
+        $productos = Producto::when($this->search, function ($query) {
+            $query->where('nombre', 'like', '%' . $this->search . '%');
+        })->paginate(4);
+
         $bases = Base::all();
         $tapas = Tapa::all();
-        return view('livewire.productos', compact('bases', 'tapas'));
+
+        return view('livewire.productos', compact('productos', 'bases', 'tapas'));
     }
 
-    public function abrirModal()
+    public function updatingSearch()
     {
-        $this->limpiarCampos();
-        $this->modal = true;
+        $this->resetPage();
     }
 
-    public function cerrarModal()
+    public function abrirModal($accion = 'create', $id = null)
     {
-        $this->modal = false;
-    }
-
-    public function limpiarCampos()
-    {
-        $this->producto_id = null;
-        $this->nombre = '';
-        $this->imagen = null;
-        $this->tipoContenido = '';
-        $this->tipoProducto = '';
-        $this->capacidad = '';
-        $this->precioReferencia = '';
-        $this->observaciones = '';
-        $this->estado = 1;
-        $this->base_id = '';
-        $this->tapa_id = '';
-    }
-
-    public function guardar()
-    {
-        $this->validate([
-            'nombre' => 'required|string',
-            'imagen' => 'nullable|image|max:2048',
-            'tipoContenido' => 'required|integer',
-            'tipoProducto' => 'required|boolean',
-            'capacidad' => 'required|integer',
-            'precioReferencia' => 'required|numeric',
-            'estado' => 'required|boolean',
-            'base_id' => 'required|exists:bases,id',
-            'tapa_id' => 'nullable|exists:tapas,id',
-        ]);
-
-        // Manejar imagen
-        if ($this->imagen) {
-            $imagenPath = $this->imagen->store('productos', 'public');
-        } else {
-            $imagenPath = null;
+        $this->reset(['nombre', 'imagen', 'tipoContenido', 'tipoProducto', 'capacidad', 'precioReferencia', 'observaciones', 'estado', 'base_id', 'tapa_id']);
+        $this->accion = $accion;
+        if ($accion === 'edit' && $id) {
+            $this->editar($id);
         }
-
-        Producto::updateOrCreate(['id' => $this->producto_id], [
-            'nombre' => $this->nombre,
-            'imagen' => $imagenPath,
-            'tipoContenido' => $this->tipoContenido,
-            'tipoProducto' => $this->tipoProducto,
-            'capacidad' => $this->capacidad,
-            'precioReferencia' => $this->precioReferencia,
-            'observaciones' => $this->observaciones,
-            'estado' => $this->estado,
-            'base_id' => $this->base_id,
-            'tapa_id' => $this->tapa_id,
-        ]);
-
-        session()->flash('message', $this->producto_id ? 'Producto actualizado' : 'Producto creado');
-
-        $this->cerrarModal();
+        $this->modal = true;
     }
 
     public function editar($id)
     {
         $producto = Producto::findOrFail($id);
-        $this->producto_id = $id;
+        $this->producto_id = $producto->id;
         $this->nombre = $producto->nombre;
         $this->imagen = $producto->imagen;
         $this->tipoContenido = $producto->tipoContenido;
@@ -103,7 +81,45 @@ class Productos extends Component
         $this->estado = $producto->estado;
         $this->base_id = $producto->base_id;
         $this->tapa_id = $producto->tapa_id;
+        $this->accion = 'edit';
+    }
 
-        $this->modal = true;
+    public function guardar()
+    {
+        $this->validate();
+
+        try {
+            $imagenPath = $this->imagen ? $this->imagen->store('productos', 'public') : null;
+
+            Producto::updateOrCreate(['id' => $this->producto_id], [
+                'nombre' => $this->nombre,
+                'imagen' => $imagenPath,
+                'tipoContenido' => $this->tipoContenido,
+                'tipoProducto' => $this->tipoProducto,
+                'capacidad' => $this->capacidad,
+                'precioReferencia' => $this->precioReferencia,
+                'observaciones' => $this->observaciones,
+                'estado' => $this->estado,
+                'base_id' => $this->base_id,
+                'tapa_id' => $this->tapa_id,
+            ]);
+
+            LivewireAlert::title($this->producto_id ? 'Producto actualizado con éxito.' : 'Producto creado con éxito.')
+                ->success()
+                ->show();
+
+            $this->cerrarModal();
+        } catch (\Exception $e) {
+            LivewireAlert::title('Ocurrió un error: ' . $e->getMessage())
+                ->error()
+                ->show();
+        }
+    }
+
+    public function cerrarModal()
+    {
+        $this->modal = false;
+        $this->reset(['nombre', 'imagen', 'tipoContenido', 'tipoProducto', 'capacidad', 'precioReferencia', 'observaciones', 'estado', 'base_id', 'tapa_id', 'producto_id']);
+        $this->resetErrorBag();
     }
 }
