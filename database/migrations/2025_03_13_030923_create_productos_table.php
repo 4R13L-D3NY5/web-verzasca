@@ -18,6 +18,7 @@ return new class extends Migration
             $table->tinyInteger('tipoContenido'); // Tipo de contenido (tiny integer)
             $table->boolean('tipoProducto'); // Tipo de producto (0: sin retorno, 1: con retorno)
             $table->integer('capacidad'); // Capacidad del producto
+            $table->string('unidad')->nullable(); // [L, ml, g, Kg, unidad]
             $table->double('precioReferencia', 8, 2); // Precio de referencia
             $table->text('observaciones')->nullable(); // Observaciones (opcional)
             $table->foreignId('base_id')->constrained('bases')->onDelete('cascade');

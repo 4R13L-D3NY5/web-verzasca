@@ -4,56 +4,59 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Proveedor as ModeloProveedor;
-use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
+use App\Models\Distribucion as ModeloDistribucion;
+use App\Models\Asignacion;
+use App\Models\Venta;
+use App\Models\Stock;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class Proveedores extends Component
+class Distribucion extends Component
 {
     use WithPagination;
+    // use LivewireAlert;
 
     public $search = '';
     public $modal = false;
-    public $detalleModal = false;
+    public $detalleModal = false; // Aseguro que esté definida aquí
     public $accion = 'create';
-    public $proveedorId = null;
-    public $razonSocial = '';
-    public $nombreContacto = '';
-    public $direccion = '';
-    public $telefono = '';
-    public $correo = '';
-    public $tipo = '';
-    public $servicio = '';
-    public $descripcion = '';
-    public $precio = '';
-    public $tiempoEntrega = '';
+    public $distribucionId = null;
+    public $fecha;
     public $estado = 1;
-    public $proveedorSeleccionado = null;
+    public $observaciones = '';
+    public $asignacion_id;
+    public $venta_id;
+    public $stock_ids = [];
+    public $asignaciones;
+    public $ventasContado;
+    public $stocksVenta;
+    public $distribucionSeleccionada = null;
 
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
-        'razonSocial' => 'required|string|max:255',
-        'nombreContacto' => 'nullable|string|max:255',
-        'direccion' => 'required|string|max:255',
-        'telefono' => 'required|integer',
-        'correo' => 'required|email|max:255',
-        'tipo' => 'required|in:tapas,preformas,etiquetas',
-        'servicio' => 'required|in:soplado,transporte',
-        'descripcion' => 'required|string|max:255',
-        'precio' => 'required|numeric|min:0',
-        'tiempoEntrega' => 'required|string|max:255',
-        'estado' => 'required|boolean',
+        'fecha' => 'required|date',
+        'estado' => 'required|in:1,2',
+        'observaciones' => 'nullable|string|max:500',
+        'asignacion_id' => 'required|exists:asignacions,id',
+        'venta_id' => 'nullable|exists:ventas,id',
+        'stock_ids' => 'nullable|array',
+        'stock_ids.*' => 'exists:stocks,id',
     ];
+
+    public function mount()
+    {
+        $this->asignaciones = Asignacion::all();
+        $this->ventasContado = Venta::where('estadoPedido', 1)->with('cliente')->get();
+    }
 
     public function render()
     {
-        $proveedores = ModeloProveedor::when($this->search, function ($query) {
-            $query->where('razonSocial', 'like', '%' . $this->search . '%')
-                  ->orWhere('nombreContacto', 'like', '%' . $this->search . '%')
-                  ->orWhere('correo', 'like', '%' . $this->search . '%');
+        $distribucions = ModeloDistribucion::when($this->search, function ($query) {
+            $query->where('fecha', 'like', '%' . $this->search . '%')
+                  ->orWhere('observaciones', 'like', '%' . $this->search . '%');
         })->paginate(5);
 
-        return view('livewire.proveedores', compact('proveedores'));
+        return view('livewire.distribucion', compact('distribucions'));
     }
 
     public function updatingSearch()
@@ -63,28 +66,25 @@ class Proveedores extends Component
 
     public function abrirModal($accion)
     {
-        $this->reset(['razonSocial', 'nombreContacto', 'direccion', 'telefono', 'correo', 'tipo', 'servicio', 'descripcion', 'precio', 'tiempoEntrega', 'estado', 'proveedorId']);
+        $this->reset(['fecha', 'estado', 'observaciones', 'asignacion_id', 'venta_id', 'stock_ids', 'distribucionId', 'stocksVenta']);
         $this->accion = $accion;
+        $this->fecha = now()->format('Y-m-d');
         $this->estado = 1;
         $this->modal = true;
         $this->detalleModal = false;
     }
 
-    public function editarProveedor($id)
+    public function editarDistribucion($id)
     {
-        $proveedor = ModeloProveedor::findOrFail($id);
-        $this->proveedorId = $proveedor->id;
-        $this->razonSocial = $proveedor->razonSocial;
-        $this->nombreContacto = $proveedor->nombreContacto;
-        $this->direccion = $proveedor->direccion;
-        $this->telefono = $proveedor->telefono;
-        $this->correo = $proveedor->correo;
-        $this->tipo = $proveedor->tipo;
-        $this->servicio = $proveedor->servicio;
-        $this->descripcion = $proveedor->descripcion;
-        $this->precio = $proveedor->precio;
-        $this->tiempoEntrega = $proveedor->tiempoEntrega;
-        $this->estado = $proveedor->estado;
+        $distribucion = ModeloDistribucion::findOrFail($id);
+        $this->distribucionId = $distribucion->id;
+        $this->fecha = $distribucion->fecha;
+        $this->estado = $distribucion->estado;
+        $this->observaciones = $distribucion->observaciones;
+        $this->asignacion_id = $distribucion->asignacion_id;
+        $this->venta_id = $distribucion->venta_id; // Suponiendo que haya una relación con venta
+        $this->stock_ids = $distribucion->stocks ? $distribucion->stocks->pluck('id')->toArray() : [];
+        $this->cargarStocksVenta();
         $this->accion = 'edit';
         $this->modal = true;
         $this->detalleModal = false;
@@ -92,66 +92,77 @@ class Proveedores extends Component
 
     public function verDetalle($id)
     {
-        $this->proveedorSeleccionado = ModeloProveedor::findOrFail($id);
+        $this->distribucionSeleccionada = ModeloDistribucion::with('stocks.producto')->findOrFail($id);
         $this->modal = false;
         $this->detalleModal = true;
     }
 
-    public function guardarProveedor()
-{
-    $this->validate();
-
-    try {
-        if ($this->accion === 'edit' && $this->proveedorId) {
-            $proveedor = ModeloProveedor::findOrFail($this->proveedorId);
-            $proveedor->update([
-                'razonSocial' => $this->razonSocial,
-                'nombreContacto' => $this->nombreContacto,
-                'direccion' => $this->direccion,
-                'telefono' => $this->telefono,
-                'correo' => $this->correo,
-                'tipo' => $this->tipo,
-                'servicio' => $this->servicio,
-                'descripcion' => $this->descripcion,
-                'precio' => $this->precio,
-                'tiempoEntrega' => $this->tiempoEntrega,
-                'estado' => $this->estado,
-            ]);
-            LivewireAlert::title('Proveedor actualizado con éxito.')
-                ->success()
-                ->show();
+    public function cargarStocksVenta()
+    {
+        if ($this->venta_id) {
+            $venta = Venta::with('itemVentas.existencia.existenciable')->find($this->venta_id);
+            $this->stocksVenta = $venta ? Stock::whereIn('id', $venta->itemVentas->pluck('existencia.existenciable.id'))->get() : [];
         } else {
-            ModeloProveedor::create([
-                'razonSocial' => $this->razonSocial,
-                'nombreContacto' => $this->nombreContacto,
-                'direccion' => $this->direccion,
-                'telefono' => $this->telefono,
-                'correo' => $this->correo,
-                'tipo' => $this->tipo,
-                'servicio' => $this->servicio,
-                'descripcion' => $this->descripcion,
-                'precio' => $this->precio,
-                'tiempoEntrega' => $this->tiempoEntrega,
-                'estado' => $this->estado,
-            ]);
-            LivewireAlert::title('Proveedor registrado con éxito.')
-                ->success()
+            $this->stocksVenta = null;
+            $this->stock_ids = [];
+        }
+    }
+
+    public function guardarDistribucion()
+    {
+        $this->validate();
+
+        try {
+            if ($this->accion === 'edit' && $this->distribucionId) {
+                $distribucion = ModeloDistribucion::findOrFail($this->distribucionId);
+                $distribucion->update([
+                    'fecha' => $this->fecha,
+                    'estado' => $this->estado,
+                    'observaciones' => $this->observaciones,
+                    'asignacion_id' => $this->asignacion_id,
+                ]);
+                if ($this->stock_ids) {
+                    $distribucion->stocks()->sync($this->stock_ids);
+                }
+                LivewireAlert::title('Distribución actualizada con éxito.')
+                    ->success()
+                    ->show();
+            } else {
+                $distribucion = ModeloDistribucion::create([
+                    'fecha' => $this->fecha,
+                    'estado' => $this->estado,
+                    'observaciones' => $this->observaciones,
+                    'asignacion_id' => $this->asignacion_id,
+                ]);
+                if ($this->stock_ids) {
+                    $distribucion->stocks()->attach($this->stock_ids);
+                }
+                LivewireAlert::title('Distribución registrada con éxito.')
+                    ->success()
+                    ->show();
+            }
+
+            $this->cerrarModal();
+        } catch (\Exception $e) {
+            LivewireAlert::title('Ocurrió un error: ' . $e->getMessage())
+                ->error()
                 ->show();
         }
+    }
 
-        $this->cerrarModal();
-    } catch (\Exception $e) {
-        LivewireAlert::title('Ocurrió un error: ' . $e->getMessage())
-            ->error()
+    public function retornarStock($id)
+    {
+        $distribucion = ModeloDistribucion::findOrFail($id);
+        LivewireAlert::title('Funcionalidad de retorno de stock aún no implementada para Distribución #' . $distribucion->id)
+            ->info()
             ->show();
     }
-}
 
     public function cerrarModal()
     {
         $this->modal = false;
         $this->detalleModal = false;
-        $this->reset(['razonSocial', 'nombreContacto', 'direccion', 'telefono', 'correo', 'tipo', 'servicio', 'descripcion', 'precio', 'tiempoEntrega', 'estado', 'proveedorId', 'proveedorSeleccionado']);
+        $this->reset(['fecha', 'estado', 'observaciones', 'asignacion_id', 'venta_id', 'stock_ids', 'distribucionId', 'stocksVenta', 'distribucionSeleccionada']);
         $this->resetErrorBag();
     }
 }
