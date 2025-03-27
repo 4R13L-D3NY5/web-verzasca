@@ -13,7 +13,7 @@
             <path d="M12 5v14m7-7h-14" />
           </svg>
         </button>
-        <input type="text" wire:model.live="search" placeholder="Buscar..." class="boton-g" />
+        <input type="text" wire:model.live="search" placeholder="Buscar..." class="input-g" />
       </div>
 
       <!-- Tabla -->
@@ -85,31 +85,31 @@
         </h3>
         <div class="over-col">
         <h3 class="title3">Insumo</h3>
-        <input type="text" wire:model="insumo" class="p-text boton-g" />
+        <input type="text" wire:model="insumo" class="p-text input-g" />
         @if ($accion === 'create')
       @error('insumo') <span class="error-message text-red-500">{{ $message }}</span> @enderror
     @endif
 
         <h3 class="title3">Descripción</h3>
-        <input type="text" wire:model="descripcion" class="p-text boton-g" />
+        <input type="text" wire:model="descripcion" class="p-text input-g" />
         @if ($accion === 'create')
       @error('descripcion') <span class="error-message text-red-500">{{ $message }}</span> @enderror
     @endif
 
         <h3 class="title3">Capacidad</h3>
-        <input type="number" wire:model="capacidad" class="p-text boton-g" />
+        <input type="number" wire:model="capacidad" class="p-text input-g" />
         @if ($accion === 'create')
       @error('capacidad') <span class="error-message text-red-500">{{ $message }}</span> @enderror
     @endif
 
         <h3 class="title3">Color</h3>
-        <input type="text" wire:model="color" class="p-text boton-g" />
+        <input type="text" wire:model="color" class="p-text input-g" />
         @if ($accion === 'create')
       @error('color') <span class="error-message text-red-500">{{ $message }}</span> @enderror
     @endif
 
         <h3 class="title3">Estado</h3>
-        <select wire:model="estado" class="p-text boton-g">
+        <select wire:model="estado" class="p-text input-g">
           <option value="1">Activo</option>
           <option value="0">Inactivo</option>
         </select>

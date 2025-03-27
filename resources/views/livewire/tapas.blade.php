@@ -16,7 +16,7 @@
           </svg>
         </button>
         <input type="text" wire:model.live="search" placeholder="Buscar..."
-          class="boton-g" />
+          class="input-g" />
       </div>
 
       <!-- Tabla -->
@@ -85,19 +85,19 @@
         </h3>
         <div class="over-col">
         <h3 class="title3">Color</h3>
-        <input type="text" wire:model="color" class="p-text boton-g">
+        <input type="text" wire:model="color" class="p-text input-g">
         @if ($accion === 'create')
       @error('color') <span class="error-message text-red-500">{{ $message }}</span> @enderror
     @endif
         <h3 class="title3">Tipo de tapa</h3>
-        <input type="text" wire:model="tipo" class="p-text boton-g">
+        <input type="text" wire:model="tipo" class="p-text input-g">
         @if ($accion === 'create')
       @error('tipo') <span class="error-message text-red-500">{{ $message }}</span> @enderror
     @endif
         <h3 class="title3">Estado</h3>
-        <select wire:model="estado" class="p-text boton-g">
-          <option value="1">Activo</option>
-          <option value="0">Inactivo</option>
+        <select wire:model="estado" class="p-text input-g">
+          <option class="p-text" value="1">Activo</option>
+          <option class="p-text" value="0">Inactivo</option>
         </select>
         </div>
         <div class="mt-6 flex justify-center w-full space-x-4">

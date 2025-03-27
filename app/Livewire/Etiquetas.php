@@ -19,19 +19,18 @@ class Etiquetas extends Component
     public $imagen;
     public $capacidad = '';
     public $estado = 1;
-    public $observaciones = '';
+
     public $cliente_id;
     public $accion = 'create';
     public $clientes;
-
+    public $modalDetalle = false;
+    public $etiquetaSeleccionada= [];
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
-        // 'imagen' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp',
         'capacidad' => 'required|string',
         'estado' => 'required|boolean',
         'cliente_id' => 'nullable|exists:clientes,id',
-        'observaciones' => 'nullable|string',
     ];
 
     public function mount()
@@ -56,7 +55,7 @@ class Etiquetas extends Component
 
     public function abrirModal($accion = 'create', $id = null)
     {
-        $this->reset(['imagen', 'capacidad', 'estado', 'observaciones', 'cliente_id']);
+        $this->reset(['imagen', 'capacidad', 'estado', 'cliente_id']);
         $this->accion = $accion;
 
         if ($accion === 'edit' && $id) {
@@ -73,7 +72,6 @@ class Etiquetas extends Component
         $this->imagen = $etiqueta->imagen;  // Aquí asignamos la imagen ya almacenada
         $this->capacidad = $etiqueta->capacidad;
         $this->estado = $etiqueta->estado;
-        $this->observaciones = $etiqueta->observaciones;
         $this->cliente_id = $etiqueta->cliente_id;
         $this->accion = 'edit';
     }
@@ -98,7 +96,6 @@ class Etiquetas extends Component
                 'capacidad' => $this->capacidad,
                 'estado' => $this->estado,
                 'cliente_id' => $this->cliente_id,
-                'observaciones' => $this->observaciones,
             ]);
     
             LivewireAlert::title($this->etiqueta_id ? 'Etiqueta actualizada con éxito.' : 'Etiqueta creada con éxito.')
@@ -116,7 +113,20 @@ class Etiquetas extends Component
     public function cerrarModal()
     {
         $this->modal = false;
-        $this->reset(['imagen', 'capacidad', 'estado', 'observaciones', 'cliente_id', 'etiqueta_id']);
+        $this->reset(['imagen', 'capacidad', 'estado', 'cliente_id', 'etiqueta_id']);
         $this->resetErrorBag();
+    }
+
+    // FUNCIONALIDAD PARA MODAL DE DETALLES
+    public function modaldetalle($id)
+    {
+        $this->etiquetaSeleccionada = Etiqueta::findOrFail($id);
+        $this->modalDetalle = true;
+    }
+
+    public function cerrarModalDetalle()
+    {
+        $this->modalDetalle = false;
+        $this->etiquetaSeleccionada = null;
     }
 }
