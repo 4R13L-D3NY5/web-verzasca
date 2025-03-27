@@ -12,6 +12,7 @@ class Tapa extends Model
     protected $fillable = [
         'color',
         'tipo',
+        'estado',
     ];
 
     /**

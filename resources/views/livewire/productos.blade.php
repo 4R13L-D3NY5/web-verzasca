@@ -30,8 +30,8 @@
                         <th scope="col" class="px-6 py-3">Capacidad</th>
                         <th scope="col" class="px-6 py-3">Precio</th>
                         <th scope="col" class="px-6 py-3">Estado</th>
-                        <th scope="col" class="px-6 py-3">Base</th>
-                        <th scope="col" class="px-6 py-3">Tapa</th>
+                        <th scope="col" class="px-6 py-3">Capacidad</th>
+                        <th scope="col" class="px-6 py-3">Color</th>
                         <th scope="col" class="px-6 py-3">Observaciones</th>
                     </tr>
                 </thead>
@@ -195,9 +195,9 @@
                             <!-- Base -->
                             <div class="input-container">
                                 <select wire:model="base_id" class="input-field appearance-none">
-                                    <option value="" disabled selected>Seleccione una Base</option>
+                                    <option value="" disabled selected>Seleccione una capacidad</option>
                                     @foreach ($bases as $base)
-                                        <option value="{{ $base->id }}">{{ $base->nombre }}</option>
+                                        <option value="{{ $base->id }}">{{ $base->capacidad }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -206,9 +206,9 @@
                             <!-- Tapa (Opcional) -->
                             <div class="input-container">
                                 <select wire:model="tapa_id" class="input-field appearance-none">
-                                    <option class="option-style" value="" selected>Sin tapa</option>
+                                    <option class="option-style" value="" selected>Color</option>
                                     @foreach ($tapas as $tapa)
-                                        <option class=" text-black" value="{{ $tapa->id }}">{{ $tapa->nombre }}</option>
+                                        <option class=" text-black" value="{{ $tapa->id }}">{{ $tapa->color }}</option>
                                     @endforeach
                                 </select>
                             </div>

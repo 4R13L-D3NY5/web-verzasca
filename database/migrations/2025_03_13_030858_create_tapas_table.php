@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('tapas', function (Blueprint $table) {
             $table->id();
             $table->string('color');
-            $table->string('tipo'); //rosca o botellon
+            $table->string('tipo');
+            $table->tinyInteger('estado'); 
             $table->timestamps();
         });
     }
