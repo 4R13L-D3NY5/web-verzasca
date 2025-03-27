@@ -4,19 +4,19 @@
       <h6 class="text-center text-xl font-bold mb-4 px-4 p-text">Gestión de Tapas</h6>
 
       <!-- Botón de registro y buscador -->
-      <div class="flex justify-center items-center w-full h-10 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
-        <button title="Registrar tapa" wire:click='abrirModal("create")'
-          class="group cursor-pointer outline-none hover:rotate-90 duration-300">
-          <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 24 24"
-            class="stroke-zinc-400 fill-none group-hover:fill-zinc-800 duration-300">
-            <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
-              stroke-width="1.5"></path>
-            <path d="M8 12H16" stroke-width="1.5"></path>
-            <path d="M12 16V8" stroke-width="1.5"></path>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+        <button title="Registrar tapa" wire:click='abrirModal("create")' class="boton-g p-text">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-droplet-bolt">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M18.628 12.076a6.653 6.653 0 0 0 -.564 -1.199l-4.89 -7.26c-.42 -.625 -1.287 -.803 -1.936 -.397a1.376 1.376 0 0 0 -.41 .397l-4.893 7.26c-1.695 2.838 -1.035 6.441 1.567 8.546c1.7 1.375 3.906 1.852 5.958 1.431" />
+            <path d="M19 16l-2 3h4l-2 3" />
           </svg>
         </button>
         <input type="text" wire:model.live="search" placeholder="Buscar..."
-          class="px-4 py-2 w-full sm:w-64 p-text color-bg focus:outline-none" />
+          class="boton-g" />
       </div>
 
       <!-- Tabla -->
@@ -34,10 +34,10 @@
           <td class="color-bg w-40 text-center p-2">
           <div class="flex justify-center space-x-2 ">
             <!-- Botón de edición -->
-            <button wire:click="abrirModal('edit', {{ $tapa->id }})">
+            <button title="registrar nueva tapa"class="boton-g p-text" wire:click="abrirModal('edit', {{ $tapa->id }})">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-edit p-text">
+              class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
               <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
@@ -46,15 +46,14 @@
             </button>
 
             <!-- Botón de detalle -->
-            <button wire:click="modaldetalle({{ $tapa->id }})">
+            <button title="informacion de la tapa" class="boton-g p-text" wire:click="modaldetalle({{ $tapa->id }})">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-baseline-density-small p-text">
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M4 3h16" />
-              <path d="M4 9h16" />
-              <path d="M4 15h16" />
-              <path d="M4 21h16" />
+              <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+              <path d="M12 9h.01" />
+              <path d="M11 12h1v4h1" />
             </svg>
             </button>
           </div>
@@ -86,31 +85,39 @@
         </h3>
         <div class="over-col">
         <h3 class="title3">Color</h3>
-        <input type="text" wire:model="color" class="p-text color-bg">
+        <input type="text" wire:model="color" class="p-text boton-g">
         @if ($accion === 'create')
       @error('color') <span class="error-message text-red-500">{{ $message }}</span> @enderror
     @endif
         <h3 class="title3">Tipo de tapa</h3>
-        <input type="text" wire:model="tipo" class="p-text color-bg">
+        <input type="text" wire:model="tipo" class="p-text boton-g">
         @if ($accion === 'create')
       @error('tipo') <span class="error-message text-red-500">{{ $message }}</span> @enderror
     @endif
         <h3 class="title3">Estado</h3>
-        <select wire:model="estado" class="p-text color-bg">
+        <select wire:model="estado" class="p-text boton-g">
           <option value="1">Activo</option>
           <option value="0">Inactivo</option>
         </select>
         </div>
         <div class="mt-6 flex justify-center w-full space-x-4">
-        <button type="button" wire:click="guardar" class="color-bg">
-          <span class="p-text">
-          GUARDAR
-          </span>
+        <button type="button" wire:click="guardar" class="boton-g">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
+          <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+          <path d="M14 4l0 4l-6 0l0 -4" />
+          </svg>
         </button>
-        <button type="button" wire:click="cerrarModal" class="color-bg">
-          <span class="p-text">
-          CERRAR
-          </span>
+        <button type="button" wire:click="cerrarModal" class="boton-g">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+          class="icon icon-tabler icons-tabler-filled icon-tabler-square-x">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M19 2h-14a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3 -3v-14a3 3 0 0 0 -3 -3zm-9.387 6.21l.094 .083l2.293 2.292l2.293 -2.292a1 1 0 0 1 1.497 1.32l-.083 .094l-2.292 2.293l2.292 2.293a1 1 0 0 1 -1.32 1.497l-.094 -.083l-2.293 -2.292l-2.293 2.292a1 1 0 0 1 -1.497 -1.32l.083 -.094l2.292 -2.293l-2.292 -2.293a1 1 0 0 1 1.32 -1.497z" />
+          </svg>
         </button>
         </div>
       </div>
@@ -136,10 +143,13 @@
         </p>
         </div>
         <div class="mt-6 flex justify-center w-full">
-        <button type="button" wire:click="cerrarModalDetalle" class="color-bg">
-          <span class="p-text">
-          CERRAR
-          </span>
+        <button type="button" wire:click="cerrarModalDetalle" class="boton-g color-bg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+          class="icon icon-tabler icons-tabler-filled icon-tabler-square-x">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M19 2h-14a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3 -3v-14a3 3 0 0 0 -3 -3zm-9.387 6.21l.094 .083l2.293 2.292l2.293 -2.292a1 1 0 0 1 1.497 1.32l-.083 .094l-2.292 2.293l2.292 2.293a1 1 0 0 1 -1.32 1.497l-.094 -.083l-2.293 -2.292l-2.293 2.292a1 1 0 0 1 -1.497 -1.32l.083 -.094l2.292 -2.293l-2.292 -2.293a1 1 0 0 1 1.32 -1.497z" />
+          </svg>
         </button>
         </div>
       </div>

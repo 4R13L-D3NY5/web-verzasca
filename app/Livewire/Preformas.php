@@ -13,6 +13,7 @@ class Preformas extends Component
 
     public $search = '';
     public $modal = false;
+    public $modalDetalle = false;
     public $preforma_id = null;
     public $insumo = '';
     public $descripcion = '';
@@ -21,6 +22,7 @@ class Preformas extends Component
     public $estado = 1;
     public $observaciones = '';
     public $accion = 'create';
+    public $preformaSeleccionada = [];
 
     protected $paginationTheme = 'tailwind';
 
@@ -102,5 +104,18 @@ class Preformas extends Component
         $this->modal = false;
         $this->reset(['insumo', 'descripcion', 'capacidad', 'color', 'estado', 'observaciones', 'preforma_id']);
         $this->resetErrorBag();
+    }
+
+    // FUNCIONALIDAD PARA MODAL DE DETALLES
+    public function modaldetalle($id)
+    {
+        $this->preformaSeleccionada = Preforma::findOrFail($id);
+        $this->modalDetalle = true;
+    }
+
+    public function cerrarModalDetalle()
+    {
+        $this->modalDetalle = false;
+        $this->preformaSeleccionada = null;
     }
 }

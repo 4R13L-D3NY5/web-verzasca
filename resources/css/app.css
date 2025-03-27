@@ -50,7 +50,9 @@
     @apply rounded-l;
   }
 
-  .botonmodal button:last-child {
-    @apply rounded-r;
+  .boton-g{
+    @apply text-black bg-white border border-black hover:bg-black hover:text-white focus:ring-4 focus:outline-none focus:ring-gray-600 
+    dark:text-cyan-500 dark:bg-slate-950 dark:border-cyan-500 dark:hover:bg-cyan-500 dark:hover:text-black dark:focus:ring-cyan-800 
+    font-medium rounded-lg text-sm px-2 py-1.5 text-center me-2 mb-1
   }
 }
