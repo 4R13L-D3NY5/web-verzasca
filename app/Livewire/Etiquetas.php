@@ -27,7 +27,7 @@ class Etiquetas extends Component
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
-        'imagen' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp',
+        // 'imagen' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp',
         'capacidad' => 'required|string',
         'estado' => 'required|boolean',
         'cliente_id' => 'nullable|exists:clientes,id',

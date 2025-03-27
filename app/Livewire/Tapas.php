@@ -13,12 +13,13 @@ class Tapas extends Component
 
     public $search = '';
     public $modal = false;
+    public $modalDetalle = false;
     public $tapa_id = null;
     public $color = '';
     public $tipo = '';
     public $estado = 1;
     public $accion = 'create';
-
+    public $tapaSeleccionada = [];
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
@@ -31,7 +32,7 @@ class Tapas extends Component
     {
         $tapas = Tapa::when($this->search, function ($query) {
             $query->where('color', 'like', '%' . $this->search . '%')
-                  ->orWhere('tipo', 'like', '%' . $this->search . '%');
+                ->orWhere('tipo', 'like', '%' . $this->search . '%');
         })->paginate(4);
 
         return view('livewire.tapas', compact('tapas'));
@@ -64,7 +65,13 @@ class Tapas extends Component
 
     public function guardar()
     {
-        $this->validate();
+        // Validar solo si es un nuevo registro
+        if ($this->accion === 'create') {
+            $this->validate([
+                'color' => 'required|string',
+                'tipo' => 'required|string',
+            ]);
+        }
 
         try {
             Tapa::updateOrCreate(['id' => $this->tapa_id], [
@@ -90,5 +97,17 @@ class Tapas extends Component
         $this->modal = false;
         $this->reset(['color', 'tipo', 'estado', 'tapa_id']);
         $this->resetErrorBag();
+    }
+    // FUNCIONALIDAD PARA MODAL DE DETALLES
+    public function modaldetalle($id)
+    {
+        $this->tapaSeleccionada = Tapa::findOrFail($id);
+        $this->modalDetalle = true;
+    }
+
+    public function cerrarModalDetalle()
+    {
+        $this->modalDetalle = false;
+        $this->tapaSeleccionada = null;
     }
 }
