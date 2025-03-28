@@ -8,7 +8,7 @@ use App\Models\Distribucion as ModeloDistribucion;
 use App\Models\Asignacion;
 use App\Models\Venta;
 use App\Models\Stock;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 
 class Distribucion extends Component
 {
@@ -17,6 +17,7 @@ class Distribucion extends Component
 
     public $search = '';
     public $modal = false;
+    public $detalleModal = false; // Aseguro que esté definida aquí
     public $accion = 'create';
     public $distribucionId = null;
     public $fecha;
@@ -28,6 +29,7 @@ class Distribucion extends Component
     public $asignaciones;
     public $ventasContado;
     public $stocksVenta;
+    public $distribucionSeleccionada = null;
 
     protected $paginationTheme = 'tailwind';
 
@@ -69,6 +71,7 @@ class Distribucion extends Component
         $this->fecha = now()->format('Y-m-d');
         $this->estado = 1;
         $this->modal = true;
+        $this->detalleModal = false;
     }
 
     public function editarDistribucion($id)
@@ -84,6 +87,14 @@ class Distribucion extends Component
         $this->cargarStocksVenta();
         $this->accion = 'edit';
         $this->modal = true;
+        $this->detalleModal = false;
+    }
+
+    public function verDetalle($id)
+    {
+        $this->distribucionSeleccionada = ModeloDistribucion::with('stocks.producto')->findOrFail($id);
+        $this->modal = false;
+        $this->detalleModal = true;
     }
 
     public function cargarStocksVenta()
@@ -113,7 +124,9 @@ class Distribucion extends Component
                 if ($this->stock_ids) {
                     $distribucion->stocks()->sync($this->stock_ids);
                 }
-                // $this->alert('success', 'Distribución actualizada con éxito.');
+                LivewireAlert::title('Distribución actualizada con éxito.')
+                    ->success()
+                    ->show();
             } else {
                 $distribucion = ModeloDistribucion::create([
                     'fecha' => $this->fecha,
@@ -124,27 +137,32 @@ class Distribucion extends Component
                 if ($this->stock_ids) {
                     $distribucion->stocks()->attach($this->stock_ids);
                 }
-                // $this->alert('success', 'Distribución registrada con éxito.');
+                LivewireAlert::title('Distribución registrada con éxito.')
+                    ->success()
+                    ->show();
             }
 
             $this->cerrarModal();
         } catch (\Exception $e) {
-            // $this->alert('error', 'Ocurrió un error: ' . $e->getMessage());
+            LivewireAlert::title('Ocurrió un error: ' . $e->getMessage())
+                ->error()
+                ->show();
         }
     }
 
     public function retornarStock($id)
     {
         $distribucion = ModeloDistribucion::findOrFail($id);
-        // Aquí va la lógica para retornar stock (por ahora solo un mensaje)
-        // $this->alert('info', 'Funcionalidad de retorno de stock aún no implementada para Distribución #' . $distribucion->id);
-        // Ejemplo futuro: $distribucion->stocks()->detach(); para eliminar relación y sumar cantidades a existencias
+        LivewireAlert::title('Funcionalidad de retorno de stock aún no implementada para Distribución #' . $distribucion->id)
+            ->info()
+            ->show();
     }
 
     public function cerrarModal()
     {
         $this->modal = false;
-        $this->reset(['fecha', 'estado', 'observaciones', 'asignacion_id', 'venta_id', 'stock_ids', 'distribucionId', 'stocksVenta']);
+        $this->detalleModal = false;
+        $this->reset(['fecha', 'estado', 'observaciones', 'asignacion_id', 'venta_id', 'stock_ids', 'distribucionId', 'stocksVenta', 'distribucionSeleccionada']);
         $this->resetErrorBag();
     }
 }

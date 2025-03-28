@@ -38,10 +38,13 @@
                                 <div class="flex flex-col">
                                     <span>Fecha: {{ $distribucion->fecha }}</span>
                                     <span class="text-gray-500 dark:text-gray-400 text-xs">
-                                        Estado: {{ $distribucion->estado == 1 ? 'En distribución' : 'Concluido' }}
+                                        Estado: 
+                                        <span class="{{ $distribucion->estado == 1 ? 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white' }} inline-block px-2 py-1 rounded-full text-xs">
+                                            {{ $distribucion->estado == 1 ? 'En distribución' : 'Concluido' }}
+                                        </span>
                                     </span>
                                     <span class="text-gray-500 dark:text-gray-400 text-xs">
-                                        Asignación ID: {{ $distribucion->asignacion_id }}
+                                        Asignación ID: {{ $distribucion->asignacion->personal->apellidos.' '.$distribucion->asignacion->personal->nombres }}
                                     </span>
                                 </div>
                             </td>
@@ -175,7 +178,7 @@
     </div>
     @endif
     <!-- Modal de detalle -->
-    @if ($detalleModal)
+    @if ($detalleModal) 
     <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 transition-opacity" aria-hidden="true"></div>
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto flex items-center justify-center">

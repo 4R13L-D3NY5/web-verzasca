@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Distribucion extends Model
 {
@@ -30,5 +31,9 @@ class Distribucion extends Model
     public function retorno()
     {
         return $this->hasOne(Retorno::class);
+    }
+    public function stocks(): HasMany
+    {
+        return $this->hasMany(Retorno::class);
     }
 }

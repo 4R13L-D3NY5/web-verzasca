@@ -53,4 +53,8 @@ class Stock extends Model
     {
         return $this->belongsTo(Etiqueta::class, 'etiqueta_id');
     }
+    public function distribucion()
+    {
+        return $this->belongsTo(Distribucion::class);
+    }
 }
