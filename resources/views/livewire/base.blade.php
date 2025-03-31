@@ -161,6 +161,74 @@
 
                 </div>
                 <div>
+                    <h3 class="text-violet-500 mt-4">GESTIÓN DE PRODUCCIÓN</h3>
+                
+                    <li class="nav-item @if($seleccion == 'Elaboracion') bg-emerald-500 @endif">
+                        <a wire:click="$set('seleccion', 'Elaboracion')" class="flex items-center space-x-2">
+                            <span class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="icon icon-tabler icon-tabler-settings">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                    <path d="M10 21l2 -4l2 4" />
+                                    <path d="M4 12l4 -2l-4 -2" />
+                                    <path d="M20 12l-4 -2l4 -2" />
+                                </svg>
+                            </span>
+                            <span class="text-custom">Elaboración</span>
+                        </a>
+                    </li>
+                
+                    <li class="nav-item @if($seleccion == 'Embotellado') bg-emerald-500 @endif">
+                        <a wire:click="$set('seleccion', 'Embotellado')" class="flex items-center space-x-2">
+                            <span class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="icon icon-tabler icon-tabler-bottle">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M10 5v1a2 2 0 0 1 -2 2v11a2 2 0 0 0 2 2h4a2 2 0 0 0 2 -2v-11a2 2 0 0 1 -2 -2v-1" />
+                                    <path d="M10 3h4" />
+                                </svg>
+                            </span>
+                            <span class="text-custom">Embotellado</span>
+                        </a>
+                    </li>
+                
+                    <li class="nav-item @if($seleccion == 'Etiquetado') bg-emerald-500 @endif">
+                        <a wire:click="$set('seleccion', 'Etiquetado')" class="flex items-center space-x-2">
+                            <span class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="icon icon-tabler icon-tabler-tag">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M4 4h6l10 10a2.828 2.828 0 1 1 -4 4l-10 -10v-6" />
+                                    <path d="M7 7h.01" />
+                                </svg>
+                            </span>
+                            <span class="text-custom">Etiquetado</span>
+                        </a>
+                    </li>
+                
+                    <li class="nav-item @if($seleccion == 'Traspaso') bg-emerald-500 @endif">
+                        <a wire:click="$set('seleccion', 'Traspaso')" class="flex items-center space-x-2">
+                            <span class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="icon icon-tabler icon-tabler-transfer">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M4 7h16" />
+                                    <path d="M4 17h16" />
+                                    <path d="M10 11l-2 2l2 2" />
+                                    <path d="M14 11l2 2l-2 2" />
+                                </svg>
+                            </span>
+                            <span class="text-custom">Traspaso</span>
+                        </a>
+                    </li>
+                </div>
+                
+                <div>
                     <h3 class="text-violet-500">GESTION DE VENTAS</h3>
                     <li class="nav-item @if($seleccion == 'Cliente') bg-emerald-500 @endif">
                         <a wire:click="$set('seleccion', 'Cliente')" class="flex items-center space-x-2">
