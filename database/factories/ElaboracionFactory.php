@@ -2,6 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Base;
+use App\Models\Personal;
+use App\Models\Existencia;
+use App\Models\Preforma;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

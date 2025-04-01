@@ -12,6 +12,7 @@ use App\Models\Stock;
 use App\Models\Sucursal;
 use App\Models\Cliente;
 use App\Models\Compra;
+use App\Models\Elaboracion;
 use App\Models\Etiqueta;
 use App\Models\Existencia;
 use App\Models\Itemcompra;
@@ -270,7 +271,7 @@ class DatabaseSeeder extends Seeder
 
         // Prestamo::factory(10)->create();
         
-        // elaboracion::factory(10)->create();
+        Elaboracion::factory(10)->create();
         // Enbotellado::factory(10)->create();
         // Reposicion::factory(10)->create();
         // Compra::factory(10)->create();
