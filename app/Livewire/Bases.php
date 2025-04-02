@@ -20,7 +20,8 @@ class Bases extends Component
     public $observaciones = '';
     public $preforma_id = '';
     public $accion = 'create';
-
+    public $baseSeleccionada = [];
+    public $modalDetalle = false;
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
@@ -98,5 +99,16 @@ class Bases extends Component
         $this->modal = false;
         $this->reset(['capacidad', 'estado', 'observaciones', 'preforma_id', 'base_id']);
         $this->resetErrorBag();
+    }
+    public function modaldetalle($id)
+    {
+        $this->preformaSeleccionada = Base::findOrFail($id);
+        $this->modalDetalle = true;
+    }
+
+    public function cerrarModalDetalle()
+    {
+        $this->modalDetalle = false;
+        $this->preformaSeleccionada = null;
     }
 }

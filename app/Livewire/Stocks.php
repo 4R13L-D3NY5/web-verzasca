@@ -20,9 +20,10 @@ class Stocks extends Component
     public $etiqueta_id = null;
     public $producto_id = null;
     public $accion = 'create';
-
+    public $stockSeleccionado = [];
     protected $paginationTheme = 'tailwind';
 
+    public $modalDetalle = false;
     protected $rules = [
         'fechaElaboracion' => 'required|date',
         'fechaVencimiento' => 'required|date|after:fechaElaboracion',
@@ -102,5 +103,16 @@ class Stocks extends Component
         $this->modal = false;
         $this->reset(['fechaElaboracion', 'fechaVencimiento', 'observaciones', 'etiqueta_id', 'producto_id', 'stock_id']);
         $this->resetErrorBag();
+    }
+    public function modaldetalle($id)
+    {
+        $this->stockSeleccionado = Stock::findOrFail($id);
+        $this->modalDetalle = true;
+    }
+
+    public function cerrarModalDetalle()
+    {
+        $this->modalDetalle = false;
+        $this->stockSeleccionado = null;
     }
 }

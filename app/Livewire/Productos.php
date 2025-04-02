@@ -3,8 +3,6 @@
 namespace App\Livewire;
 
 use App\Models\Producto;
-use App\Models\Base;
-use App\Models\Tapa;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -25,10 +23,9 @@ class Productos extends Component
     public $precioReferencia = '';
     public $observaciones = '';
     public $estado = 1;
-    public $base_id = '';
-    public $tapa_id = '';
     public $accion = 'create';
-
+    public $productoSeleccionado = [];
+    public $modalDetalle = false;
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
@@ -36,8 +33,6 @@ class Productos extends Component
         'capacidad' => 'required|integer',
         'precioReferencia' => 'required|numeric',
         'estado' => 'required|boolean',
-        'base_id' => 'required|exists:bases,id',
-        'tapa_id' => 'nullable|exists:tapas,id',
     ];
 
     public function render()
@@ -46,10 +41,7 @@ class Productos extends Component
             $query->where('nombre', 'like', '%' . $this->search . '%');
         })->paginate(4);
 
-        $bases = Base::all();
-        $tapas = Tapa::all();
-
-        return view('livewire.productos', compact('productos', 'bases', 'tapas'));
+        return view('livewire.productos', compact('productos'));
     }
 
     public function updatingSearch()
@@ -59,7 +51,7 @@ class Productos extends Component
 
     public function abrirModal($accion = 'create', $id = null)
     {
-        $this->reset(['nombre', 'imagen', 'tipoContenido', 'tipoProducto', 'capacidad', 'precioReferencia', 'observaciones', 'estado', 'base_id', 'tapa_id']);
+        $this->reset(['nombre', 'imagen', 'tipoContenido', 'tipoProducto', 'capacidad', 'precioReferencia', 'observaciones', 'estado']);
         $this->accion = $accion;
         if ($accion === 'edit' && $id) {
             $this->editar($id);
@@ -79,8 +71,6 @@ class Productos extends Component
         $this->precioReferencia = $producto->precioReferencia;
         $this->observaciones = $producto->observaciones;
         $this->estado = $producto->estado;
-        $this->base_id = $producto->base_id;
-        $this->tapa_id = $producto->tapa_id;
         $this->accion = 'edit';
     }
 
@@ -100,8 +90,6 @@ class Productos extends Component
                 'precioReferencia' => $this->precioReferencia,
                 'observaciones' => $this->observaciones,
                 'estado' => $this->estado,
-                'base_id' => $this->base_id,
-                'tapa_id' => $this->tapa_id,
             ]);
 
             LivewireAlert::title($this->producto_id ? 'Producto actualizado con éxito.' : 'Producto creado con éxito.')
@@ -119,7 +107,19 @@ class Productos extends Component
     public function cerrarModal()
     {
         $this->modal = false;
-        $this->reset(['nombre', 'imagen', 'tipoContenido', 'tipoProducto', 'capacidad', 'precioReferencia', 'observaciones', 'estado', 'base_id', 'tapa_id', 'producto_id']);
+        $this->reset(['nombre', 'imagen', 'tipoContenido', 'tipoProducto', 'capacidad', 'precioReferencia', 'observaciones', 'estado', 'producto_id']);
         $this->resetErrorBag();
+    }
+
+    public function modaldetalle($id)
+    {
+        $this->productoSeleccionado = Producto::findOrFail($id);
+        $this->modalDetalle = true;
+    }
+
+    public function cerrarModalDetalle()
+    {
+        $this->modalDetalle = false;
+        $this->productoSeleccionado = null;
     }
 }

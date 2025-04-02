@@ -1,236 +1,206 @@
-<div class="text-white p-2 mt-10 flex justify-center">
-<div class="w-full max-w-screen-xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
-    <div class="relative flex w-full flex-col rounded-xl text-gray-700 shadow-md">
-        <h6 class="text-center text-xl font-bold text-gray-800 dark:text-white mb-4 px-4">Gestión de Productos</h6>
-        
-        <div class="flex overflow-hidden border divide-x rounded-lg rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700">
-            <button title="Registrar Producto" wire:click='abrirModal("create")'
-                class="group cursor-pointer outline-none hover:rotate-90 duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 24 24"
-                    class="stroke-zinc-400 fill-none group-hover:fill-zinc-800 group-active:stroke-zinc-200 group-active:fill-zinc-600 group-active:duration-0 duration-300">
-                    <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
-                        stroke-width="1.5"></path>
-                    <path d="M8 12H16" stroke-width="1.5"></path>
-                    <path d="M12 16V8" stroke-width="1.5"></path>
-                </svg>
-            </button>
-            <input type="text" wire:model.live="search" placeholder="Buscar..."
-                class="px-4 py-2 w-full sm:w-64 text-gray-600 dark:text-gray-300 dark:bg-gray-900 focus:outline-none" />
-        </div>
+<div class="p-text p-2 mt-10 flex justify-center">
+    <div class="w-full max-w-screen-xl grid grid-cols-1 gap-6">
+        <div>
+            <h6 class="text-center text-xl font-bold mb-4 px-4 p-text">Gestión de Productos</h6>
 
-        <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full table-auto text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
-                    <tr>
-                        <th scope="col" class="w-40 text-right p-2">Acciones</th>
-                        <th scope="col" class="px-6 py-3">Imagen</th>
-                        <th scope="col" class="px-6 py-3">Nombre</th>
-                        <th scope="col" class="px-6 py-3">Tipo Contenido</th>
-                        <th scope="col" class="px-6 py-3">Tipo Producto</th>
-                        <th scope="col" class="px-6 py-3">Capacidad</th>
-                        <th scope="col" class="px-6 py-3">Precio</th>
-                        <th scope="col" class="px-6 py-3">Estado</th>
-                        <th scope="col" class="px-6 py-3">Capacidad</th>
-                        <th scope="col" class="px-6 py-3">Color</th>
-                        <th scope="col" class="px-6 py-3">Observaciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($productos as $producto)
-                        <tr class="border-b border-gray-200 dark:border-gray-700">
-                            <!-- Acciones -->
-                            <td class="bg-gray-50 dark:bg-gray-800 w-40 text-right p-2">
-                                <div class="flex justify-end">
-                                    <button wire:click="abrirModal('edit', {{ $producto->id }})"
-                                        class="text-gray-600 hover:text-gray-800 mx-1 transition-all duration-200 ease-in-out hover:rotate-12 focus:outline-none">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.85 3 20l1.15-4.5L16.862 3.487z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
+            <!-- Botón de registro y buscador -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+                <button title="Registrar Producto" wire:click='abrirModal("create")' class="boton-g p-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-droplet-bolt">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path
+                            d="M18.628 12.076a6.653 6.653 0 0 0 -.564 -1.199l-4.89 -7.26c-.42 -.625 -1.287 -.803 -1.936 -.397a1.376 1.376 0 0 0 -.41 .397l-4.893 7.26c-1.695 2.838 -1.035 6.441 1.567 8.546c1.7 1.375 3.906 1.852 5.958 1.431" />
+                        <path d="M19 16l-2 3h4l-2 3" />
+                    </svg>
+                </button>
+                <input type="text" wire:model.live="search" placeholder="Buscar..." class="input-g" />
+            </div>
 
-                            <!-- Imagen -->
-                            <td class="px-6 py-4">
-                                @if ($producto->imagen)
-                                    <img src="{{ asset('storage/' . $producto->imagen) }}" alt="Producto"
-                                        class="h-10 w-10 rounded-md object-cover">
-                                @else
-                                    <span class="text-gray-400">Sin imagen</span>
-                                @endif
-                            </td>
-
-                            <!-- Nombre -->
-                            <td class="px-6 py-4">{{ $producto->nombre }}</td>
-
-                            <!-- Tipo de Contenido -->
-                            <td class="px-6 py-4">
-                                {{ $producto->tipoContenido == 1 ? 'Líquido' : 'Sólido' }}
-                            </td>
-
-                            <!-- Tipo de Producto -->
-                            <td class="px-6 py-4">
-                                <span class="text-{{ $producto->tipoProducto ? 'blue' : 'yellow' }}-500">
-                                    {{ $producto->tipoProducto ? 'Producto Final' : 'Materia Prima' }}
-                                </span>
-                            </td>
-
-                            <!-- Capacidad -->
-                            <td class="px-6 py-4">{{ $producto->capacidad }} ml</td>
-
-                            <!-- Precio -->
-                            <td class="px-6 py-4">${{ number_format($producto->precioReferencia, 2) }}</td>
-
-                            <!-- Estado -->
-                            <td class="px-6 py-4">
-                                <span class="text-{{ $producto->estado ? 'green' : 'red' }}-500">
-                                    {{ $producto->estado ? 'Activo' : 'Inactivo' }}
-                                </span>
-                            </td>
-
-                            <!-- Base -->
-                            <td class="px-6 py-4">
-                                {{ optional($producto->base)->nombre ?? 'Sin base' }}
-                            </td>
-
-                            <!-- Tapa -->
-                            <td class="px-6 py-4">
-                                {{ optional($producto->tapa)->nombre ?? 'Sin tapa' }}
-                            </td>
-
-                            <!-- Observaciones -->
-                            <td class="px-6 py-4">
-                                {{ $producto->observaciones ?: '-' }}
-                            </td>
-                        </tr>
-                    @empty
+            <!-- Tabla -->
+            <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left rtl:text-right">
+                    <thead class="text-x uppercase color-bg">
                         <tr>
-                            <td colspan="11" class="text-center py-4 text-gray-600 dark:text-gray-400">
-                                No hay productos registrados.
-                            </td>
+                            <th scope="col" class="w-40 rounded-s-lg text-center p-2 p-text">Acciones</th>
+                            <th scope="col" class="px-6 py-3 text-center p-text">Imagen</th>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @forelse ($productos as $producto)
+                            <tr class="color-bg">
+                                <td class="color-bg w-40 text-center p-2">
+                                    <div class="flex justify-center space-x-2">
+                                        <button title="Editar Producto" class="boton-g p-text"
+                                            wire:click="abrirModal('edit', {{ $producto->id }})">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                                <path
+                                                    d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                                <path d="M16 5l3 3" />
+                                            </svg>
+                                        </button>
+                                        <button title="Detalles del Producto" class="boton-g p-text"
+                                            wire:click="modaldetalle({{ $producto->id }})">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                <path d="M12 9h.01" />
+                                                <path d="M11 12h1v4h1" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-center p-text">
+                                    <img src="{{ asset('storage/' . $producto->imagen) }}" alt="Producto"
+                                        class="h-24 w-24 object-cover mx-auto">
+                                    <div class="text-sm font-semibold">{{ $producto->nombre }}</div>
+                                    <div class="text-sm">{{ $producto->tipoContenido == 1 ? 'Líquido' : 'Sólido' }}</div>
+                                </td>
 
-        <div class="mt-4 flex justify-center">
-            {{ $productos->links() }}
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="text-center py-4 text-gray-600 dark:text-gray-400">
+                                    No hay productos registrados.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 flex justify-center">
+                {{ $productos->links() }}
+            </div>
+
         </div>
     </div>
-</div>
-
 
 
     @if ($modal)
-        <div class="relative z-10 flex items-center justify-center min-h-screen" aria-labelledby="modal-title" role="dialog"
-            aria-modal="true">
-            <div class="fixed inset-0 bg-gray-500/75 dark:bg-black transition-opacity" aria-hidden="true"></div>
-
-            <div class="fixed inset-0 z-10 flex items-center justify-center w-full">
-                <div
-                    class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-full max-w-md mx-4 sm:mx-0">
-                    <div class="px-6 py-6 flex flex-col items-center">
-                        <h3 id="modal-title" class="text-lg font-semibold text-black text-center">
-                            {{ $accion === 'create' ? 'Registrar Producto' : 'Editar Producto' }}
-                        </h3>
-
-                        <div class="mt-4 w-full flex flex-col gap-3 max-h-[80vh] overflow-y-auto">
+        <div class="modal-first">
+            <div class="modal-center">
+                <div class="modal-hiden">
+                    <div class="center-col">
+                        <h3 class="title3">{{ $accion === 'create' ? 'Registrar Producto' : 'Editar Producto' }}</h3>
+                        <div class="over-col">
+                            <!-- Imagen -->
+                            <h3 class="title3">Imagen</h3>
+                            <input type="file" wire:model="imagen" class="p-text input-g">
 
                             <!-- Nombre -->
-                            <div class="input-container">
-                                <input placeholder="Nombre" type="text" wire:model="nombre" class="input-field">
-                            </div>
-                            @error('nombre') <span class="error-message">{{ $message }}</span> @enderror
-
-                            <!-- Imagen -->
-                            <div class="input-container">
-                                <input type="file" wire:model="imagen" class="input-field">
-                            </div>
-                            @error('imagen') <span class="error-message">{{ $message }}</span> @enderror
+                            <h3 class="title3">Nombre</h3>
+                            <input type="text" wire:model="nombre" class="p-text input-g">
 
                             <!-- Tipo de Contenido -->
-                            <div class="input-container">
-                                <select wire:model="tipoContenido" class="input-field appearance-none">
-                                    <option value="1">Líquido</option>
-                                    <option value="2">Sólido</option>
-                                </select>
-                            </div>
-                            @error('tipoContenido') <span class="error-message">{{ $message }}</span> @enderror
+                            <h3 class="title3">Tipo de Contenido</h3>
+                            <select wire:model="tipoContenido" class="p-text input-g">
+                                <option value="1">Líquido</option>
+                                <option value="0">Sólido</option>
+                            </select>
 
-                            <!-- Tipo de Producto (booleano) -->
-                            <div class="input-container">
-                                <select wire:model="tipoProducto" class="input-field appearance-none">
-                                    <option value="1">Producto Final</option>
-                                    <option value="0">Materia Prima</option>
-                                </select>
-                            </div>
-                            @error('tipoProducto') <span class="error-message">{{ $message }}</span> @enderror
+                            <!-- Tipo de Producto -->
+                            <h3 class="title3">Tipo de Producto</h3>
+                            <input type="text" wire:model="tipoProducto" class="p-text input-g">
 
                             <!-- Capacidad -->
-                            <div class="input-container">
-                                <input placeholder="Capacidad (ml)" type="number" wire:model="capacidad"
-                                    class="input-field">
-                            </div>
-                            @error('capacidad') <span class="error-message">{{ $message }}</span> @enderror
+                            <h3 class="title3">Capacidad</h3>
+                            <input type="text" wire:model="capacidad" class="p-text input-g">
 
-                            <!-- Precio Referencial -->
-                            <div class="input-container">
-                                <input placeholder="Precio de Referencia ($)" type="number" step="0.01"
-                                    wire:model="precioReferencia" class="input-field">
-                            </div>
-                            @error('precioReferencia') <span class="error-message">{{ $message }}</span> @enderror
-
-                            <!-- Estado -->
-                            <div class="input-container">
-                                <select wire:model="estado" class="input-field appearance-none">
-                                    <option value="1">Activo</option>
-                                    <option value="0">Inactivo</option>
-                                </select>
-                            </div>
-                            @error('estado') <span class="error-message">{{ $message }}</span> @enderror
-
-                            <!-- Base -->
-                            <div class="input-container">
-                                <select wire:model="base_id" class="input-field appearance-none">
-                                    <option value="" disabled selected>Seleccione una capacidad</option>
-                                    @foreach ($bases as $base)
-                                        <option value="{{ $base->id }}">{{ $base->capacidad }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('base_id') <span class="error-message">{{ $message }}</span> @enderror
-
-                            <!-- Tapa (Opcional) -->
-                            <div class="input-container">
-                                <select wire:model="tapa_id" class="input-field appearance-none">
-                                    <option class="option-style" value="" selected>Color</option>
-                                    @foreach ($tapas as $tapa)
-                                        <option class=" text-black" value="{{ $tapa->id }}">{{ $tapa->color }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('tapa_id') <span class="error-message">{{ $message }}</span> @enderror
+                            <!-- Precio de Referencia -->
+                            <h3 class="title3">Precio de Referencia</h3>
+                            <input type="text" wire:model="precioReferencia" class="p-text input-g">
 
                             <!-- Observaciones -->
-                            <div class="input-container h-[60px]">
-                                <textarea placeholder="Observaciones" wire:model="observaciones"
-                                    class="input-field resize-none"></textarea>
-                            </div>
-                            @error('observaciones') <span class="error-message">{{ $message }}</span> @enderror
+                            <h3 class="title3">Observaciones</h3>
+                            <textarea wire:model="observaciones" class="p-text input-g"></textarea>
+
+                            <!-- Estado -->
+                            <h3 class="title3">Estado</h3>
+                            <select wire:model="estado" class="p-text input-g">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        
                         </div>
 
                         <div class="mt-6 flex justify-center w-full space-x-4">
-                            <div class="botonmodal">
-                                <button type="button" wire:click="guardar">Guardar</button>
-                                <button type="button" wire:click="cerrarModal">Cancelar</button>
-                            </div>
+                            <button type="button" wire:click="guardar" class="boton-g">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
+                                    <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                    <path d="M14 4l0 4l-6 0l0 -4" />
+                                </svg>
+                            </button>
+                            <button type="button" wire:click="cerrarModal" class="boton-g">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-square-x">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M19 2h-14a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3 -3v-14a3 3 0 0 0 -3 -3zm-9.387 6.21l.094 .083l2.293 2.292l2.293 -2.292a1 1 0 0 1 1.497 1.32l-.083 .094l-2.292 2.293l2.292 2.293a1 1 0 0 1 -1.32 1.497l-.094 -.083l-2.293 -2.292l-2.293 2.292a1 1 0 0 1 -1.497 -1.32l.083 -.094l2.292 -2.293l-2.292 -2.293a1 1 0 0 1 1.32 -1.497z" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     @endif
+    @if ($modalDetalle)
+        <div class="modal-first">
+            <div class="modal-center">
+                <div class="modal-hiden">
+                    <div class="center-col">
+                        <h3 class="p-text">Detalles del Producto</h3>
+                        <div class="over-col">
+                            <p class="title3"><strong class="p-text">Imagen:</strong></p>
+                            <img src="{{ asset('storage/' . $productoSeleccionado['imagen']) }}" alt="Producto"
+                                class="h-52 w-52 object-cover mx-auto">
+
+                            <p class="title3"><strong class="p-text">Nombre:</strong>
+                                {{ $productoSeleccionado['nombre'] }}</p>
+                            <p class="title3"><strong class="p-text">Tipo de Contenido:</strong>
+                                {{ $productoSeleccionado['tipoContenido'] == 1 ? 'Líquido' : 'Sólido' }}</p>
+                            <p class="title3"><strong class="p-text">Tipo de Producto:</strong>
+                                {{ $productoSeleccionado['tipoProducto'] }}</p>
+                            <p class="title3"><strong class="p-text">Capacidad:</strong>
+                                {{ $productoSeleccionado['capacidad'] }}</p>
+                            <p class="title3"><strong class="p-text">Precio de Referencia:</strong>
+                                {{ $productoSeleccionado['precioReferencia'] }}</p>
+                            <p class="title3"><strong class="p-text">Observaciones:</strong>
+                                {{ $productoSeleccionado['observaciones'] }}</p>
+                            <p class="title3"><strong class="p-text">Estado:</strong>
+                                <span class="text-{{ $productoSeleccionado['estado'] ? 'green' : 'red' }}-500">
+                                    {{ $productoSeleccionado['estado'] ? 'Activo' : 'Inactivo' }}</span>
+                            </p>
+                        </div>
+
+                        <div class="mt-6 flex justify-center w-full">
+                            <button type="button" wire:click="cerrarModalDetalle" class="boton-g">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-square-x">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M19 2h-14a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3 -3v-14a3 3 0 0 0 -3 -3zm-9.387 6.21l.094 .083l2.293 2.292l2.293 -2.292a1 1 0 0 1 1.497 1.32l-.083 .094l-2.292 2.293l2.292 2.293a1 1 0 0 1 -1.32 1.497l-.094 -.083l-2.293 -2.292l-2.293 2.292a1 1 0 0 1 -1.497 -1.32l.083 -.094l2.292 -2.293l-2.292 -2.293a1 1 0 0 1 1.32 -1.497z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
 </div>
