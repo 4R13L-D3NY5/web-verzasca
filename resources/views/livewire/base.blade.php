@@ -42,7 +42,7 @@
             </form>
         </div>
     </header>
-    <nav id="menu" class="w-[95%]  max-w-[1700px] bg-slate-800 text-white px-6 py-4 shadow-lg 
+    <nav id="menu" class="w-[95%]  max-w-[1700px] p-text color-bg px-6 py-4 shadow-lg 
        fixed left-1/2 -translate-x-1/2 top-[65px] hidden transition-all duration-300 
        rounded-xl opacity-0 backdrop-blur-md z-20">
         <div class="max-h-[80vh] overflow-y-auto">
@@ -95,81 +95,124 @@
                         </a>
                     </li>
                 </div>
-                <!-- Gestión de Producción -->
-                <div>
-                    <h3 class="text-red-500">GESTION DE PRODUCCION</h3>
-                    <li class="nav-item @if($seleccion == 'Elaboracion') bg-emerald-500 @endif">
-                        <a wire:click="$set('seleccion', 'Elaboracion')" class="flex items-center space-x-2">
-                            <span class="icon">
-                                <!-- Icono de Elaboración -->
-                            </span>
-                            <span class="text-custom">ELABORACION</span>
-                        </a>
-                    </li>
-                  
-                </div>
+
+
                 <div>
                     <h3 class="text-violet-500">ALMACEN</h3>
-                    <li class="nav-item @if($seleccion == 'Stocks') bg-emerald-500 @endif">
+                    <li class="nav-item @if($seleccion == 'Stocks') color-bg @endif">
                         <a wire:click="$set('seleccion', 'Stocks')" class="flex items-center space-x-2">
                             <span class="icon">
-                            
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    class="icon icon-tabler icons-tabler-filled icon-tabler-stack-2">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M20.894 15.553a1 1 0 0 1 -.447 1.341l-8 4a1 1 0 0 1 -.894 0l-8 -4a1 1 0 0 1 .894 -1.788l7.553 3.774l7.554 -3.775a1 1 0 0 1 1.341 .447m0 -4a1 1 0 0 1 -.447 1.341l-8 4a1 1 0 0 1 -.894 0l-8 -4a1 1 0 0 1 .894 -1.788l7.552 3.775l7.554 -3.775a1 1 0 0 1 1.341 .447m-8.887 -8.552q .056 0 .111 .007l.111 .02l.086 .024l.012 .006l.012 .002l.029 .014l.05 .019l.016 .009l.012 .005l8 4a1 1 0 0 1 0 1.788l-8 4a1 1 0 0 1 -.894 0l-8 -4a1 1 0 0 1 0 -1.788l8 -4l.011 -.005l.018 -.01l.078 -.032l.011 -.002l.013 -.006l.086 -.024l.11 -.02l.056 -.005z" />
+                                </svg>
                             </span>
-                            <span class="text-custom">Stocks</span>
+                            <span class="p-text">STOCK</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Tapas') bg-emerald-500 @endif">
+                    <li class="nav-item @if($seleccion == 'Tapas') color-bg @endif">
                         <a wire:click="$set('seleccion', 'Tapas')" class="flex items-center space-x-2">
                             <span class="icon">
-
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-pepsi ">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                    <path d="M4 16c5.713 -2.973 11 -3.5 13.449 -11.162" />
+                                    <path d="M5 17.5c5.118 -2.859 15 0 14 -11" />
+                                </svg>
                             </span>
-                            <span class="text-custom">Tapas</span>
+                            <span class="p-text">TAPAS</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Etiquetas') bg-emerald-500 @endif">
+                    <li class="nav-item @if($seleccion == 'Etiquetas') color-bg @endif">
                         <a wire:click="$set('seleccion', 'Etiquetas')" class="flex items-center space-x-2">
                             <span class="icon">
-
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-ticket">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M15 5l0 2" />
+                                    <path d="M15 11l0 2" />
+                                    <path d="M15 17l0 2" />
+                                    <path
+                                        d="M5 5h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-3a2 2 0 0 0 0 -4v-3a2 2 0 0 1 2 -2" />
+                                </svg>
                             </span>
-                            <span class="text-custom">Etiquetas</span>
+                            <span class="p-text">ETIQUETAS</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Productos') bg-emerald-500 @endif">
+                    <li class="nav-item @if($seleccion == 'Productos') color-bg @endif">
                         <a wire:click="$set('seleccion', 'Productos')" class="flex items-center space-x-2">
                             <span class="icon">
-
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-building-store">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M3 21l18 0" />
+                                    <path
+                                        d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" />
+                                    <path d="M5 21l0 -10.15" />
+                                    <path d="M19 21l0 -10.15" />
+                                    <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
+                                </svg>
                             </span>
-                            <span class="text-custom">Productos</span>
+                            <span class="p-text">PRODUCTOS</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Bases') bg-emerald-500 @endif">
+                    <li class="nav-item @if($seleccion == 'Bases') color-bg @endif">
                         <a wire:click="$set('seleccion', 'Bases')" class="flex items-center space-x-2">
                             <span class="icon">
-
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-medicine-syrup">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M8 21h8a1 1 0 0 0 1 -1v-10a3 3 0 0 0 -3 -3h-4a3 3 0 0 0 -3 3v10a1 1 0 0 0 1 1z" />
+                                    <path d="M10 14h4" />
+                                    <path d="M12 12v4" />
+                                    <path d="M10 7v-3a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v3" />
+                                </svg>
                             </span>
-                            <span class="text-custom">Bases</span>
+                            <span class="p-text">BASES</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Preformas') bg-emerald-500 @endif">
+                    <li class="nav-item @if($seleccion == 'Preformas') color-bg @endif">
                         <a wire:click="$set('seleccion', 'Preformas')" class="flex items-center space-x-2">
                             <span class="icon">
-
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-terraform">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M15 15.5l-11.476 -6.216a1 1 0 0 1 -.524 -.88v-4.054a1.35 1.35 0 0 1 2.03 -1.166l9.97 5.816v10.65a1.35 1.35 0 0 1 -2.03 1.166l-3.474 -2.027a1 1 0 0 1 -.496 -.863v-11.926" />
+                                    <path
+                                        d="M15 15.5l5.504 -3.21a1 1 0 0 0 .496 -.864v-3.576a1.35 1.35 0 0 0 -2.03 -1.166l-3.97 2.316" />
+                                </svg>
                             </span>
-                            <span class="text-custom">Preformas</span>
+                            <span class="p-text">PREFORMAS</span>
                         </a>
                     </li>
 
                 </div>
                 <div>
                     <h3 class="text-violet-500 mt-4">GESTIÓN DE PRODUCCIÓN</h3>
-                
+
                     <li class="nav-item @if($seleccion == 'Elaboracion') bg-emerald-500 @endif">
                         <a wire:click="$set('seleccion', 'Elaboracion')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="icon icon-tabler icon-tabler-settings">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M12 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
                                     <path d="M10 21l2 -4l2 4" />
                                     <path d="M4 12l4 -2l-4 -2" />
@@ -179,29 +222,30 @@
                             <span class="text-custom">Elaboración</span>
                         </a>
                     </li>
-                
+
                     <li class="nav-item @if($seleccion == 'Embotellado') bg-emerald-500 @endif">
                         <a wire:click="$set('seleccion', 'Embotellado')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="icon icon-tabler icon-tabler-bottle">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M10 5v1a2 2 0 0 1 -2 2v11a2 2 0 0 0 2 2h4a2 2 0 0 0 2 -2v-11a2 2 0 0 1 -2 -2v-1" />
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M10 5v1a2 2 0 0 1 -2 2v11a2 2 0 0 0 2 2h4a2 2 0 0 0 2 -2v-11a2 2 0 0 1 -2 -2v-1" />
                                     <path d="M10 3h4" />
                                 </svg>
                             </span>
                             <span class="text-custom">Embotellado</span>
                         </a>
                     </li>
-                
+
                     <li class="nav-item @if($seleccion == 'Etiquetado') bg-emerald-500 @endif">
                         <a wire:click="$set('seleccion', 'Etiquetado')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="icon icon-tabler icon-tabler-tag">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M4 4h6l10 10a2.828 2.828 0 1 1 -4 4l-10 -10v-6" />
                                     <path d="M7 7h.01" />
                                 </svg>
@@ -209,14 +253,14 @@
                             <span class="text-custom">Etiquetado</span>
                         </a>
                     </li>
-                
+
                     <li class="nav-item @if($seleccion == 'Traspaso') bg-emerald-500 @endif">
                         <a wire:click="$set('seleccion', 'Traspaso')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="icon icon-tabler icon-tabler-transfer">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M4 7h16" />
                                     <path d="M4 17h16" />
                                     <path d="M10 11l-2 2l2 2" />
@@ -227,7 +271,7 @@
                         </a>
                     </li>
                 </div>
-                
+
                 <div>
                     <h3 class="text-violet-500">GESTION DE VENTAS</h3>
                     <li class="nav-item @if($seleccion == 'Cliente') bg-emerald-500 @endif">
@@ -531,13 +575,13 @@
                         </a>
                     </li>
                 </div>
-         
+
             </ul>
         </div>
     </nav>
 
     <main class="w-full min-h-screen dark:bg-gray-900" id="main-content">
-    <div class="w-full p-2  dark:bg-gray-900">
+        <div class="w-full p-2  dark:bg-gray-900">
             @if ($seleccion == 'Compras')
                 @livewire('compras')
             @endif
@@ -667,7 +711,7 @@
     });
 
     // También puedes agregar un evento para cerrar el menú si se hace clic fuera de él
-    document.addEventListener("click", function(event) {
+    document.addEventListener("click", function (event) {
         if (!menu.contains(event.target) && !menuToggleButton.contains(event.target)) {
             menu.classList.add("opacity-0");
             menu.classList.remove("backdrop-blur-md", "z-20"); // Eliminar desenfoque y z-index cuando se oculta
