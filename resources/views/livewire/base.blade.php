@@ -280,16 +280,13 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-stackoverflow">
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-user">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-1" />
-                                    <path d="M8 16h8" />
-                                    <path d="M8.322 12.582l7.956 .836" />
-                                    <path d="M8.787 9.168l7.826 1.664" />
-                                    <path d="M10.096 5.764l7.608 2.472" />
+                                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                                    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Cliente</span>
+                            <span class="text-custom">CLIENTE</span>
                         </a>
                     </li>
                     <li class="nav-item @if($seleccion == 'Venta') bg-emerald-500 @endif">
@@ -298,16 +295,17 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-stackoverflow">
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-report-money">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-1" />
-                                    <path d="M8 16h8" />
-                                    <path d="M8.322 12.582l7.956 .836" />
-                                    <path d="M8.787 9.168l7.826 1.664" />
-                                    <path d="M10.096 5.764l7.608 2.472" />
+                                    <path
+                                        d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                                    <path
+                                        d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                                    <path d="M14 11h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
+                                    <path d="M12 17v1m0 -8v1" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Venta</span>
+                            <span class="text-custom">VENTA</span>
                         </a>
                     </li>
                 </div>
@@ -319,16 +317,16 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-stackoverflow">
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin-share">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-1" />
-                                    <path d="M8 16h8" />
-                                    <path d="M8.322 12.582l7.956 .836" />
-                                    <path d="M8.787 9.168l7.826 1.664" />
-                                    <path d="M10.096 5.764l7.608 2.472" />
+                                    <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                                    <path
+                                        d="M12.02 21.485a1.996 1.996 0 0 1 -1.433 -.585l-4.244 -4.243a8 8 0 1 1 13.403 -3.651" />
+                                    <path d="M16 22l5 -5" />
+                                    <path d="M21 21.5v-4.5h-4.5" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Distribucion</span>
+                            <span class="text-custom">DISTRIBUCIOIN</span>
                         </a>
                     </li>
                     <li class="nav-item @if($seleccion == 'Pedidos') bg-emerald-500 @endif">

@@ -1,65 +1,78 @@
-<div class="dark:bg-gray-900 text-white p-4 flex justify-center">
-    <div class="w-full max-w-screen-xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
-        <div class="relative flex w-full flex-col rounded-xl bg-white text-gray-700 shadow-md">
-            <!-- Título bonito -->
-            <h6 class="text-center text-xl font-bold text-gray-800 dark:text-white mb-4 px-4">Gestión de Clientes</h6>
+<div class="p-text p-2 mt-10 flex justify-center">
+    <div class="w-full max-w-screen-xl grid grid-cols-1 gap-6">
+        <div>
+            <h6 class="text-center text-xl font-bold mb-4 px-4 p-text">Gestión de Clientes</h6>
 
-            <!-- Barra superior con botón y buscador -->
-            <div class="flex overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700">
-                <button title="Registrar cliente" wire:click='abrirModal("create")' class="group cursor-pointer outline-none hover:rotate-90 duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 24 24" class="stroke-zinc-400 fill-none group-hover:fill-zinc-800 group-active:stroke-zinc-200 group-active:fill-zinc-600 group-active:duration-0 duration-300">
-                        <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke-width="1.5"></path>
-                        <path d="M8 12H16" stroke-width="1.5"></path>
-                        <path d="M12 16V8" stroke-width="1.5"></path>
+            <!-- Botón de registro y buscador -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+                <button title="Registrar Cliente" wire:click='abrirModal("create")' class="boton-g p-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon icon-tabler icon-tabler-user-plus">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M8 7a4 4 0 1 0 0 8a4 4 0 0 0 0 -8z" />
+                        <path d="M16 11h6m-3 -3v6" />
+                        <path d="M6 21v-2a4 4 0 0 1 4 -4h1" />
                     </svg>
                 </button>
-                <input type="text" wire:model.live="search" placeholder="Buscar..." class="px-4 py-2 w-full sm:w-64 text-gray-600 dark:text-gray-300 dark:bg-gray-900 focus:outline-none" />
+                <input type="text" wire:model.live="search" placeholder="Buscar por cliente..." class="input-g" />
             </div>
 
-            <!-- Nueva tabla con 2 columnas -->
+            <!-- Tabla -->
             <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full table-auto text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
+                <table class="w-full text-sm text-left rtl:text-right">
+                    <thead class="text-x uppercase color-bg">
                         <tr>
-                            <th scope="col" class="px-6 py-3">Información</th>
-                            <th scope="col" class="w-40 text-right p-2">Acciones</th>
+                            <th scope="col" class="w-40 rounded-s-lg text-center p-2 p-text">Acciones</th>
+                            <th scope="col" class="px-6 py-3 text-center p-text">Información</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($clientes as $cliente)
-                            <tr class="border-b border-gray-200 dark:border-gray-700">
-                                <td class="px-6 py-4 font-medium text-gray-900 bg-gray-50 dark:text-white dark:bg-gray-800">
-                                    <div class="flex flex-col">
-                                        <span>{{ $cliente->nombre }}</span>
-                                        <span class="text-gray-500 dark:text-gray-400 text-xs">{{ $cliente->empresa ?? 'N/A' }}</span>
+                            <tr class="color-bg">
+                                <td class="color-bg w-40 text-center p-2">
+                                    <div class="flex justify-center space-x-2">
+                                        <button title="Editar Cliente" class="boton-g p-text"
+                                            wire:click="editarCliente({{ $cliente->id }})">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icon-tabler-edit">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                                <path
+                                                    d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                                <path d="M16 5l3 3" />
+                                            </svg>
+                                        </button>
+                                        <button title="Ver Detalles" class="boton-g p-text"
+                                            wire:click="verDetalle({{ $cliente->id }})">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icon-tabler-info-circle">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                <path d="M12 9h.01" />
+                                                <path d="M11 12h1v4h1" />
+                                            </svg>
+                                        </button>
                                     </div>
                                 </td>
-                                <td class="bg-gray-50 dark:bg-gray-800 w-40 text-right p-2">
-                                    <div class="flex justify-end">
-                                        <button wire:click="editarCliente({{ $cliente->id }})" class="text-gray-600 hover:text-gray-800 mx-1 transition-all duration-200 ease-in-out hover:rotate-12 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.85 3 20l1.15-4.5L16.862 3.487z" />
-                                            </svg>
-                                        </button>
-                                        <button wire:click="verDetalle({{ $cliente->id }})" class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                            </svg>
-                                        </button>
-                                    </div>
+                                <td class="px-6 py-4 text-center p-text">
+                                    <div>CLIENTE :{{ $cliente->nombre }}</div>
+                                    <div>EMPRESA :{{ $cliente->empresa ?? 'N/A' }}</div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="2" class="text-center py-4 text-gray-600 dark:text-gray-400">
-                                    No hay clientes registrados.
-                                </td>
+                                <td colspan="2" class="text-center py-4 text-gray-600 dark:text-gray-400">No hay clientes
+                                    registrados.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-            <!-- Paginación -->
             <div class="mt-4 flex justify-center">
                 {{ $clientes->links() }}
             </div>
@@ -68,105 +81,112 @@
 
     <!-- Modal de registro y edición -->
     @if ($modal)
-        <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 transition-opacity" aria-hidden="true"></div>
-            <div class="fixed inset-0 z-10 w-screen overflow-y-auto flex items-center justify-center">
-                <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all w-full max-w-md mx-4 sm:mx-0">
-                    <div class="px-4 py-4 sm:px-5 sm:py-4">
-                        <div class="w-full">
-                            <h3 class="text-base font-semibold text-gray-900 dark:text-white" id="modal-title">
-                                {{ $accion === 'create' ? 'Registrar Cliente' : 'Editar Cliente' }}
-                            </h3>
-                            <div class="mt-2">
-                                <div class="grid grid-cols-1 gap-3">
-                                    <div>
-                                        <label class="label1">Nombre</label>
-                                        <input type="text" wire:model="nombre" class="input1">
-                                        @error('nombre') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Empresa</label>
-                                        <input type="text" wire:model="empresa" class="input1">
-                                        @error('empresa') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">NIT/CI</label>
-                                        <input type="number" wire:model="nitCi" class="input1">
-                                        @error('nitCi') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Teléfono</label>
-                                        <input type="number" wire:model="telefono" class="input1">
-                                        @error('telefono') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Correo</label>
-                                        <input type="email" wire:model="correo" class="input1">
-                                        @error('correo') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Estado</label>
-                                        <select wire:model="estado" class="select1">
-                                            <option value="1">Activo</option>
-                                            <option value="0">Inactivo</option>
-                                        </select>
-                                        @error('estado') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                </div>
-                            </div>
+        <div class="modal-first">
+            <div class="modal-center">
+                <div class="modal-hiden">
+                    <div class="center-col">
+                        <h3 class="title3">{{ $accion === 'create' ? 'Registrar Cliente' : 'Editar Cliente' }}</h3>
+                        <div class="over-col">
+
+                            <!-- Nombre -->
+                            <h3 class="title3">Nombre</h3>
+                            <input type="text" wire:model="nombre" class="p-text input-g">
+                            @error('nombre') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Empresa -->
+                            <h3 class="title3">Empresa</h3>
+                            <input type="text" wire:model="empresa" class="p-text input-g">
+                            @error('empresa') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- NIT/CI -->
+                            <h3 class="title3">NIT/CI</h3>
+                            <input type="number" wire:model="nitCi" class="p-text input-g">
+                            @error('nitCi') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Teléfono -->
+                            <h3 class="title3">Teléfono</h3>
+                            <input type="number" wire:model="telefono" class="p-text input-g">
+                            @error('telefono') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Correo -->
+                            <h3 class="title3">Correo</h3>
+                            <input type="email" wire:model="correo" class="p-text input-g">
+                            @error('correo') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Estado -->
+                            <h3 class="title3">Estado</h3>
+                            <select wire:model="estado" class="p-text input-g">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                            @error('estado') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
                         </div>
-                    </div>
-                    <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-5">
-                        <button type="button" wire:click="guardarCliente" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 sm:ml-2 sm:w-auto">Guardar</button>
-                        <button type="button" wire:click="cerrarModal" class="mt-2 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-600 dark:text-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 dark:ring-gray-500 ring-inset hover:bg-gray-50 dark:hover:bg-gray-500 sm:mt-0 sm:w-auto">Cancelar</button>
+
+                        <!-- Botones -->
+                        <div class="mt-6 flex justify-center w-full space-x-4">
+                            <button type="button" wire:click="guardarCliente" class="boton-g">Guardar</button>
+                            <button type="button" wire:click="cerrarModal" class="boton-g">Cerrar</button>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     @endif
 
+
     <!-- Modal de detalle -->
     @if ($detalleModal)
-        <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 transition-opacity" aria-hidden="true"></div>
-            <div class="fixed inset-0 z-10 w-screen overflow-y-auto flex items-center justify-center">
-                <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all w-full max-w-md mx-4 sm:mx-0">
-                    <div class="px-4 py-4 sm:px-5 sm:py-4">
-                        <h3 class="text-base font-semibold text-gray-900 dark:text-white" id="modal-title">Detalles del Cliente</h3>
-                        <div class="mt-4">
-                            <dl class="grid grid-cols-1 gap-4">
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Nombre</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $clienteSeleccionado->nombre }}</dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Empresa</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $clienteSeleccionado->empresa ?? 'N/A' }}</dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">NIT/CI</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $clienteSeleccionado->nitCi ?? 'N/A' }}</dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Teléfono</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $clienteSeleccionado->telefono ?? 'N/A' }}</dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Correo</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $clienteSeleccionado->correo ?? 'N/A' }}</dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Estado</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $clienteSeleccionado->estado ? 'Activo' : 'Inactivo' }}</dd>
-                                </div>
-                            </dl>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-5">
-                        <button type="button" wire:click="cerrarModal" class="inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-600 dark:text-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 dark:ring-gray-500 ring-inset hover:bg-gray-50 dark:hover:bg-gray-500 sm:w-auto">Cerrar</button>
-                    </div>
-                </div>
-            </div>
+<div class="modal-first">
+  <div class="modal-center">
+    <div class="modal-hiden">
+      <div class="center-col">
+        <h3 class="p-text">Detalles del Cliente</h3>
+        <div class="over-col">
+
+          <p class="title3">
+            <strong class="p-text">Nombre:</strong>
+            {{ $clienteSeleccionado->nombre ?? 'No disponible' }}
+          </p>
+
+          <p class="title3">
+            <strong class="p-text">Empresa:</strong>
+            {{ $clienteSeleccionado->empresa ?? 'N/A' }}
+          </p>
+
+          <p class="title3">
+            <strong class="p-text">NIT/CI:</strong>
+            {{ $clienteSeleccionado->nitCi ?? 'N/A' }}
+          </p>
+
+          <p class="title3">
+            <strong class="p-text">Teléfono:</strong>
+            {{ $clienteSeleccionado->telefono ?? 'N/A' }}
+          </p>
+
+          <p class="title3">
+            <strong class="p-text">Correo:</strong>
+            {{ $clienteSeleccionado->correo ?? 'N/A' }}
+          </p>
+
+          <p class="title3">
+            <strong class="p-text">Estado:</strong>
+            <span class="text-{{ $clienteSeleccionado->estado ? 'green' : 'red' }}-500">
+              {{ $clienteSeleccionado->estado ? 'Activo' : 'Inactivo' }}
+            </span>
+          </p>
+
         </div>
-    @endif
+
+        <div class="mt-6 flex justify-center w-full">
+          <button type="button" wire:click="cerrarModal" class="boton-g">Cerrar</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+@endif
+
 </div>
