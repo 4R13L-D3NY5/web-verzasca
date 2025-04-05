@@ -1,63 +1,81 @@
-<div class="dark:bg-gray-900 text-white p-4 flex justify-center">
-  <div class="w-full max-w-screen-xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
-    <div class="relative flex w-full flex-col rounded-xl bg-white text-gray-700 shadow-md">
-      <h6 class="text-center text-xl font-bold text-gray-800 dark:text-white mb-4 px-4">Gestión de Elaboraciones</h6>
+<div class="p-text p-2 mt-10 flex justify-center">
+  <div class="w-full max-w-screen-xl grid grid-cols-1 gap-6">
+    <div>
+      <h6 class="text-center text-xl font-bold mb-4 px-4 p-text">Gestión de Elaboraciones</h6>
 
-      <!-- Botón + buscador -->
-      <div class="flex overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700">
-        <button title="Registrar elaboración" wire:click='abrirModal' class="group cursor-pointer outline-none hover:rotate-90 duration-300">
-          <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 24 24" class="stroke-zinc-400 fill-none group-hover:fill-zinc-800 group-active:stroke-zinc-200 group-active:fill-zinc-600 group-active:duration-0 duration-300">
-            <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke-width="1.5"></path>
-            <path d="M8 12H16" stroke-width="1.5"></path>
-            <path d="M12 16V8" stroke-width="1.5"></path>
+      <!-- Botón de registro y buscador -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+        <button title="Registrar Elaboración" wire:click='abrirModal' class="boton-g p-text">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icon-tabler-circle-plus">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <circle cx="12" cy="12" r="9" />
+            <line x1="9" y1="12" x2="15" y2="12" />
+            <line x1="12" y1="9" x2="12" y2="15" />
           </svg>
         </button>
-        <input type="text" wire:model.live="search" placeholder="Buscar por fecha o encargado..." class="px-4 py-2 w-full sm:w-64 text-gray-600 dark:text-gray-300 dark:bg-gray-900 focus:outline-none" />
+        <input type="text" wire:model.live="search" placeholder="Buscar por fecha o encargado..." class="input-g" />
       </div>
 
       <!-- Tabla -->
       <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full table-auto text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
+        <table class="w-full text-sm text-left rtl:text-right">
+          <thead class="text-x uppercase color-bg">
             <tr>
-              <th class="px-6 py-3">Información</th>
-              <th class="w-40 text-right p-2">Acciones</th>
+              <th scope="col" class="w-40 rounded-s-lg text-center p-text">Acciones</th>
+              <th scope="col" class="px-6 py-3 text-center p-text">Información</th>
             </tr>
           </thead>
           <tbody>
             @forelse ($elaboraciones as $elaboracion)
-              <tr class="border-b border-gray-200 dark:border-gray-700">
-                <td class="px-6 py-4 font-medium text-gray-900 bg-gray-50 dark:text-white dark:bg-gray-800">
-                  <div class="flex flex-col">
-                    <span>{{ $elaboracion->fecha_elaboracion }} - {{ $elaboracion->personal->nombre }}</span>
-                    <span class="text-gray-500 dark:text-gray-400 text-xs">
-                      Entrada: {{ $elaboracion->cantidad_entrada }} | Salida: {{ $elaboracion->cantidad_salida ?? 'Pendiente' }}
-                    </span>
-                    @if ($elaboracion->observaciones)
-                      <span class="text-xs italic text-gray-400 dark:text-gray-500">{{ $elaboracion->observaciones }}</span>
-                    @endif
-                  </div>
-                </td>
-                <td class="bg-gray-50 dark:bg-gray-800 w-40 text-right p-2">
-                  <div class="flex justify-end">
-                    <button wire:click="editar({{ $elaboracion->id }})" class="text-gray-600 hover:text-gray-800 mx-1 transition-all duration-200 ease-in-out hover:rotate-12 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.85 3 20l1.15-4.5L16.862 3.487z" />
-                      </svg>
-                    </button>
-                    <button wire:click="verDetalle({{ $elaboracion->id }})" class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
-                      </svg>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="2" class="text-center py-4 text-gray-600 dark:text-gray-400">No se registraron procesos de elaboración.</td>
-              </tr>
-            @endforelse
+        <tr class="color-bg">
+          <!-- Acciones -->
+          <td class="color-bg w-40 text-center p-2">
+          <div class="flex justify-center space-x-2">
+            <button title="Editar Elaboración" class="boton-g p-text" wire:click="editar({{ $elaboracion->id }})">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="icon icon-tabler icon-tabler-edit">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+              <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3z" />
+              <path d="M16 5l3 3" />
+            </svg>
+            </button>
+            <button title="Detalles" class="boton-g p-text" wire:click="modaldetalle({{ $elaboracion->id }})">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="icon icon-tabler icon-tabler-info-circle">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <circle cx="12" cy="12" r="9" />
+              <line x1="12" y1="9" x2="12.01" y2="9" />
+              <polyline points="11 12 12 12 12 16 13 16" />
+            </svg>
+            </button>
+          </div>
+          </td>
+
+          <!-- Información -->
+          <td class="px-6 py-4 text-center p-text">
+          <div>
+            <div>{{ $elaboracion->fecha_elaboracion }} - {{ $elaboracion->personal->nombre }}</div>
+            <div class="text-sm">
+            Entrada: {{ $elaboracion->cantidad_entrada }} |
+            Salida: {{ $elaboracion->cantidad_salida ?? 'Pendiente' }}
+            </div>
+            @if ($elaboracion->observaciones)
+        <div class="text-xs italic text-gray-500 dark:text-gray-400">{{ $elaboracion->observaciones }}</div>
+      @endif
+          </div>
+          </td>
+        </tr>
+      @empty
+    <tr>
+      <td colspan="2" class="text-center py-4 text-gray-600 dark:text-gray-400">No se registraron procesos de
+      elaboración.</td>
+    </tr>
+  @endforelse
           </tbody>
         </table>
       </div>
@@ -69,67 +87,107 @@
     </div>
   </div>
 
+
+
   <!-- Modal -->
   @if($modal)
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-2xl mx-4 p-6">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          {{ $accion === 'create' ? 'Registrar Elaboración' : 'Editar Elaboración' }}
-        </h2>
+    <div class="modal-first">
+    <div class="modal-center">
+      <div class="modal-hiden">
+      <div class="center-col">
+        <h3 class="title3">{{ $accion === 'create' ? 'Registrar Elaboración' : 'Editar Elaboración' }}</h3>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="label1">Fecha de Elaboración</label>
-            <input type="date" wire:model.defer="fecha_elaboracion" class="input1">
-            @error('fecha_elaboracion') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-          </div>
+        <div class="over-col">
+        <!-- Fecha de Elaboración -->
+        <h3 class="title3">Fecha de Elaboración</h3>
+        <input type="date" wire:model.defer="fecha_elaboracion" class="p-text input-g">
+        @error('fecha_elaboracion') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-          <div>
-            <label class="label1">Encargado</label>
-            <select wire:model.defer="personal_id" class="select1">
-              <option value="">Seleccione</option>
-              @foreach($personales as $personal)
-                <option value="{{ $personal->id }}">{{ $personal->nombre }}</option>
-              @endforeach
-            </select>
-            @error('personal_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-          </div>
+        <!-- Encargado -->
+        <h3 class="title3">Encargado</h3>
+        <select wire:model.defer="personal_id" class="p-text input-g">
+          <option value="">Seleccione</option>
+          @foreach($personales as $personal)
+        <option value="{{ $personal->id }}">{{ $personal->nombre }}</option>
+      @endforeach
+        </select>
+        @error('personal_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-          <div>
-            <label class="label1">Existencia Entrada (Preformas)</label>
-            <select wire:model.defer="existencia_entrada_id" class="select1">
-              <option value="">Seleccione</option>
-              @foreach($existencias_preforma as $existencia)
-                <option value="{{ $existencia->id }}">ID #{{ $existencia->id }} - {{ $existencia->descripcion ?? 'Preforma' }}</option>
-              @endforeach
-            </select>
-            @error('existencia_entrada_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-          </div>
+        <!-- Existencia Entrada -->
+        <h3 class="title3">Existencia Entrada (Preformas)</h3>
+        <select wire:model.defer="existencia_entrada_id" class="p-text input-g">
+          <option value="">Seleccione</option>
+          @foreach($existencias_preforma as $existencia)
+        <option value="{{ $existencia->id }}">ID #{{ $existencia->id }} -
+        {{ $existencia->descripcion ?? 'Preforma' }}</option>
+      @endforeach
+        </select>
+        @error('existencia_entrada_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-          <div>
-            <label class="label1">Cantidad Entrada</label>
-            <input type="number" wire:model.defer="cantidad_entrada" class="input1">
-            @error('cantidad_entrada') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-          </div>
+        <!-- Cantidad Entrada -->
+        <h3 class="title3">Cantidad Entrada</h3>
+        <input type="number" wire:model.defer="cantidad_entrada" class="p-text input-g">
+        @error('cantidad_entrada') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-          <div>
-            <label class="label1">Cantidad Salida (Bases)</label>
-            <input type="number" wire:model.defer="cantidad_salida" class="input1">
-            @error('cantidad_salida') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-          </div>
+        <!-- Cantidad Salida -->
+        <h3 class="title3">Cantidad Salida (Bases)</h3>
+        <input type="number" wire:model.defer="cantidad_salida" class="p-text input-g">
+        @error('cantidad_salida') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-          <div class="md:col-span-2">
-            <label class="label1">Observaciones</label>
-            <textarea wire:model.defer="observaciones" class="input1"></textarea>
-            @error('observaciones') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-          </div>
+        <!-- Observaciones -->
+        <h3 class="title3">Observaciones</h3>
+        <textarea wire:model.defer="observaciones" class="p-text input-g"></textarea>
+        @error('observaciones') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
         </div>
 
-        <div class="mt-6 flex justify-end space-x-2">
-          <button wire:click="guardar" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-500">Guardar</button>
-          <button wire:click="cerrarModal" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">Cancelar</button>
+        <!-- Botones -->
+        <div class="mt-6 flex justify-center w-full space-x-4">
+        <button wire:click="guardar" class="boton-g">Guardar</button>
+        <button wire:click="cerrarModal" class="boton-g">Cancelar</button>
         </div>
       </div>
+      </div>
+    </div>
     </div>
   @endif
+  @if ($modalDetalle)
+    <div class="modal-first">
+        <div class="modal-center">
+            <div class="modal-hiden">
+                <div class="center-col">
+                    <h3 class="p-text">Detalles de la Elaboración</h3>
+
+                    <div class="over-col">
+                        <p class="title3"><strong class="p-text">Fecha de Elaboración:</strong> {{ $elaboracionSeleccionada['fecha_elaboracion'] }}</p>
+
+                        <p class="title3"><strong class="p-text">Encargado:</strong> {{ $elaboracionSeleccionada['personal']['nombre'] ?? '-' }}</p>
+
+                        <p class="title3"><strong class="p-text">Existencia Entrada (Preformas):</strong> 
+                            ID #{{ $elaboracionSeleccionada['existencia_entrada']['id'] ?? '-' }} - 
+                            {{ $elaboracionSeleccionada['existencia_entrada']['descripcion'] ?? 'Sin descripción' }}
+                        </p>
+
+                        <p class="title3"><strong class="p-text">Cantidad Entrada:</strong> {{ $elaboracionSeleccionada['cantidad_entrada'] }}</p>
+
+                        <p class="title3"><strong class="p-text">Cantidad Salida (Bases):</strong> {{ $elaboracionSeleccionada['cantidad_salida'] }}</p>
+
+                        <p class="title3"><strong class="p-text">Observaciones:</strong> {{ $elaboracionSeleccionada['observaciones'] ?? 'Ninguna' }}</p>
+                    </div>
+
+                    <div class="mt-6 flex justify-center w-full">
+                        <button type="button" wire:click="cerrarModalDetalle" class="boton-g">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-square-x">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M19 2h-14a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3 -3v-14a3 3 0 0 0 -3 -3zm-9.387 6.21l.094 .083l2.293 2.292l2.293 -2.292a1 1 0 0 1 1.497 1.32l-.083 .094l-2.292 2.293l2.292 2.293a1 1 0 0 1 -1.32 1.497l-.094 -.083l-2.293 -2.292l-2.293 2.292a1 1 0 0 1 -1.497 -1.32l.083 -.094l2.292 -2.293l-2.292 -2.293a1 1 0 0 1 1.32 -1.497z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 </div>

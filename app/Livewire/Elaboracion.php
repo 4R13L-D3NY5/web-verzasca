@@ -24,7 +24,8 @@ class Elaboracion extends Component
     public $cantidad_entrada;
     public $cantidad_salida;
     public $observaciones;
-
+    public $modalDetalle = false;
+    public $elaboracionSeleccionada= [];
     public $personales = [];
     public $existencias_preforma = [];
 
@@ -138,5 +139,16 @@ class Elaboracion extends Component
             'cantidad_salida',
             'observaciones',
         ]);
+    }
+    public function modaldetalle($id)
+    {
+        $this->elaboracionSeleccionada = ModelElaboracion::findOrFail($id);
+        $this->modalDetalle = true;
+    }
+
+    public function cerrarModalDetalle()
+    {
+        $this->modalDetalle = false;
+        $this->elaboracionSeleccionada = null;
     }
 }
