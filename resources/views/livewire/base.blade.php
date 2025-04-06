@@ -365,7 +365,7 @@
                             <span class="text-custom">Asignacion</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Coche') bg-emerald-500 @endif">
+                    <li class="nav-item @if($seleccion == 'Coche') bg-indigo-500 @endif">
                         <a wire:click="$set('seleccion', 'Coche')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -386,25 +386,25 @@
                 </div>
                 <div>
                     <h3 class="text-violet-500">SUCURSALES</h3>
-                    <li class="nav-item @if($seleccion == 'Empresa') bg-emerald-500 @endif">
+                    <li class="nav-item @if($seleccion == 'Empresa') bg-indigo-500 @endif">
                         <a wire:click="$set('seleccion', 'Empresa')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-stackoverflow">
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-presentation">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-1" />
-                                    <path d="M8 16h8" />
-                                    <path d="M8.322 12.582l7.956 .836" />
-                                    <path d="M8.787 9.168l7.826 1.664" />
-                                    <path d="M10.096 5.764l7.608 2.472" />
+                                    <path d="M3 4l18 0" />
+                                    <path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" />
+                                    <path d="M12 16l0 4" />
+                                    <path d="M9 20l6 0" />
+                                    <path d="M8 12l3 -3l2 2l3 -3" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Empresa</span>
+                            <span class="text-custom">EMPRESA</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Sucursal') bg-emerald-500 @endif">
+                    <li class="nav-item @if($seleccion == 'Sucursal') bg-indigo-500 @endif">
                         <a wire:click="$set('seleccion', 'Sucursal')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
