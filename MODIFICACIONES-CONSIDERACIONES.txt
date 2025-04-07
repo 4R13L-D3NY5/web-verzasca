@@ -7,5 +7,19 @@ reportes,
 
 precio para los clientes, 
 
-los usuarios ver la manera que los usuarios habituales tengan su categoria al descargar la app.
+los usuarios ver la manera que los usuarios habituales tengan su categoria al descargar la app y se verifiquen.
+ver como subir el proyecto a la nube
+roles
+
+EN PRODUCCION
+- elaboracion, se tiene que especificar cual entra y mostrar las bases que pueden salir de esa preforma, se debe restas y aumentar la cantidad de las existencias involucradas
+- embotellado y etiquetado, lo propio
+
+EN ALMACEN
+- mostrar cantidades e imagenes
+
+VENTA
+que se le asigne items al distribuidor
+
+
 

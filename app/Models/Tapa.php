@@ -10,6 +10,7 @@ class Tapa extends Model
     use HasFactory;
 
     protected $fillable = [
+        'imagen',
         'color',
         'tipo',
         'estado',

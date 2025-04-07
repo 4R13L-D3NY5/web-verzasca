@@ -10,6 +10,8 @@ class Base extends Model
     use HasFactory;
 
     protected $fillable = [
+        'imagen',
+        'unidad',
         'capacidad',
         'estado',
         'observaciones',

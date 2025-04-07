@@ -16,6 +16,7 @@
         <input type="text" wire:model.live="search" placeholder="Buscar..." class="input-g" />
       </div>
 
+      
       <!-- Tabla -->
       <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right">
@@ -56,7 +57,13 @@
             </button>
           </div>
           </td>
-          <td class="px-6 py-4 text-center p-text">{{ $preforma->insumo }}</td>
+          <td class="px-6 py-4 text-center p-text">{{ $preforma->insumo }} [{{$preforma->color}}] <br>
+            @foreach ($preforma->existencias as $existencia)
+            {{$existencia->sucursal->nombre}} : {{$existencia->cantidad}} <br>
+            @endforeach
+            <strong>Total: {{ $preforma->existencias->sum('cantidad') }}</strong>
+          </td>
+          
         </tr>
       @empty
     <tr>

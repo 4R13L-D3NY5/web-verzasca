@@ -160,7 +160,7 @@
                     <div class="over-col">
                         <p class="title3"><strong class="p-text">Fecha de Elaboración:</strong> {{ $elaboracionSeleccionada['fecha_elaboracion'] }}</p>
 
-                        <p class="title3"><strong class="p-text">Encargado:</strong> {{ $elaboracionSeleccionada['personal']['nombre'] ?? '-' }}</p>
+                        <p class="title3"><strong class="p-text">Encargado:</strong> {{ $elaboracionSeleccionada['personal']['nombres'] ?? '-' }}</p>
 
                         <p class="title3"><strong class="p-text">Existencia Entrada (Preformas):</strong> 
                             ID #{{ $elaboracionSeleccionada['existencia_entrada']['id'] ?? '-' }} - 

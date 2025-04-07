@@ -11,6 +11,7 @@ class Preforma extends Model
     use HasFactory;
 
     protected $fillable = [
+        'imagen',
         'insumo',
         'descripcion',
         'capacidad',

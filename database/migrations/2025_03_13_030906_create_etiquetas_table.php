@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('imagen');
             $table->string('capacidad');
+            $table->string('unidad')->nullable(); // [L, ml, g, Kg, unidad]
             $table->tinyInteger('estado'); 
             $table->foreignId('cliente_id')->nullable()->constrained('clientes')->nullOnDelete(); // Relación opcional con Preforma
             $table->timestamps();
