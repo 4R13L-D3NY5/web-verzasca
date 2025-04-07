@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\ClienteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -7,7 +7,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {

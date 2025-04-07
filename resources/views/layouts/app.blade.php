@@ -9,7 +9,7 @@
     <!-- ========== All CSS files linkup ========= -->
     <!-- <link rel="stylesheet" href="{{ asset('css/lineicons.css') }}"/>
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}" /> -->
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css','resources/js/menu.js'])
     @livewireStyles()
 </head>
 <body>

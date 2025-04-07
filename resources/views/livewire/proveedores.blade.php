@@ -1,126 +1,309 @@
-<div class="dark:bg-gray-900 text-white p-4 flex justify-center">
-    <div class="w-full max-w-screen-xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
-      <div class="relative flex w-full flex-col rounded-xl bg-white text-gray-700 shadow-md">
-        <h6 class="text-center text-xl font-bold text-gray-800 dark:text-white mb-4 px-4">Gestión de Elaboraciones</h6>
-  
-        <div class="flex overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700">
-          <button title="Registrar elaboración" wire:click='abrirModal' class="group cursor-pointer outline-none hover:rotate-90 duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 24 24" class="stroke-zinc-400 fill-none group-hover:fill-zinc-800 group-active:stroke-zinc-200 group-active:fill-zinc-600 group-active:duration-0 duration-300">
-              <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke-width="1.5"></path>
-              <path d="M8 12H16" stroke-width="1.5"></path>
-              <path d="M12 16V8" stroke-width="1.5"></path>
+<div class="p-text p-2 mt-10 flex justify-center">
+  <div class="w-full max-w-screen-xl grid grid-cols-1 gap-6">
+    <div>
+      <h6 class="text-xl font-bold mb-4 px-4 p-text">Gestión de Proveedores</h6>
+
+      <!-- Botón de registro y buscador -->
+      <div class="flex justify-center items-center gap-4 w-full max-w-2xl mx-auto">
+        <button title="Registrar Proveedor" wire:click='abrirModal("create")'
+          class="text-emerald-500 hover:text-emerald-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icon-tabler-building-store">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 21l18 0" />
+            <path d="M5 21v-14l8 -4v18" />
+            <path d="M19 21v-10l-6 -4" />
+          </svg>
+        </button>
+
+        <input type="text" wire:model.live="search" placeholder="Buscar proveedor..." class="input-g w-auto sm:w-64" />
+      </div>
+
+      <!-- Tabla -->
+      <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left border border-slate-200 dark:border-cyan-200 rounded-lg border-collapse">
+          <thead class="text-x uppercase color-bg">
+            <tr>
+              <th scope="col" class="px-6 py-3 p-text text-left">Información</th>
+              <th scope="col" class="px-6 py-3 p-text text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @forelse ($proveedores as $proveedor)
+        <tr class="color-bg border border-slate-200">
+          <td class="px-6 py-4 p-text text-left">
+          <div class="mb-2">
+            <span class="font-semibold block">Razón Social:</span>
+            <span>{{ $proveedor->razonSocial }}</span>
+          </div>
+          <div class="mb-2">
+            <span class="font-semibold block">Contacto:</span>
+            <span>{{ $proveedor->nombreContacto ?? 'No definido' }}</span>
+          </div>
+          <div class="mb-2">
+            <span class="font-semibold block">Correo:</span>
+            <span>{{ $proveedor->correo }}</span>
+          </div>
+          <div class="mb-2">
+            <span class="font-semibold block">Tipo / Servicio:</span>
+            <span>{{ ucfirst($proveedor->tipo) }} / {{ ucfirst($proveedor->servicio) }}</span>
+          </div>
+          </td>
+          <td class="px-6 py-4 text-right">
+          <div class="flex justify-end space-x-2">
+            <button title="Editar" wire:click="editarProveedor({{ $proveedor->id }})"
+            class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="icon icon-tabler icon-tabler-edit">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+              <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+              <path d="M16 5l3 3" />
             </svg>
-          </button>
-          <input type="text" wire:model.live="search" placeholder="Buscar por fecha o encargado..." class="px-4 py-2 w-full sm:w-64 text-gray-600 dark:text-gray-300 dark:bg-gray-900 focus:outline-none" />
-        </div>
-  
-        <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
-          <table class="w-full table-auto text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
-              <tr>
-                <th class="px-6 py-3">Información</th>
-                <th class="w-40 text-right p-2">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              @forelse ($elaboraciones as $elaboracion)
-                <tr class="border-b border-gray-200 dark:border-gray-700">
-                  <td class="px-6 py-4 font-medium text-gray-900 bg-gray-50 dark:text-white dark:bg-gray-800">
-                    <div class="flex flex-col">
-                      <span>{{ $elaboracion->fecha_elaboracion }} - {{ $elaboracion->personal->nombre }}</span>
-                      <span class="text-gray-500 dark:text-gray-400 text-xs">
-                        Entrada: {{ $elaboracion->cantidad_entrada }} | Salida: {{ $elaboracion->cantidad_salida ?? 'Pendiente' }}
-                      </span>
-                      @if ($elaboracion->observaciones)
-                        <span class="text-xs italic text-gray-400 dark:text-gray-500">{{ $elaboracion->observaciones }}</span>
-                      @endif
-                    </div>
-                  </td>
-                  <td class="bg-gray-50 dark:bg-gray-800 w-40 text-right p-2">
-                    <div class="flex justify-end">
-                      <button wire:click="editar({{ $elaboracion->id }})" class="text-gray-600 hover:text-gray-800 mx-1 transition-all duration-200 ease-in-out hover:rotate-12 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.85 3 20l1.15-4.5L16.862 3.487z" />
-                        </svg>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              @empty
-                <tr>
-                  <td colspan="2" class="text-center py-4 text-gray-600 dark:text-gray-400">No se registraron procesos de elaboración.</td>
-                </tr>
-              @endforelse
-            </tbody>
-          </table>
-        </div>
-  
-        <div class="mt-4 flex justify-center">
-          {{ $elaboraciones->links() }}
-        </div>
+            </button>
+
+            <button title="Ver Detalle" wire:click="verDetalle({{ $proveedor->id }})"
+            class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="icon icon-tabler icon-tabler-eye">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <circle cx="12" cy="12" r="2" />
+              <path d="M22 12c0 5.523 -4.477 10 -10 10s-10 -4.477 -10 -10s4.477 -10 10 -10s10 4.477 10 10z" />
+            </svg>
+            </button>
+          </div>
+          </td>
+        </tr>
+      @empty
+    <tr>
+      <td colspan="2" class="text-left py-4 text-gray-600 dark:text-gray-400">
+      No hay proveedores registrados.
+      </td>
+    </tr>
+  @endforelse
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-4 flex justify-center">
+        {{ $proveedores->links() }}
       </div>
     </div>
-  
-    @if($modal)
-      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-2xl mx-4 p-6">
-          <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            {{ $accion === 'create' ? 'Registrar Elaboración' : 'Editar Elaboración' }}
-          </h2>
-  
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="label1">Fecha de Elaboración</label>
-              <input type="date" wire:model.defer="fecha_elaboracion" class="input1">
-              @error('fecha_elaboracion') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-            </div>
-  
-            <div>
-              <label class="label1">Encargado</label>
-              <select wire:model.defer="personal_id" class="select1">
-                <option value="">Seleccione</option>
-                @foreach($personales as $personal)
-                  <option value="{{ $personal->id }}">{{ $personal->nombre }}</option>
-                @endforeach
-              </select>
-              @error('personal_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-            </div>
-  
-            <div>
-              <label class="label1">Existencia Entrada (Preformas)</label>
-              <select wire:model.defer="existencia_entrada_id" class="select1">
-                <option value="">Seleccione</option>
-                @foreach($existencias_preforma as $existencia)
-                  <option value="{{ $existencia->id }}">ID #{{ $existencia->id }} - {{ $existencia->descripcion ?? 'Preforma' }}</option>
-                @endforeach
-              </select>
-              @error('existencia_entrada_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-            </div>
-  
-            <div>
-              <label class="label1">Cantidad Entrada</label>
-              <input type="number" wire:model.defer="cantidad_entrada" class="input1">
-              @error('cantidad_entrada') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-            </div>
-  
-            <div>
-              <label class="label1">Cantidad Salida (Bases)</label>
-              <input type="number" wire:model.defer="cantidad_salida" class="input1">
-              @error('cantidad_salida') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-            </div>
-  
-            <div class="md:col-span-2">
-              <label class="label1">Observaciones</label>
-              <textarea wire:model.defer="observaciones" class="input1"></textarea>
-              @error('observaciones') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-            </div>
+  </div>
+
+
+  @if ($modal)
+    <div class="modal-first">
+    <div class="modal-center">
+      <div class="modal-hiden">
+      <div class="center-col">
+        <h3 class="p-text">{{ $accion === 'create' ? 'Registrar Proveedor' : 'Editar Proveedor' }}</h3>
+
+        <div class="over-col">
+        <!-- Razón Social -->
+        <h3 class="p-text">Razón Social</h3>
+        <input type="text" wire:model.defer="razonSocial" class="p-text input-g">
+        @error('razonSocial') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+        <!-- Nombre del Contacto -->
+        <h3 class="p-text">Nombre del Contacto</h3>
+        <input type="text" wire:model.defer="nombreContacto" class="p-text input-g">
+        @error('nombreContacto') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+        <!-- Dirección -->
+        <h3 class="p-text">Dirección</h3>
+        <input type="text" wire:model.defer="direccion" class="p-text input-g">
+        @error('direccion') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+        <!-- Teléfono -->
+        <h3 class="p-text">Teléfono</h3>
+        <input type="text" wire:model.defer="telefono" class="p-text input-g">
+        @error('telefono') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+        <!-- Correo -->
+        <h3 class="p-text">Correo</h3>
+        <input type="email" wire:model.defer="correo" class="p-text input-g">
+        @error('correo') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+        <!-- Tipo -->
+        <h3 class="p-text">Tipo</h3>
+        <select wire:model.defer="tipo" class="p-text input-g">
+          <option value="">Seleccione tipo</option>
+          <option value="tapas">Tapas</option>
+          <option value="preformas">Preformas</option>
+          <option value="etiquetas">Etiquetas</option>
+        </select>
+        @error('tipo') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+        <!-- Servicio -->
+        <h3 class="p-text">Servicio</h3>
+        <select wire:model.defer="servicio" class="p-text input-g">
+          <option value="">Seleccione servicio</option>
+          <option value="soplado">Soplado</option>
+          <option value="transporte">Transporte</option>
+        </select>
+        @error('servicio') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+        <!-- Descripción -->
+        <h3 class="p-text">Descripción</h3>
+        <input wire:model.defer="descripcion" class="p-text input-g "></input>
+        @error('descripcion') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+        <!-- Precio -->
+        <h3 class="p-text">Precio</h3>
+        <input type="number" wire:model.defer="precio" class="p-text input-g" step="0.01" min="0">
+        @error('precio') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+        <!-- Tiempo de Entrega -->
+        <h3 class="p-text">Tiempo de Entrega</h3>
+        <input type="text" wire:model.defer="tiempoEntrega" class="p-text input-g">
+        @error('tiempoEntrega') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+        <!-- Estado -->
+        <h3 class="p-text">Estado</h3>
+        <select wire:model.defer="estado" class="p-text input-g">
+          <option value="1">Activo</option>
+          <option value="0">Inactivo</option>
+        </select>
+        @error('estado') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+        </div>
+
+        <!-- Botones -->
+        <div class="mt-6 flex justify-center w-full space-x-4">
+        <button type="button" wire:click="guardarProveedor"
+          class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
+          <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+          <path d="M14 4l0 4l-6 0l0 -4" />
+          </svg>
+        </button>
+
+        <button type="button" wire:click="cerrarModal"
+          class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M18 6l-12 12" />
+          <path d="M6 6l12 12" />
+          </svg>
+        </button>
+        </div>
+
+      </div>
+      </div>
+    </div>
+    </div>
+  @endif
+  @if ($detalleModal)
+    <div class="modal-first">
+    <div class="modal-center">
+      <div class="modal-hiden">
+      <div class="center-col">
+        <h3 class="text-base font-semibold p-text" id="modal-title">Detalles del Proveedor</h3>
+
+        <div class="mt-4">
+        <dl class="grid grid-cols-2 gap-4">
+
+          <!-- Razón Social -->
+          <div>
+          <dt class="text-sm font-medium p-text">Razón Social</dt>
+          <dd class="mt-1 text-sm p-text">{{ $proveedorSeleccionado->razonSocial ?? 'No especificada' }}</dd>
           </div>
-  
-          <div class="mt-6 flex justify-end space-x-2">
-            <button wire:click="guardar" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-500">Guardar</button>
-            <button wire:click="cerrarModal" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">Cancelar</button>
+
+          <!-- Nombre del Contacto -->
+          <div>
+          <dt class="text-sm font-medium p-text">Nombre del Contacto</dt>
+          <dd class="mt-1 text-sm p-text">{{ $proveedorSeleccionado->nombreContacto ?? 'No especificado' }}</dd>
           </div>
+
+          <!-- Dirección -->
+          <div>
+          <dt class="text-sm font-medium p-text">Dirección</dt>
+          <dd class="mt-1 text-sm p-text">{{ $proveedorSeleccionado->direccion ?? 'No especificada' }}</dd>
+          </div>
+
+          <!-- Teléfono -->
+          <div>
+          <dt class="text-sm font-medium p-text">Teléfono</dt>
+          <dd class="mt-1 text-sm p-text">{{ $proveedorSeleccionado->telefono ?? 'No especificado' }}</dd>
+          </div>
+
+          <!-- Correo -->
+          <div>
+          <dt class="text-sm font-medium p-text">Correo</dt>
+          <dd class="mt-1 text-sm p-text">{{ $proveedorSeleccionado->correo ?? 'No especificado' }}</dd>
+          </div>
+
+          <!-- Tipo -->
+          <div>
+          <dt class="text-sm font-medium p-text">Tipo</dt>
+          <dd class="mt-1 text-sm p-text">{{ ucfirst($proveedorSeleccionado->tipo ?? 'No especificado') }}</dd>
+          </div>
+
+          <!-- Servicio -->
+          <div>
+          <dt class="text-sm font-medium p-text">Servicio</dt>
+          <dd class="mt-1 text-sm p-text">{{ ucfirst($proveedorSeleccionado->servicio ?? 'No especificado') }}
+          </dd>
+          </div>
+
+          <!-- Descripción -->
+          <div class="col-span-2">
+          <dt class="text-sm font-medium p-text">Descripción</dt>
+          <dd class="mt-1 text-sm p-text">{{ $proveedorSeleccionado->descripcion ?? 'No especificada' }}</dd>
+          </div>
+
+          <!-- Precio -->
+          <div>
+          <dt class="text-sm font-medium p-text">Precio</dt>
+          <dd class="mt-1 text-sm p-text">Bs
+            {{ number_format($proveedorSeleccionado->precio, 2, ',', '.') ?? '0.00' }}</dd>
+          </div>
+
+          <!-- Tiempo de Entrega -->
+          <div>
+          <dt class="text-sm font-medium p-text">Tiempo de Entrega</dt>
+          <dd class="mt-1 text-sm p-text">{{ $proveedorSeleccionado->tiempoEntrega ?? 'No especificado' }}</dd>
+          </div>
+
+          <!-- Estado -->
+          <div class="col-span-2">
+          <dt class="text-sm font-medium p-text">Estado</dt>
+          <dd class="mt-1 text-sm p-text">
+            <span class="{{ $proveedorSeleccionado->estado ? 'text-green-600' : 'text-red-600' }}">
+            {{ $proveedorSeleccionado->estado ? 'Activo' : 'Inactivo' }}
+            </span>
+          </dd>
+          </div>
+
+        </dl>
+        </div>
+
+        <!-- Botón cerrar -->
+        <div class="mt-6 flex justify-center">
+        <button type="button" wire:click="cerrarModal"
+          class="text-red-500 hover:text-red-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M18 6l-12 12" />
+          <path d="M6 6l12 12" />
+          </svg>
+        </button>
         </div>
       </div>
-    @endif
-  </div>
+      </div>
+    </div>
+    </div>
+  @endif
+
+</div>

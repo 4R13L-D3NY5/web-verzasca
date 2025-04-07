@@ -89,8 +89,6 @@
           </tbody>
         </table>
       </div>
-
-
       <div class="mt-4 flex justify-center">
         {{ $sucursales->links() }}
       </div>
@@ -162,8 +160,7 @@
     </div>
     </div>
   @endif
-
-
+  
   @if ($detalleModal)
     <div class="modal-first">
     <div class="modal-center">
