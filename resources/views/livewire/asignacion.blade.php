@@ -1,52 +1,90 @@
-<div class="dark:bg-gray-900 text-white p-4 flex justify-center">
-    <div class="w-full max-w-screen-xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
-        <div class="relative flex w-full flex-col rounded-xl bg-white text-gray-700 shadow-md">
-            <!-- Título bonito -->
-            <h6 class="text-center text-xl font-bold text-gray-800 dark:text-white mb-4 px-4">Gestión de Asignaciones</h6>
+<div class="p-text p-2 mt-10 flex justify-center">
+    <div class="w-full max-w-screen-xl grid grid-cols-1 gap-6">
+        <div>
+            <h6 class="text-xl font-bold mb-4 px-4 p-text">Gestión de Asignaciones</h6>
 
-            <!-- Barra superior con botón y buscador -->
-            <div class="flex overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700">
-                <button title="Registrar asignación" wire:click='abrirModal("create")' class="group cursor-pointer outline-none hover:rotate-90 duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 24 24" class="stroke-zinc-400 fill-none group-hover:fill-zinc-800 group-active:stroke-zinc-200 group-active:fill-zinc-600 group-active:duration-0 duration-300">
-                        <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke-width="1.5"></path>
-                        <path d="M8 12H16" stroke-width="1.5"></path>
-                        <path d="M12 16V8" stroke-width="1.5"></path>
+            <!-- Botón de registro y buscador -->
+            <div class="flex justify-center items-center gap-4 w-full max-w-2xl mx-auto">
+                <button title="Registrar Asignación" wire:click='abrirModal("create")'
+                    class="text-emerald-500 hover:text-emerald-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-pin">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5 -1.5l1.5 -4l4 -4" />
+                        <path d="M9 15l-4.5 4.5" />
+                        <path d="M14.5 4l5.5 5.5" />
                     </svg>
                 </button>
-                <input type="text" wire:model.live="search" placeholder="Buscar..." class="px-4 py-2 w-full sm:w-64 text-gray-600 dark:text-gray-300 dark:bg-gray-900 focus:outline-none" />
+
+                <input type="text" wire:model.live="search" placeholder="Buscar asignación..."
+                    class="input-g w-auto sm:w-64" />
             </div>
 
-            <!-- Tabla con 2 columnas -->
+            <!-- Tabla -->
             <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full table-auto text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
+                <table
+                    class="w-full text-sm text-left border border-slate-200 dark:border-cyan-200 rounded-lg border-collapse">
+                    <thead class="text-x uppercase color-bg">
                         <tr>
-                            <th scope="col" class="px-6 py-3">Información</th>
-                            <th scope="col" class="w-40 text-right p-2">Acciones</th>
+                            <th scope="col" class="px-6 py-3 p-text text-left">Información</th>
+                            <th scope="col" class="px-6 py-3 p-text text-right">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($asignaciones as $asignacion)
-                            <tr class="border-b border-gray-200 dark:border-gray-700">
-                                <td class="px-6 py-4 font-medium text-gray-900 bg-gray-50 dark:text-white dark:bg-gray-800">
-                                    <div class="flex flex-col">
-                                        <span>Inicio: {{ $asignacion->fechaInicio }}</span>
-                                        <span class="text-gray-500 dark:text-gray-400 text-xs">Fin: {{ $asignacion->fechaFinal }}</span>
-                                        <span class="text-gray-500 dark:text-gray-400 text-xs">Coche: {{ $asignacion->coche->placa }}</span>
-                                        <span class="text-gray-500 dark:text-gray-400 text-xs">Personal: {{ $asignacion->personal->nombre }}</span>
-                                        <span class="text-gray-500 dark:text-gray-400 text-xs">Estado: {{ $asignacion->estado ? 'Activo' : 'Inactivo' }}</span>
+                            <tr class="color-bg border border-slate-200">
+                                <td class="px-6 py-4 p-text text-left">
+                                    <div class="mb-2">
+                                        <span class="font-semibold block">Inicio:</span>
+                                        <span>{{ $asignacion->fechaInicio }}</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <span class="font-semibold block">Fin:</span>
+                                        <span>{{ $asignacion->fechaFinal }}</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <span class="font-semibold block">Coche:</span>
+                                        <span>{{ $asignacion->coche->placa ?? 'Sin vehículo' }}</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <span class="font-semibold block">Personal:</span>
+                                        <span>{{ $asignacion->personal->nombre ?? 'Sin personal' }}</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <span class="font-semibold block">Estado:</span>
+                                        <span class="{{ $asignacion->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
+                                         px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
+                                            {{ $asignacion->estado ? 'Activo' : 'Inactivo' }}
+                                        </span>
                                     </div>
                                 </td>
-                                <td class="bg-gray-50 dark:bg-gray-800 w-40 text-right p-2">
-                                    <div class="flex justify-end">
-                                        <button wire:click="editarAsignacion({{ $asignacion->id }})" class="text-gray-600 hover:text-gray-800 mx-1 transition-all duration-200 ease-in-out hover:rotate-12 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.85 3 20l1.15-4.5L16.862 3.487z" />
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex justify-end space-x-2">
+                                        <button title="Editar" wire:click="editarAsignacion({{ $asignacion->id }})"
+                                            class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                                <path
+                                                    d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                                <path d="M16 5l3 3" />
                                             </svg>
                                         </button>
-                                        <button wire:click="verDetalle({{ $asignacion->id }})" class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        <button title="Ver Detalle" wire:click="verDetalle({{ $asignacion->id }})"
+                                            class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-eye-plus">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                <path d="M12 18c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                <path d="M16 19h6" />
+                                                <path d="M19 16v6" />
                                             </svg>
                                         </button>
                                     </div>
@@ -54,7 +92,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="2" class="text-center py-4 text-gray-600 dark:text-gray-400">
+                                <td colspan="2" class="text-left py-4 text-gray-600 dark:text-gray-400">
                                     No hay asignaciones registradas.
                                 </td>
                             </tr>
@@ -62,115 +100,162 @@
                     </tbody>
                 </table>
             </div>
+
             <!-- Paginación -->
             <div class="mt-4 flex justify-center">
                 {{ $asignaciones->links() }}
             </div>
         </div>
     </div>
-
-    <!-- Modal de registro y edición -->
     @if ($modal)
-        <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 transition-opacity" aria-hidden="true"></div>
-            <div class="fixed inset-0 z-10 w-screen overflow-y-auto flex items-center justify-center">
-                <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all w-full max-w-md mx-4 sm:mx-0">
-                    <div class="px-4 py-4 sm:px-5 sm:py-4">
-                        <div class="w-full">
-                            <h3 class="text-base font-semibold text-gray-900 dark:text-white" id="modal-title">
-                                {{ $accion === 'create' ? 'Registrar Asignación' : 'Editar Asignación' }}
-                            </h3>
-                            <div class="mt-2">
-                                <div class="grid grid-cols-1 gap-3">
-                                    <div>
-                                        <label class="label1">Fecha de Inicio</label>
-                                        <input type="date" wire:model="fechaInicio" class="input1">
-                                        @error('fechaInicio') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Fecha Final</label>
-                                        <input type="date" wire:model="fechaFinal" class="input1">
-                                        @error('fechaFinal') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Estado</label>
-                                        <select wire:model="estado" class="select1">
-                                            <option value="1">Activo</option>
-                                            <option value="0">Inactivo</option>
-                                        </select>
-                                        @error('estado') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Coche</label>
-                                        <select wire:model="coche_id" class="select1">
-                                            <option value="">Seleccione un coche</option>
-                                            @foreach ($coches as $coche)
-                                                <option value="{{ $coche->id }}">{{ $coche->placa }} - {{ $coche->marca }} {{ $coche->modelo }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('coche_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Personal</label>
-                                        <select wire:model="personal_id" class="select1">
-                                            <option value="">Seleccione personal</option>
-                                            @foreach ($personals as $personal)
-                                                <option value="{{ $personal->id }}">{{ $personal->nombre }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('personal_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                </div>
-                            </div>
+        <div class="modal-first">
+            <div class="modal-center">
+                <div class="modal-hiden">
+                    <div class="center-col">
+                        <h3 class="p-text">{{ $accion === 'create' ? 'Registrar Asignación' : 'Editar Asignación' }}</h3>
+                        <div class="over-col">
+                            <!-- Fecha Inicio -->
+                            <h3 class="p-text">Fecha de Inicio</h3>
+                            <input type="date" wire:model.defer="fechaInicio" class="p-text input-g">
+                            @error('fechaInicio') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Fecha Final -->
+                            <h3 class="p-text">Fecha Final</h3>
+                            <input type="date" wire:model.defer="fechaFinal" class="p-text input-g">
+                            @error('fechaFinal') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Estado -->
+                            <h3 class="p-text">Estado</h3>
+                            <select wire:model.defer="estado" class="p-text input-g">
+                                <option value="">Seleccione estado</option>
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                            @error('estado') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Coche -->
+                            <h3 class="p-text">Coche</h3>
+                            <select wire:model.defer="coche_id" class="p-text input-g">
+                                <option value="">Seleccione un coche</option>
+                                @foreach ($coches as $coche)
+                                    <option value="{{ $coche->id }}">{{ $coche->placa }} - {{ $coche->marca }}
+                                        {{ $coche->modelo }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('coche_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Personal -->
+                            <h3 class="p-text">Personal</h3>
+                            <select wire:model.defer="personal_id" class="p-text input-g">
+                                <option value="">Seleccione personal</option>
+                                @foreach ($personals as $personal)
+                                    <option value="{{ $personal->id }}">{{ $personal->nombres}}</option>
+                                @endforeach
+                            </select>
+                            @error('personal_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                         </div>
-                    </div>
-                    <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-5">
-                        <button type="button" wire:click="guardarAsignacion" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 sm:ml-2 sm:w-auto">Guardar</button>
-                        <button type="button" wire:click="cerrarModal" class="mt-2 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-600 dark:text-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 dark:ring-gray-500 ring-inset hover:bg-gray-50 dark:hover:bg-gray-500 sm:mt-0 sm:w-auto">Cancelar</button>
+
+                        <!-- Botones -->
+                        <div class="mt-6 flex justify-center w-full space-x-4">
+                            <button type="button" wire:click="guardarAsignacion"
+                                class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
+                                <!-- Icono Guardar -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                                    class="icon icon-tabler icon-tabler-device-floppy">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
+                                    <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                    <path d="M14 4l0 4l-6 0l0 -4" />
+                                </svg>
+                            </button>
+                            <button type="button" wire:click="cerrarModal"
+                                class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
+                                <!-- Icono Cancelar -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                                    class="icon icon-tabler icon-tabler-x">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M18 6l-12 12" />
+                                    <path d="M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     @endif
-
-    <!-- Modal de detalle -->
     @if ($detalleModal)
-        <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 transition-opacity" aria-hidden="true"></div>
-            <div class="fixed inset-0 z-10 w-screen overflow-y-auto flex items-center justify-center">
-                <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all w-full max-w-md mx-4 sm:mx-0">
-                    <div class="px-4 py-4 sm:px-5 sm:py-4">
-                        <h3 class="text-base font-semibold text-gray-900 dark:text-white" id="modal-title">Detalles de la Asignación</h3>
+        <div class="modal-first">
+            <div class="modal-center">
+                <div class="modal-hiden">
+                    <div class="center-col">
+                        <h3 class="text-base font-semibold p-text" id="modal-title">Detalles de la Asignación</h3>
                         <div class="mt-4">
-                            <dl class="grid grid-cols-1 gap-4">
+                            <dl class="grid grid-cols-2 gap-4">
+                                <!-- Fecha de Inicio -->
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Fecha de Inicio</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $asignacionSeleccionada->fechaInicio }}</dd>
+                                    <dt class="text-sm font-medium p-text">Fecha de Inicio</dt>
+                                    <dd class="mt-1 text-sm p-text">
+                                        {{ $asignacionSeleccionada->fechaInicio ?? 'No especificada' }}
+                                    </dd>
                                 </div>
+
+                                <!-- Fecha Final -->
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Fecha Final</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $asignacionSeleccionada->fechaFinal }}</dd>
+                                    <dt class="text-sm font-medium p-text">Fecha Final</dt>
+                                    <dd class="mt-1 text-sm p-text">
+                                        {{ $asignacionSeleccionada->fechaFinal ?? 'No especificada' }}
+                                    </dd>
                                 </div>
+
+                                <!-- Estado -->
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Estado</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $asignacionSeleccionada->estado ? 'Activo' : 'Inactivo' }}</dd>
+                                    <dt class="text-sm font-medium p-text">Estado</dt>
+                                    <dd class="mt-1 text-sm p-text">
+                                        {{ $asignacionSeleccionada->estado ? 'Activo' : 'Inactivo' }}
+                                    </dd>
                                 </div>
+
+                                <!-- Coche -->
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Coche</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $asignacionSeleccionada->coche->placa }} - {{ $asignacionSeleccionada->coche->marca }} {{ $asignacionSeleccionada->coche->modelo }}</dd>
+                                    <dt class="text-sm font-medium p-text">Coche</dt>
+                                    <dd class="mt-1 text-sm p-text">
+                                        {{ $asignacionSeleccionada->coche->placa ?? 'No especificado' }} -
+                                        {{ $asignacionSeleccionada->coche->marca ?? 'No especificado' }}
+                                        {{ $asignacionSeleccionada->coche->modelo ?? 'No especificado' }}
+                                    </dd>
                                 </div>
+
+                                <!-- Personal -->
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Personal</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $asignacionSeleccionada->personal->nombre }}</dd>
+                                    <dt class="text-sm font-medium p-text">Personal</dt>
+                                    <dd class="mt-1 text-sm p-text">
+                                        {{ $asignacionSeleccionada->personal->nombre ?? 'No asignado' }}
+                                    </dd>
                                 </div>
                             </dl>
                         </div>
-                    </div>
-                    <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-5">
-                        <button type="button" wire:click="cerrarModal" class="inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 dark:text-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 dark:ring-gray-500 ring-inset hover:bg-gray-50 dark:hover:bg-gray-700 sm:w-auto">Cerrar</button>
+
+                        <!-- Botón de Cerrar Modal -->
+                        <div>
+                            <button type="button" wire:click="cerrarModal"
+                                class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M18 6l-12 12" />
+                                    <path d="M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     @endif
+
 </div>

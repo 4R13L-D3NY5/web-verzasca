@@ -1,50 +1,75 @@
-<div class="dark:bg-gray-900 text-white p-4 flex justify-center">
-    <div class="w-full max-w-screen-xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
-        <div class="relative flex w-full flex-col rounded-xl bg-white text-gray-700 shadow-md">
-            <!-- Título bonito -->
-            <h6 class="text-center text-xl font-bold text-gray-800 dark:text-white mb-4 px-4">Gestión de Coches</h6>
+<div class="p-text p-2 mt-10 flex justify-center">
+    <div class="w-full max-w-screen-xl grid grid-cols-1 gap-6">
+        <div>
+            <h6 class="text-xl font-bold mb-4 px-4 p-text">Gestión de Coches</h6>
 
-            <!-- Barra superior con botón y buscador -->
-            <div class="flex overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700">
-                <button title="Registrar coche" wire:click='abrirModal("create")' class="group cursor-pointer outline-none hover:rotate-90 duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 24 24" class="stroke-zinc-400 fill-none group-hover:fill-zinc-800 group-active:stroke-zinc-200 group-active:fill-zinc-600 group-active:duration-0 duration-300">
-                        <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke-width="1.5"></path>
-                        <path d="M8 12H16" stroke-width="1.5"></path>
-                        <path d="M12 16V8" stroke-width="1.5"></path>
+            <!-- Botón de registro y buscador -->
+            <div class="flex justify-center items-center gap-4 w-full max-w-2xl mx-auto">
+                <button title="Registrar Coche" wire:click='abrirModal("create")'
+                    class="text-emerald-500 hover:text-emerald-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-car">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5" />
                     </svg>
                 </button>
-                <input type="text" wire:model.live="search" placeholder="Buscar..." class="px-4 py-2 w-full sm:w-64 text-gray-600 dark:text-gray-300 dark:bg-gray-900 focus:outline-none" />
+
+                <input type="text" wire:model.live="search" placeholder="Buscar coche..."
+                    class="input-g w-auto sm:w-64" />
             </div>
 
-            <!-- Tabla con 2 columnas -->
+            <!-- Tabla -->
             <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full table-auto text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
+                <table
+                    class="w-full text-sm text-left border border-slate-200 dark:border-cyan-200 rounded-lg border-collapse">
+                    <thead class="text-x uppercase color-bg">
                         <tr>
-                            <th scope="col" class="px-6 py-3">Información</th>
-                            <th scope="col" class="w-40 text-right p-2">Acciones</th>
+                            <th scope="col" class="px-6 py-3 p-text text-left">Información</th>
+                            <th scope="col" class="px-6 py-3 p-text text-right">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($coches as $coche)
-                            <tr class="border-b border-gray-200 dark:border-gray-700">
-                                <td class="px-6 py-4 font-medium text-gray-900 bg-gray-50 dark:text-white dark:bg-gray-800">
-                                    <div class="flex flex-col">
-                                        <span>{{ $coche->marca }} {{ $coche->modelo }}</span>
-                                        <span class="text-gray-500 dark:text-gray-400 text-xs">Placa: {{ $coche->placa }}</span>
-                                        <span class="text-gray-500 dark:text-gray-400 text-xs">Estado: {{ $coche->estado ? 'Activo' : 'Inactivo' }}</span>
+                            <tr class="color-bg border border-slate-200">
+                                <td class="px-6 py-4 p-text text-left">
+                                    <div class="mb-2">
+                                        <span class="font-semibold block">Placa:</span>
+                                        <span>{{ $coche->placa }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-semibold block">Modelo:</span>
+                                        <span>{{ $coche->modelo }}</span>
                                     </div>
                                 </td>
-                                <td class="bg-gray-50 dark:bg-gray-800 w-40 text-right p-2">
-                                    <div class="flex justify-end">
-                                        <button wire:click="editarCoche({{ $coche->id }})" class="text-gray-600 hover:text-gray-800 mx-1 transition-all duration-200 ease-in-out hover:rotate-12 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.85 3 20l1.15-4.5L16.862 3.487z" />
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex justify-end space-x-2">
+                                        <button title="Editar" wire:click="editarCoche({{ $coche->id }})"
+                                            class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                                <path
+                                                    d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                                <path d="M16 5l3 3" />
                                             </svg>
                                         </button>
-                                        <button wire:click="verDetalle({{ $coche->id }})" class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        <button title="Ver Detalle" wire:click="verDetalle({{ $coche->id }})"
+                                            class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-eye-plus">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                <path d="M12 18c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                <path d="M16 19h6" />
+                                                <path d="M19 16v6" />
                                             </svg>
                                         </button>
                                     </div>
@@ -52,7 +77,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="2" class="text-center py-4 text-gray-600 dark:text-gray-400">
+                                <td colspan="2" class="text-left py-4 text-gray-600 dark:text-gray-400">
                                     No hay coches registrados.
                                 </td>
                             </tr>
@@ -60,123 +85,167 @@
                     </tbody>
                 </table>
             </div>
-            <!-- Paginación -->
+
             <div class="mt-4 flex justify-center">
                 {{ $coches->links() }}
             </div>
         </div>
     </div>
-
     <!-- Modal de registro y edición -->
     @if ($modal)
-        <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 transition-opacity" aria-hidden="true"></div>
-            <div class="fixed inset-0 z-10 w-screen overflow-y-auto flex items-center justify-center">
-                <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all w-full max-w-md mx-4 sm:mx-0">
-                    <div class="px-4 py-4 sm:px-5 sm:py-4">
-                        <div class="w-full">
-                            <h3 class="text-base font-semibold text-gray-900 dark:text-white" id="modal-title">
-                                {{ $accion === 'create' ? 'Registrar Coche' : 'Editar Coche' }}
-                            </h3>
-                            <div class="mt-2">
-                                <div class="grid grid-cols-1 gap-3">
-                                    <div>
-                                        <label class="label1">Móvil</label>
-                                        <input type="number" wire:model="movil" class="input1">
-                                        @error('movil') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Marca</label>
-                                        <input type="text" wire:model="marca" class="input1">
-                                        @error('marca') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Modelo</label>
-                                        <input type="text" wire:model="modelo" class="input1">
-                                        @error('modelo') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Año</label>
-                                        <input type="number" wire:model="anio" class="input1">
-                                        @error('anio') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Color</label>
-                                        <input type="text" wire:model="color" class="input1">
-                                        @error('color') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Placa</label>
-                                        <input type="text" wire:model="placa" class="input1">
-                                        @error('placa') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="label1">Estado</label>
-                                        <select wire:model="estado" class="select1">
-                                            <option value="1">Activo</option>
-                                            <option value="0">Inactivo</option>
-                                        </select>
-                                        @error('estado') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                </div>
-                            </div>
+        <div class="modal-first">
+            <div class="modal-center">
+                <div class="modal-hiden">
+                    <div class="center-col">
+                        <h3 class="p-text">{{ $accion === 'create' ? 'Registrar Coche' : 'Editar Coche' }}</h3>
+                        <div class="over-col">
+                            <!-- Móvil -->
+                            <h3 class="p-text">Móvil</h3>
+                            <input type="number" wire:model.defer="movil" class="p-text input-g">
+                            @error('movil') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Marca -->
+                            <h3 class="p-text">Marca</h3>
+                            <input type="text" wire:model.defer="marca" class="p-text input-g">
+                            @error('marca') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Modelo -->
+                            <h3 class="p-text">Modelo</h3>
+                            <input type="text" wire:model.defer="modelo" class="p-text input-g">
+                            @error('modelo') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Año -->
+                            <h3 class="p-text">Año</h3>
+                            <input type="number" wire:model.defer="anio" class="p-text input-g">
+                            @error('anio') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Color -->
+                            <h3 class="p-text">Color</h3>
+                            <input type="text" wire:model.defer="color" class="p-text input-g">
+                            @error('color') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Placa -->
+                            <h3 class="p-text">Placa</h3>
+                            <input type="text" wire:model.defer="placa" class="p-text input-g">
+                            @error('placa') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Estado -->
+                            <h3 class="p-text">Estado</h3>
+                            <select wire:model.defer="estado" class="p-text input-g">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                            @error('estado') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                         </div>
-                    </div>
-                    <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-5">
-                        <button type="button" wire:click="guardarCoche" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 sm:ml-2 sm:w-auto">Guardar</button>
-                        <button type="button" wire:click="cerrarModal" class="mt-2 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-600 dark:text-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 dark:ring-gray-500 ring-inset hover:bg-gray-50 dark:hover:bg-gray-500 sm:mt-0 sm:w-auto">Cancelar</button>
+
+                        <!-- Botones -->
+                        <div class="mt-6 flex justify-center w-full space-x-4">
+                            <button type="button" wire:click="guardarCoche"
+                                class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
+                                    <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                    <path d="M14 4l0 4l-6 0l0 -4" />
+                                </svg>
+                            </button>
+                            <button type="button" wire:click="cerrarModal"
+                                class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M18 6l-12 12" />
+                                    <path d="M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     @endif
 
-    <!-- Modal de detalle -->
+
     @if ($detalleModal)
-        <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 transition-opacity" aria-hidden="true"></div>
-            <div class="fixed inset-0 z-10 w-screen overflow-y-auto flex items-center justify-center">
-                <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all w-full max-w-md mx-4 sm:mx-0">
-                    <div class="px-4 py-4 sm:px-5 sm:py-4">
-                        <h3 class="text-base font-semibold text-gray-900 dark:text-white" id="modal-title">Detalles del Coche</h3>
+        <div class="modal-first">
+            <div class="modal-center">
+                <div class="modal-hiden">
+                    <div class="center-col">
+                        <h3 class="text-base font-semibold p-text" id="modal-title">Detalles del Coche</h3>
                         <div class="mt-4">
-                            <dl class="grid grid-cols-1 gap-4">
+                            <dl class="grid grid-cols-2 gap-4">
+                                <!-- Móvil -->
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Móvil</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $cocheSeleccionado->movil }}</dd>
+                                    <dt class="text-sm font-medium p-text">Móvil</dt>
+                                    <dd class="mt-1 text-sm p-text">{{ $cocheSeleccionado->movil ?? 'No especificado' }}
+                                    </dd>
                                 </div>
+
+                                <!-- Marca -->
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Marca</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $cocheSeleccionado->marca }}</dd>
+                                    <dt class="text-sm font-medium p-text">Marca</dt>
+                                    <dd class="mt-1 text-sm p-text">{{ $cocheSeleccionado->marca ?? 'No especificada' }}
+                                    </dd>
                                 </div>
+
+                                <!-- Modelo -->
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Modelo</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $cocheSeleccionado->modelo }}</dd>
+                                    <dt class="text-sm font-medium p-text">Modelo</dt>
+                                    <dd class="mt-1 text-sm p-text">{{ $cocheSeleccionado->modelo ?? 'No especificado' }}
+                                    </dd>
                                 </div>
+
+                                <!-- Año -->
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Año</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $cocheSeleccionado->anio }}</dd>
+                                    <dt class="text-sm font-medium p-text">Año</dt>
+                                    <dd class="mt-1 text-sm p-text">{{ $cocheSeleccionado->anio ?? 'No especificado' }}</dd>
                                 </div>
+
+                                <!-- Color -->
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Color</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $cocheSeleccionado->color }}</dd>
+                                    <dt class="text-sm font-medium p-text">Color</dt>
+                                    <dd class="mt-1 text-sm p-text">{{ $cocheSeleccionado->color ?? 'No especificado' }}
+                                    </dd>
                                 </div>
+
+                                <!-- Placa -->
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Placa</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $cocheSeleccionado->placa }}</dd>
+                                    <dt class="text-sm font-medium p-text">Placa</dt>
+                                    <dd class="mt-1 text-sm p-text">{{ $cocheSeleccionado->placa ?? 'No especificada' }}
+                                    </dd>
                                 </div>
+
+                                <!-- Estado -->
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Estado</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $cocheSeleccionado->estado ? 'Activo' : 'Inactivo' }}</dd>
+                                    <dt class="text-sm font-medium p-text">Estado</dt>
+                                    <dd class="mt-1 text-sm p-text">
+                                        {{ $cocheSeleccionado->estado === 1 ? 'Activo' : 'Inactivo' }}
+                                    </dd>
                                 </div>
                             </dl>
                         </div>
-                    </div>
-                    <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-5">
-                        <button type="button" wire:click="cerrarModal" class="inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 dark:text-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 dark:ring-gray-500 ring-inset hover:bg-gray-50 dark:hover:bg-gray-700 sm:w-auto">Cerrar</button>
+
+                        <!-- Botón cerrar -->
+                        <div>
+                            <button type="button" wire:click="cerrarModal"
+                                class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M18 6l-12 12" />
+                                    <path d="M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     @endif
+
 </div>
