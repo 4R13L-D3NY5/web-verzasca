@@ -38,23 +38,23 @@
             <!-- Filtros de estado -->
             <div class="mt-4 flex rounded-md shadow-sm justify-center">
                 <button wire:click="filtrarPorEstado(null)"
-                    class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-1 px-3 rounded-l-md text-xs transition-colors focus:outline-none">
+                    class="flex-1 bg-gray-600 hover:bg-gray-300 text-white font-semibold py-1 px-3 rounded-l-md text-xs transition-colors focus:outline-none">
                     Todos
                 </button>
                 <button wire:click="filtrarPorEstado(1)"
-                    class="flex-1 bg-yellow-200 hover:bg-yellow-300 text-gray-800 font-semibold py-1 px-3 text-xs transition-colors focus:outline-none">
+                    class="flex-1 bg-yellow-600 hover:bg-yellow-300 text-white font-semibold py-1 px-3 text-xs transition-colors focus:outline-none">
                     Pedidos
                 </button>
                 <button wire:click="filtrarPorEstado(2)"
-                    class="flex-1 bg-green-200 hover:bg-green-300 text-gray-800 font-semibold py-1 px-3 text-xs transition-colors focus:outline-none">
+                    class="flex-1 bg-green-600 hover:bg-green-300 text-white font-semibold py-1 px-3 text-xs transition-colors focus:outline-none">
                     Vendidos
                 </button>
                 <button wire:click="filtrarPorEstado(0)"
-                    class="flex-1 bg-red-200 hover:bg-red-300 text-gray-800 font-semibold py-1 px-3 text-xs transition-colors focus:outline-none">
+                    class="flex-1 bg-red-600 hover:bg-red-300 text-white font-semibold py-1 px-3 text-xs transition-colors focus:outline-none">
                     Cancelados
                 </button>
                 <button wire:click="filtrarPorCreditosPendientes"
-                    class="flex-1 bg-orange-200 hover:bg-orange-300 text-gray-800 font-semibold py-1 px-3 rounded-r-md text-xs transition-colors focus:outline-none">
+                    class="flex-1 bg-orange-600 hover:bg-orange-300 text-white font-semibold py-1 px-3 rounded-r-md text-xs transition-colors focus:outline-none">
                     Cré. Pen.
                 </button>
             </div>
@@ -77,13 +77,13 @@
                                         <span class="font-semibold block">Estado:</span>
                                         @if ($venta->estadoPedido == 0)
                                             <span
-                                                class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Cancelado</span>
+                                                class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-red-600 text-white">Cancelado</span>
                                         @elseif ($venta->estadoPedido == 1)
                                             <span
-                                                class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pedido</span>
+                                                class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-600 text-white">Pedido</span>
                                         @elseif ($venta->estadoPedido == 2)
                                             <span
-                                                class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Vendido</span>
+                                                class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-green-600 text-white">Vendido</span>
                                         @endif
                                     </div>
                                     <div class="mb-2">
@@ -132,24 +132,30 @@
                                         </button>
 
                                         <button wire:click="editarVenta({{ $venta->id }})"
-                                            class="text-purple-500 hover:text-purple-600 transition-transform duration-200 ease-in-out hover:rotate-12 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-full"
-                                            title="Editar">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.85 3 20l1.15-4.5L16.862 3.487z" />
+                                            class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                                <path
+                                                    d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                                <path d="M16 5l3 3" />
                                             </svg>
                                         </button>
 
                                         <button wire:click="verDetalle({{ $venta->id }})"
-                                            class="text-blue-500 hover:text-blue-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full"
-                                            title="Ver detalle">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye"
-                                                width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <circle cx="12" cy="12" r="2" />
-                                                <path
-                                                    d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10z" />
+                                            class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-eye-plus">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                <path d="M12 18c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                <path d="M16 19h6" />
+                                                <path d="M19 16v6" />
                                             </svg>
                                         </button>
                                     </div>
@@ -432,47 +438,62 @@
 
                         <!-- Ítems -->
                         <div class="mt-6">
-                            <dt class="text-sm font-medium p-text">Item de venta</dt>
-                            <table class="w-full mt-2 text-sm text-left text-gray-500 dark:text-gray-400">
-                                <thead
-                                    class="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
-                                    <tr>
-                                        <th class="px-4 py-2">Cantidad</th>
-                                        <th class="px-4 py-2">Precio Unitario</th>
-                                        <th class="px-4 py-2">Subtotal</th>
-                                        <th class="px-4 py-2">Estado</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($ventaSeleccionada->itemVentas as $item)
-                                        <tr class="border-b border-gray-200 dark:border-gray-700">
-                                            <td class="px-4 py-2">{{ $item->cantidad }}</td>
-                                            <td class="px-4 py-2">{{ number_format($item->precio, 2) }}</td>
-                                            <td class="px-4 py-2">{{ number_format($item->cantidad * $item->precio, 2) }}</td>
-                                            <td class="px-4 py-2">
-                                                @if ($item->estado == 0) Cancelado
-                                                @elseif ($item->estado == 1) Pedido
-                                                @else Vendido @endif
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="px-4 py-2 text-center text-gray-600 dark:text-gray-400">
-                                                No hay ítems registrados para esta venta.
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+                            <h4 class="text-sm font-medium p-text text-center">Detalle de Venta</h4>
+                            <div class="bg-white shadow-md rounded-xl p-2 dark:bg-slate-800">
+                                @forelse ($ventaSeleccionada->itemVentas as $item)
+                                    <div
+                                        class="flex flex-wrap justify-between items-center py-2 border-b border-gray-200 dark:border-slate-700 last:border-none">
+                                        <div class="w-[200px] sm:w-[400px] text-right">
+                                            <p class="text-sm font-semibold p-text">
+                                                Estado:
+                                                <span
+                                                    class="inline-block px-2 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-800 dark:text-blue-200">
+                                                    @if ($item->estado == 0)
+                                                        Cancelado
+                                                    @elseif ($item->estado == 1)
+                                                        Pedido
+                                                    @else
+                                                        Vendido
+                                                    @endif
+                                                </span>
+                                            </p>
+                                            <p class="text-sm font-semibold p-text flex justify-between">
+                                                <span class="text-right">Cantidad:</span>
+                                                <span class="font-normal text-left">{{ $item->cantidad }}</span>
+                                            </p>
+                                            <p class="text-sm font-semibold p-text flex justify-between">
+                                                <span class="text-left">Precio Unitario:</span>
+                                                <span
+                                                    class="font-semibold text-right">{{ number_format($item->precio, 2) }}</span>
+                                            </p>
+                                            <p class="text-sm font-semibold p-text flex justify-between">
+                                                <span class="text-left">Subtotal:</span>
+                                                <span
+                                                    class="font-semibold text-right">{{ number_format($item->cantidad * $item->precio, 2) }}</span>
+                                            </p>
 
-                            <!-- Total -->
-                            <div class="mt-4 flex justify-end">
-                                <span class="text-sm font-semibold p-text">
-                                    Total:
-                                    {{ number_format($ventaSeleccionada->itemVentas->sum(fn($item) => $item->cantidad * $item->precio), 2) }}
-                                </span>
+
+                                        </div>
+
+                                    </div>
+                                @empty
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 text-center py-4">
+                                        No hay ítems registrados para esta venta.
+                                    </p>
+                                @endforelse
+
+                                <!-- Total -->
+                                <div class="mt-4 flex justify-between items-center text-right">
+                                    <span class="text-base font-semibold text-gray-800 dark:text-gray-100">
+                                        Total:
+                                    </span>
+                                    <span class="text-xl font-bold text-gray-800 dark:text-gray-100">
+                                        {{ number_format($ventaSeleccionada->itemVentas->sum(fn($item) => $item->cantidad * $item->precio), 2) }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
+
 
                         <!-- Botón cerrar -->
                         <div class="mt-4 flex justify-end">
@@ -629,8 +650,10 @@
                                     <tbody>
                                         @forelse ($ventaSeleccionadaEntrega->itemVentas as $index => $item)
                                             <tr class="border-b border-gray-200 dark:border-gray-700">
-                                                <td class="px-4 py-2">{{ $item->existencia->nombre ?? 'Producto no encontrado'
-                                                                                            }}</td>
+                                                <td class="px-4 py-2">
+                                                    {{ $item->existencia->nombre ?? 'Producto no encontrado'
+                                                                                                                                                                    }}
+                                                </td>
                                                 <td class="px-4 py-2">{{ $item->cantidad }}</td>
                                                 <td class="px-4 py-2 flex space-x-2">
                                                     <!-- Botón para aumentar cantidad -->
