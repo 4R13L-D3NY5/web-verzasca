@@ -209,7 +209,14 @@
                                 <div>
                                     <dt class="text-sm font-medium p-text">Estado</dt>
                                     <dd class="mt-1 text-sm p-text">
-                                        {{ $personalSeleccionado->estado ? 'Activo' : 'Inactivo' }}</dd>
+                                        @if (($personalSeleccionado['estado'] ?? false) == 1)
+                                            <span
+                                                class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-600 text-white">Activo</span>
+                                        @else
+                                            <span
+                                                class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-red-600 text-white">Inactivo</span>
+                                        @endif
+                                    </dd>
                                 </div>
                             </dl>
                         </div>

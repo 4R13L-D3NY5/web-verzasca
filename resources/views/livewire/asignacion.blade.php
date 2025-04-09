@@ -49,12 +49,12 @@
                                     </div>
                                     <div class="mb-2">
                                         <span class="font-semibold block">Personal:</span>
-                                        <span>{{ $asignacion->personal->nombre ?? 'Sin personal' }}</span>
+                                        <span>{{ $asignacion->personal->nombres ?? 'Sin personal' }}</span>
                                     </div>
                                     <div class="mb-2">
                                         <span class="font-semibold block">Estado:</span>
                                         <span class="{{ $asignacion->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
-                                         px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
+                                             px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
                                             {{ $asignacion->estado ? 'Activo' : 'Inactivo' }}
                                         </span>
                                     </div>
@@ -215,7 +215,13 @@
                                 <div>
                                     <dt class="text-sm font-medium p-text">Estado</dt>
                                     <dd class="mt-1 text-sm p-text">
-                                        {{ $asignacionSeleccionada->estado ? 'Activo' : 'Inactivo' }}
+                                        @if (($asignacionSeleccionada['estado'] ?? false) == 1)
+                                            <span
+                                                class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-600 text-white">Activo</span>
+                                        @else
+                                            <span
+                                                class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-red-600 text-white">Inactivo</span>
+                                        @endif
                                     </dd>
                                 </div>
 
