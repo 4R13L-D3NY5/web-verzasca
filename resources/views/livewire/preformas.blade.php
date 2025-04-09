@@ -1,11 +1,12 @@
 <div class="p-text p-2 mt-10 flex justify-center">
   <div class="w-full max-w-screen-xl grid grid-cols-1 gap-6">
     <div>
-      <h6 class="text-center text-xl font-bold mb-4 px-4 p-text">Gestión de Preformas</h6>
+      <h6 class="text-xl font-bold mb-4 px-4 p-text">Gestión de Preformas</h6>
 
       <!-- Botón de registro y buscador -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-        <button title="Registrar Preforma" wire:click='abrirModal("create")' class="boton-g p-text">
+      <div class="flex justify-center items-center gap-4 w-full max-w-2xl mx-auto">
+        <button title="Registrar Preforma" wire:click='abrirModal("create")'
+          class="text-emerald-500 hover:text-emerald-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-full">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
@@ -13,29 +14,52 @@
             <path d="M12 5v14m7-7h-14" />
           </svg>
         </button>
-        <input type="text" wire:model.live="search" placeholder="Buscar..." class="input-g" />
+
+        <input type="text" wire:model.live="search" placeholder="Buscar preforma..." class="input-g w-auto sm:w-64" />
       </div>
 
-      
       <!-- Tabla -->
       <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right">
+        <table class="w-full text-sm text-left border border-slate-200 dark:border-cyan-200 rounded-lg border-collapse">
           <thead class="text-x uppercase color-bg">
             <tr>
-              <th scope="col" class="w-40 rounded-s-lg text-center p-2 p-text">Acciones</th>
-              <th scope="col" class="px-6 py-3 text-center p-text">Insumo</th>
+              <th scope="col" class="px-6 py-3 p-text text-left">Información</th>
+              <th scope="col" class="px-6 py-3 p-text text-right">Acciones</th>
             </tr>
           </thead>
           <tbody>
             @forelse ($preformas as $preforma)
-        <tr class="color-bg">
-          <td class="color-bg w-40 text-center p-2">
-          <div class="flex justify-center space-x-2">
-            <!-- Botón de edición -->
-            <button title="Editar Preforma" class="boton-g p-text"
-            wire:click="abrirModal('edit', {{ $preforma->id }})">
+        <tr class="color-bg border border-slate-200">
+          <td class="px-6 py-4 p-text text-left">
+          <div class="mb-2">
+            <span class="font-semibold block">Estado:</span>
+            <span class="{{ $preforma->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
+           px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
+            {{ $preforma->estado ? 'Activo' : 'Inactivo' }}
+            </span>
+          </div>
+          <div class="mb-2">
+            <span class="font-semibold block">Insumo:</span>
+            <span>{{ $preforma->insumo }}</span>
+          </div>
+          <div>
+            <span class="font-semibold block">Color:</span>
+            <span>{{ $preforma->color }}</span>
+          </div>
+          <div>
+            <span class="font-semibold block">Sucursal:</span>
+            @foreach ($preforma->existencias as $existencia)
+        <span>{{ $existencia->sucursal->nombre }}: {{ $existencia->cantidad }}</span><br>
+      @endforeach
+          </div>
+          </td>
+
+          <td class="px-6 py-4 text-right">
+          <div class="flex justify-end space-x-2">
+            <button title="Editar Preforma" wire:click="abrirModal('edit', {{ $preforma->id }})"
+            class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
               class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
@@ -45,41 +69,41 @@
             </button>
 
             <!-- Botón de detalles -->
-            <button title="Ver detalles" class="boton-g p-text" wire:click="modaldetalle({{ $preforma->id }})">
+            <button title="Ver detalles" wire:click="modaldetalle({{ $preforma->id }})"
+            class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle">
+              class="icon icon-tabler icons-tabler-outline icon-tabler-eye-plus">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
-              <path d="M12 9h.01" />
-              <path d="M11 12h1v4h1" />
+              <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+              <path d="M12 18c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+              <path d="M16 19h6" />
+              <path d="M19 16v6" />
             </svg>
             </button>
           </div>
           </td>
-          <td class="px-6 py-4 text-center p-text">{{ $preforma->insumo }} [{{$preforma->color}}] <br>
-            @foreach ($preforma->existencias as $existencia)
-            {{$existencia->sucursal->nombre}} : {{$existencia->cantidad}} <br>
-            @endforeach
-            <strong>Total: {{ $preforma->existencias->sum('cantidad') }}</strong>
-          </td>
-          
         </tr>
       @empty
     <tr>
-      <td colspan="2" class="text-center py-4 text-gray-600 dark:text-gray-400">No hay preformas registradas.
+      <td colspan="2" class="text-center py-4 text-gray-600 dark:text-gray-400">
+      No hay preformas registradas.
       </td>
     </tr>
   @endforelse
           </tbody>
         </table>
       </div>
+
       <div class="mt-4 flex justify-center">
         {{ $preformas->links() }}
       </div>
-
     </div>
   </div>
+
+
+
+
 
   <!-- Modal de Registro/Edición -->
   @if ($modal)
@@ -87,43 +111,44 @@
     <div class="modal-center">
       <div class="modal-hiden">
       <div class="center-col">
-        <h3 class="title3">
+        <h3 class="p-text">
         {{ $accion === 'create' ? 'Registrar Preforma' : 'Editar Preforma' }}
         </h3>
         <div class="over-col">
-        <h3 class="title3">Insumo</h3>
+        <h3 class="p-text">Insumo</h3>
         <input type="text" wire:model="insumo" class="p-text input-g" />
         @if ($accion === 'create')
       @error('insumo') <span class="error-message text-red-500">{{ $message }}</span> @enderror
     @endif
 
-        <h3 class="title3">Descripción</h3>
+        <h3 class="p-text">Descripción</h3>
         <input type="text" wire:model="descripcion" class="p-text input-g" />
         @if ($accion === 'create')
       @error('descripcion') <span class="error-message text-red-500">{{ $message }}</span> @enderror
     @endif
 
-        <h3 class="title3">Capacidad</h3>
+        <h3 class="p-text">Capacidad</h3>
         <input type="number" wire:model="capacidad" class="p-text input-g" />
         @if ($accion === 'create')
       @error('capacidad') <span class="error-message text-red-500">{{ $message }}</span> @enderror
     @endif
 
-        <h3 class="title3">Color</h3>
+        <h3 class="p-text">Color</h3>
         <input type="text" wire:model="color" class="p-text input-g" />
         @if ($accion === 'create')
       @error('color') <span class="error-message text-red-500">{{ $message }}</span> @enderror
     @endif
 
-        <h3 class="title3">Estado</h3>
+        <h3 class="p-text">Estado</h3>
         <select wire:model="estado" class="p-text input-g">
           <option value="1">Activo</option>
           <option value="0">Inactivo</option>
         </select>
         </div>
         <div class="mt-6 flex justify-center w-full space-x-4">
-        <button type="button" wire:click="guardar" class="boton-g">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        <button type="button" wire:click="guardar"
+          class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full"><svg
+          xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
           class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy">
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -132,12 +157,14 @@
           <path d="M14 4l0 4l-6 0l0 -4" />
           </svg>
         </button>
-        <button type="button" wire:click="cerrarModal" class="boton-g">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
-          class="icon icon-tabler icons-tabler-filled icon-tabler-square-x">
+        <button type="button" wire:click="cerrarModal"
+          class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full"><svg
+          xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-x">
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path
-            d="M19 2h-14a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3 -3v-14a3 3 0 0 0 -3 -3zm-9.387 6.21l.094 .083l2.293 2.292l2.293 -2.292a1 1 0 0 1 1.497 1.32l-.083 .094l-2.292 2.293l2.292 2.293a1 1 0 0 1 -1.32 1.497l-.094 -.083l-2.293 -2.292l-2.293 2.292a1 1 0 0 1 -1.497 -1.32l.083 -.094l2.292 -2.293l-2.292 -2.293a1 1 0 0 1 1.32 -1.497z" />
+          <path d="M18 6l-12 12" />
+          <path d="M6 6l12 12" />
           </svg>
         </button>
         </div>
@@ -153,25 +180,59 @@
     <div class="modal-center">
       <div class="modal-hiden">
       <div class="center-col">
-        <h3 class="p-text">Detalles de la Preforma</h3>
-        <div class="over-col">
-        <p class="title3"><strong class="p-text">Insumo:</strong> {{ $preformaSeleccionada->insumo }}</p>
-        <p class="title3"><strong class="p-text">Descripción:</strong> {{ $preformaSeleccionada->descripcion }}</p>
-        <p class="title3"><strong class="p-text">Capacidad:</strong> {{ $preformaSeleccionada->capacidad }}</p>
-        <p class="title3"><strong class="p-text">Color:</strong> {{ $preformaSeleccionada->color }}</p>
-        <p class="title3"><strong class="p-text">Estado:</strong>
-          <span class="text-{{ $preformaSeleccionada->estado ? 'green' : 'red' }}-500">
-          {{ $preformaSeleccionada->estado ? 'Activo' : 'Inactivo' }}
-          </span>
-        </p>
+        <h3 class="text-base font-semibold p-text" id="modal-title">Detalles de la Preforma</h3>
+        <div class="mt-4">
+        <dl class="grid grid-cols-2 gap-4">
+          <!-- Insumo -->
+          <div>
+          <dt class="text-sm font-medium p-text">Insumo</dt>
+          <dd class="mt-1 text-sm p-text">{{ $preformaSeleccionada->insumo ?? 'No especificado' }}</dd>
+          </div>
+
+          <!-- Descripción -->
+          <div>
+          <dt class="text-sm font-medium p-text">Descripción</dt>
+          <dd class="mt-1 text-sm p-text">{{ $preformaSeleccionada->descripcion ?? 'No especificada' }}</dd>
+          </div>
+
+          <!-- Capacidad -->
+          <div>
+          <dt class="text-sm font-medium p-text">Capacidad</dt>
+          <dd class="mt-1 text-sm p-text">{{ $preformaSeleccionada->capacidad ?? 'No especificada' }}</dd>
+          </div>
+
+          <!-- Color -->
+          <div>
+          <dt class="text-sm font-medium p-text">Color</dt>
+          <dd class="mt-1 text-sm p-text">{{ $preformaSeleccionada->color ?? 'No especificado' }}</dd>
+          </div>
+
+          <!-- Estado -->
+          <div>
+          <dt class="text-sm font-medium p-text">Estado</dt>
+          <dd class="mt-1 text-sm p-text">
+            @if (($preformaSeleccionada['estado'] ?? false) == 1)
+        <span
+        class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-600 text-white">Activo</span>
+      @else
+    <span
+    class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-red-600 text-white">Inactivo</span>
+  @endif
+          </dd>
+          </div>
+
+        </dl>
         </div>
+
         <div class="mt-6 flex justify-center w-full">
-        <button type="button" wire:click="cerrarModalDetalle" class="boton-g color-bg">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
-          class="icon icon-tabler icons-tabler-filled icon-tabler-square-x">
+        <button type="button" wire:click="cerrarModalDetalle"
+          class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-x">
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path
-            d="M19 2h-14a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3 -3v-14a3 3 0 0 0 -3 -3zm-9.387 6.21l.094 .083l2.293 2.292l2.293 -2.292a1 1 0 0 1 1.497 1.32l-.083 .094l-2.292 2.293l2.292 2.293a1 1 0 0 1 -1.32 1.497l-.094 -.083l-2.293 -2.292l-2.293 2.292a1 1 0 0 1 -1.497 -1.32l.083 -.094l2.292 -2.293l-2.292 -2.293a1 1 0 0 1 1.32 -1.497z" />
+          <path d="M18 6l-12 12" />
+          <path d="M6 6l12 12" />
           </svg>
         </button>
         </div>
@@ -180,4 +241,5 @@
     </div>
     </div>
   @endif
+
 </div>
