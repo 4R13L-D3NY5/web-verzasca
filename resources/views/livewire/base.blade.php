@@ -612,13 +612,13 @@
                             <span class="text-custom">Reportecredito</span>
                         </a>
                     </li>
-                    <div class="mt-4">
-                        <!-- Puedes usar el helper 'route' para redirigir con un nombre de ruta -->
+                    <!-- <div class="mt-4">
+                       
                         <a href="{{ route('clientes.index') }}"
                             class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                             Ir a Clientes
                         </a>
-                    </div>
+                    </div> -->
                 </div>
 
             </ul>
