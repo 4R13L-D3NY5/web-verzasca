@@ -107,6 +107,7 @@ class DatabaseSeeder extends Seeder
                     'existenciable_id' => $preforma->id,
                     'existenciable_type' => Preforma::class,
                     'sucursal_id' => $sucursal->id,
+                    'cantidad' => rand(10,50),
                 ]);
             }
 
@@ -116,6 +117,7 @@ class DatabaseSeeder extends Seeder
                     'existenciable_id' => $base->id,
                     'existenciable_type' =>Base::class,
                     'sucursal_id' => $sucursal->id,
+                    'cantidad' => rand(10,50),
                 ]);
             }
 
@@ -125,6 +127,7 @@ class DatabaseSeeder extends Seeder
                     'existenciable_id' => $tapa->id,
                     'existenciable_type' =>Tapa::class,
                     'sucursal_id' => $sucursal->id,
+                    'cantidad' => rand(10,50),
                 ]);
             }
 
@@ -134,6 +137,7 @@ class DatabaseSeeder extends Seeder
                     'existenciable_id' => $producto->id,
                     'existenciable_type' => Producto::class,
                     'sucursal_id' => $sucursal->id,
+                    'cantidad' => rand(10,50),
                 ]);
             }
 
@@ -143,6 +147,7 @@ class DatabaseSeeder extends Seeder
                     'existenciable_id' => $etiqueta->id,
                     'existenciable_type' => Etiqueta::class,
                     'sucursal_id' => $sucursal->id,
+                    'cantidad' => rand(10,50),
                 ]);
             }
 
@@ -152,6 +157,7 @@ class DatabaseSeeder extends Seeder
                     'existenciable_id' => $stock->id,
                     'existenciable_type' => Stock::class,
                     'sucursal_id' => $sucursal->id,
+                    'cantidad' => rand(10,50),
                 ]);
             }
 

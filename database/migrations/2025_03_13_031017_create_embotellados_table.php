@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('enbotellados', function (Blueprint $table) {
+        Schema::create('embotellados', function (Blueprint $table) {
             $table->id(); // Clave primaria
             $table->foreignId('existencia_base_id')->constrained('existencias')->onDelete('cascade');
             $table->foreignId('existencia_tapa_id')->constrained('existencias')->onDelete('cascade');

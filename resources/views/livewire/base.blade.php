@@ -660,6 +660,12 @@
             @if ($seleccion == 'Embotellado')
                 @livewire('embotellado')
             @endif
+            @if ($seleccion == 'Etiquetado')
+                @livewire('etiquetado')
+            @endif
+            @if ($seleccion == 'Traspaso')
+                @livewire('traspaso')
+            @endif
             @if ($seleccion == 'Stocks')
                 @livewire('stocks')
             @endif
