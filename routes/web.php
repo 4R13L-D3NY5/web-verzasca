@@ -1,5 +1,4 @@
 <?php
-use App\Http\Controllers\ClienteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MapaClienteController;
 Route::get('/', function () {
@@ -7,7 +6,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
+Route::get('/clientes', [MapaClienteController::class, 'index'])->name('clientes.index');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/clientes/mapa', [MapaClienteController::class, 'mostrar'])->name('clientes.mapa');
 Route::middleware('auth')->group(function () {
