@@ -12,7 +12,17 @@
                         stroke-linejoin="round" />
                 </svg>
             </button>
-
+            <a href="{{ route('clientes.mapa') }}"
+                class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
+                <!-- Icono de mapa -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2" class="icon icon-tabler icon-tabler-map">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 7l6 -2l6 2l6 -2v13l-6 2l-6 -2l-6 2v-13" />
+                    <path d="M9 4v13" />
+                    <path d="M15 6v13" />
+                </svg>
+            </a>
             <div class="flex justify-center items-center flex-grow">
                 <h5 class="text-white">VERZASCA</h5>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"

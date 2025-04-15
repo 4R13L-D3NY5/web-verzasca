@@ -1,80 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clientes - Mapa</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Mapa de Clientes</title>
 
-    <!-- Incluir el archivo CSS de Leaflet -->
+    {{-- CSS de Tailwind y Leaflet --}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    @vite(['resources/css/app.css'])
 
-    <!-- Agregar tus estilos personalizados aquí -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        #map {
-            width: 100%;
-            height: 500px;
-        }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 20px;
-            background-color: #4CAF50;
-            color: white;
-            font-size: 16px;
-            text-decoration: none;
-            border-radius: 5px;
-            text-align: center;
-            display: block;
-            width: 200px;
-            margin: 20px auto 0;
-        }
-        .btn:hover {
-            background-color: #45a049;
-        }
-    </style>
+    @livewireStyles
 </head>
-<body>
+<body class="bg-gray-100 text-gray-900">
 
-    <div class="container">
-        <h1>Mapa de Clientes</h1>
-        <p class="text-center">Aquí puedes ver la ubicación de los clientes en el mapa.</p>
-
-        <!-- Contenedor del mapa -->
-        <div id="map"></div>
-
-        <!-- Botón para ir al home -->
-        <a href="{{ route('home') }}" class="btn">Volver al Inicio</a>
+    <div class="p-6">
+        <h1 class="text-2xl font-bold mb-4">Mapa de Clientes</h1>
+        <div id="mapa" class="w-full h-[600px] rounded shadow-lg"></div>
     </div>
 
-    <!-- Incluir el archivo JS de Leaflet -->
+    {{-- JS de Leaflet y Vite --}}
+    @vite('resources/js/app.js')
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    @livewireScripts
 
     <script>
-        // Inicializar el mapa con coordenadas de ejemplo (Ciudad de México)
-        var map = L.map('map').setView([-16.5000, -68.1212], 13); // Coordenadas de Ciudad de México
+        document.addEventListener('DOMContentLoaded', function () {
+            const map = L.map('mapa').setView([-17.7833, -63.1821], 13); // Cambia las coordenadas según tu ubicación inicial preferida
 
-        // Añadir el "tile layer" del mapa (mapa de OpenStreetMap)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+            }).addTo(map);
 
+            @foreach ($clientes as $cliente)
+                L.marker([{{ $cliente->latitud }}, {{ $cliente->longitud }}])
+                    .addTo(map)
+                    .bindPopup(`
+                        <strong>{{ $cliente->nombre }}</strong><br>
+                        {{ $cliente->empresa ?? '' }}<br>
+                        {{ $cliente->celular ?? '' }}
+                    `);
+            @endforeach
+        });
     </script>
-
 </body>
 </html>
