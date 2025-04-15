@@ -19,9 +19,9 @@ return new class extends Migration
             $table->boolean('tipoProducto'); // Tipo de producto (0: sin retorno, 1: con retorno)
             $table->integer('capacidad'); // Capacidad del producto
             $table->string('unidad')->nullable(); // [L, ml, g, Kg, unidad]
-            $table->double('precioReferencia', 8, 2); // Precio de referencia
-            $table->double('precioReferencia2', 8, 2)->nullable(); // Precio de referencia
-            $table->double('precioReferencia3', 8, 2)->nullable(); // Precio de referencia
+            $table->decimal('precioReferencia', 8, 2)->comment('Precio de referencia');
+            $table->decimal('precioReferencia2', 8, 2)->nullable()->comment('Segundo precio de referencia');
+            $table->decimal('precioReferencia3', 8, 2)->nullable()->comment('Tercer precio de referencia');
             $table->text('observaciones')->nullable(); // Observaciones (opcional)
             $table->foreignId('base_id')->constrained('bases')->onDelete('cascade');
             $table->foreignId('tapa_id')->nullable()->constrained('tapas')->onDelete('cascade');

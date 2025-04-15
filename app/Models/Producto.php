@@ -16,12 +16,14 @@ class Producto extends Model
         'tipoContenido',
         'tipoProducto',
         'capacidad',
+        'unidad',
         'precioReferencia',
+        'precioReferencia2',
+        'precioReferencia3',
         'observaciones',
         'estado',
         'base_id',
         'tapa_id',
-        // 'cantidad',
     ];
 
     /**

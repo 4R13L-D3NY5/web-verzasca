@@ -13,6 +13,7 @@ class Stocks extends Component
 
     public $search = '';
     public $modal = false;
+    public $modalDetalle = false;
     public $stock_id = null;
     public $fechaElaboracion = '';
     public $fechaVencimiento = '';
@@ -20,13 +21,13 @@ class Stocks extends Component
     public $etiqueta_id = null;
     public $producto_id = null;
     public $accion = 'create';
-    public $stockSeleccionado = [];
+    public $stockSeleccionado = null;
+
     protected $paginationTheme = 'tailwind';
 
-    public $modalDetalle = false;
     protected $rules = [
-        'fechaElaboracion' => 'required|date',
-        'fechaVencimiento' => 'required|date|after:fechaElaboracion',
+        'fechaElaboracion' => 'nullable|date_format:Y-m-d',
+        'fechaVencimiento' => 'nullable|date_format:Y-m-d',
         'observaciones' => 'nullable|string',
         'etiqueta_id' => 'nullable|exists:etiquetas,id',
         'producto_id' => 'required|exists:productos,id',
@@ -34,18 +35,28 @@ class Stocks extends Component
 
     public function render()
     {
-        $stocks = Stock::when($this->search, function ($query) {
-            $query->whereHas('producto', function ($q) {
-                $q->where('nombre', 'like', '%' . $this->search . '%');
-            });
-        })->paginate(4);
-    
-        $productos = \App\Models\Producto::all(); // Obtener todos los productos
-        $etiquetas = \App\Models\Etiqueta::all(); // Obtener todas las etiquetas
-    
+        $stocks = Stock::with(['producto', 'etiqueta']) // Pre-carga relaciones
+            ->when($this->search, function ($query) {
+                $query->whereHas('producto', function ($q) {
+                    $q->where('nombre', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->paginate(4);
+
+        $productos = \App\Models\Producto::all();
+        $etiquetas = \App\Models\Etiqueta::all();
+
         return view('livewire.stocks', compact('stocks', 'productos', 'etiquetas'));
     }
-
+    public function setFechaActualElaboracion()
+    {
+        $this->fechaElaboracion = now()->format('Y-m-d');
+    }
+    
+    public function setFechaActualVencimiento()
+    {
+        $this->fechaVencimiento = now()->format('Y-m-d');
+    }
     public function updatingSearch()
     {
         $this->resetPage();
@@ -53,11 +64,13 @@ class Stocks extends Component
 
     public function abrirModal($accion = 'create', $id = null)
     {
-        $this->reset(['fechaElaboracion', 'fechaVencimiento', 'observaciones', 'etiqueta_id', 'producto_id']);
+        $this->resetInputFields();
         $this->accion = $accion;
+
         if ($accion === 'edit' && $id) {
             $this->editar($id);
         }
+
         $this->modal = true;
     }
 
@@ -101,12 +114,13 @@ class Stocks extends Component
     public function cerrarModal()
     {
         $this->modal = false;
-        $this->reset(['fechaElaboracion', 'fechaVencimiento', 'observaciones', 'etiqueta_id', 'producto_id', 'stock_id']);
+        $this->resetInputFields();
         $this->resetErrorBag();
     }
+
     public function modaldetalle($id)
     {
-        $this->stockSeleccionado = Stock::findOrFail($id);
+        $this->stockSeleccionado = Stock::with(['producto', 'etiqueta', 'sucursal', 'distribucion'])->findOrFail($id);
         $this->modalDetalle = true;
     }
 
@@ -114,5 +128,17 @@ class Stocks extends Component
     {
         $this->modalDetalle = false;
         $this->stockSeleccionado = null;
+    }
+
+    private function resetInputFields()
+    {
+        $this->reset([
+            'fechaElaboracion',
+            'fechaVencimiento',
+            'observaciones',
+            'etiqueta_id',
+            'producto_id',
+            'stock_id',
+        ]);
     }
 }
