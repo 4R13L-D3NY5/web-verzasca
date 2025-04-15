@@ -49,6 +49,11 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <!-- Paginación -->
+                <div class="mt-4">
+                    {{ $clientes->links('pagination::tailwind') }}
+                </div>
             </div>
         </div>
     </div>
@@ -70,10 +75,10 @@
                 L.marker([{{ $cliente->latitud }}, {{ $cliente->longitud }}])
                     .addTo(map)
                     .bindPopup(`
-                                <strong>{{ $cliente->nombre }}</strong><br>
-                                {{ $cliente->empresa ?? '' }}<br>
-                                {{ $cliente->celular ?? '' }}
-                            `);
+                                        <strong>{{ $cliente->nombre }}</strong><br>
+                                        {{ $cliente->empresa ?? '' }}<br>
+                                        {{ $cliente->celular ?? '' }}
+                                    `);
             @endforeach
         });
     </script>

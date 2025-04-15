@@ -9,7 +9,10 @@ class MapaClienteController extends Controller
 {
     public function mostrar()
     {
-        $clientes = Cliente::whereNotNull('latitud')->whereNotNull('longitud')->get();
+        // Utilizamos paginate para paginar los resultados
+        $clientes = Cliente::whereNotNull('latitud')
+            ->whereNotNull('longitud')
+            ->paginate(5); // Cambié get() por paginate(5)
 
         return view('clientes.mapa', compact('clientes'));
     }
@@ -17,7 +20,7 @@ class MapaClienteController extends Controller
     public function index()
     {
         // Si tenés una vista para listar clientes
-        $clientes = Cliente::paginate(10);
+        $clientes = Cliente::paginate(5);
         return view('clientes.index', compact('clientes'));
     }
 }
