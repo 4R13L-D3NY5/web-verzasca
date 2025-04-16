@@ -47,7 +47,7 @@
                                         <span class="font-semibold block">Estado:</span>
                                         <span
                                             class="{{ $etiqueta->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
-                                                         px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
+                                                                 px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
                                             {{ $etiqueta->estado ? 'Activo' : 'Inactivo' }}
                                         </span>
                                     </div>
@@ -170,25 +170,26 @@
                     <div class="center-col">
                         <h3 class="p-text mb-4">Detalles de la Etiqueta</h3>
 
-                        <div class="flex flex-row gap-6 items-start">
+                        <div class="mt-4 grid grid-cols-2 gap-4">
                             <!-- Columna de Imagen -->
-                            <div class="flex-shrink-0">
+                            <div class="flex justify-center">
                                 <img src="{{ asset('storage/' . $etiquetaSeleccionada['imagen']) }}" alt="Etiqueta"
                                     class="h-52 w-52 object-cover rounded">
                             </div>
 
                             <!-- Columna de Información -->
                             <div class="flex flex-col gap-4">
-                                <p class="title3">
+                                <p class="text-semibold">
                                     <strong class="p-text">Capacidad:</strong>
                                     {{ $etiquetaSeleccionada['capacidad'] }}
                                 </p>
-                                <p class="title3">
+                                <p class="text-semibold">
                                     <strong class="p-text">Estado:</strong>
                                     <span class="text-{{ $etiquetaSeleccionada['estado'] ? 'green' : 'red' }}-500">
                                         {{ $etiquetaSeleccionada['estado'] ? 'Activo' : 'Inactivo' }}
                                     </span>
                                 </p>
+                                <!-- Agregar más datos aquí si es necesario -->
                             </div>
                         </div>
 
@@ -211,5 +212,6 @@
             </div>
         </div>
     @endif
+
 
 </div>
