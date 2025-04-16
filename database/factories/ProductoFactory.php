@@ -21,7 +21,6 @@ class ProductoFactory extends Factory
     {
         return [
             'nombre' => $this->faker->word,
-            'imagen' => $this->faker->imageUrl(200, 200),
             'tipoContenido' => $this->faker->numberBetween(1, 5),
             'tipoProducto' => $this->faker->boolean,
             'capacidad' => $this->faker->numberBetween(500, 2000),

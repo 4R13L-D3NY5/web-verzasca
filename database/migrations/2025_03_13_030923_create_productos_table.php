@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('productos', function (Blueprint $table) {
             $table->id(); // Clave primaria
             $table->string('nombre');
-            $table->string('imagen');
+            $table->string('imagen')->nullable();
             $table->tinyInteger('tipoContenido'); // Tipo de contenido (tiny integer)
             $table->boolean('tipoProducto'); // Tipo de producto (0: sin retorno, 1: con retorno)
             $table->integer('capacidad'); // Capacidad del producto

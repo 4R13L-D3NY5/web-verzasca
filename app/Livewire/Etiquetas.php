@@ -6,17 +6,18 @@ use App\Models\Etiqueta;
 use App\Models\Cliente;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 
 class Etiquetas extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     public $search = '';
     public $modal = false;
     public $modalDetalle = false;
     public $etiqueta_id = null;
-    public $imagen = '';
+    public $imagen;
     public $capacidad = '';
     public $unidad = '';
     public $estado = 1;
@@ -28,7 +29,7 @@ class Etiquetas extends Component
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
-        'imagen' => 'required|string|max:255',
+        'imagen' => 'nullable|image|max:1024',
         'capacidad' => 'required|string|max:255',
         'unidad' => 'nullable|in:L,ml,g,Kg,unidad',
         'estado' => 'required|boolean',
@@ -37,7 +38,7 @@ class Etiquetas extends Component
 
     public function mount()
     {
-        $this->clientes = Cliente::all(); // Carga todos los clientes disponibles
+        $this->clientes = Cliente::all();
     }
 
     public function render()
@@ -69,7 +70,6 @@ class Etiquetas extends Component
     {
         $etiqueta = Etiqueta::findOrFail($id);
         $this->etiqueta_id = $etiqueta->id;
-        $this->imagen = $etiqueta->imagen;
         $this->capacidad = $etiqueta->capacidad;
         $this->unidad = $etiqueta->unidad;
         $this->estado = $etiqueta->estado;
@@ -82,8 +82,14 @@ class Etiquetas extends Component
         $this->validate();
 
         try {
+            $imagenPath = null;
+
+            if ($this->imagen) {
+                $imagenPath = $this->imagen->store('etiquetas', 'public');
+            }
+
             Etiqueta::updateOrCreate(['id' => $this->etiqueta_id], [
-                'imagen' => $this->imagen,
+                'imagen' => $imagenPath,
                 'capacidad' => $this->capacidad,
                 'unidad' => $this->unidad,
                 'estado' => $this->estado,

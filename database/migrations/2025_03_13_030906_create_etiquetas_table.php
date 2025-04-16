@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('etiquetas', function (Blueprint $table) {
             $table->id();
-            $table->string('imagen');
+            $table->string('imagen')->nullable();
             $table->string('capacidad');
             $table->string('unidad')->nullable(); // [L, ml, g, Kg, unidad]
             $table->tinyInteger('estado'); 

@@ -47,7 +47,7 @@
                                         <span class="font-semibold block">Estado:</span>
                                         <span
                                             class="{{ $etiqueta->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
-                                                     px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
+                                                         px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
                                             {{ $etiqueta->estado ? 'Activo' : 'Inactivo' }}
                                         </span>
                                     </div>
@@ -100,51 +100,64 @@
         </div>
     </div>
 
-
-
     <!-- Modal de Registro/Edición -->
     @if ($modal)
-        <div class="modal-first">
-            <div class="modal-center">
-                <div class="modal-hiden">
-                    <div class="center-col">
-                        <h3 class="p-text">{{ $accion === 'create' ? 'Registrar Etiqueta' : 'Editar Etiqueta' }}</h3>
-                        <div class="over-col">
-                            <h3 class="p-text">Imagen</h3>
-                            <input type="file" wire:model="imagen" class="p-text input-g">
-                            <h3 class="p-text">Capacidad</h3>
-                            <input type="text" wire:model="capacidad" class="p-text input-g">
-                            <h3 class="p-text">Estado</h3>
-                            <select wire:model="estado" class="p-text input-g">
-                                <option value="1">Activo</option>
-                                <option value="0">Inactivo</option>
-                            </select>
-                        </div>
-                        <div class="mt-6 flex justify-center w-full space-x-4">
-                            <button type="button" wire:click="guardar"
-                                class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
-                                <!-- Icono Guardar -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
-                                    class="icon icon-tabler icon-tabler-device-floppy">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
-                                    <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                                    <path d="M14 4l0 4l-6 0l0 -4" />
-                                </svg></button>
-                            <button type="button" wire:click="cerrarModal"
-                                class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
-                                <!-- Icono Cancelar -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
-                                    class="icon icon-tabler icon-tabler-x">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M18 6l-12 12" />
-                                    <path d="M6 6l12 12" />
-                                </svg></button>
-                        </div>
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div class="bg-white p-6 rounded w-full max-w-md shadow-lg">
+                <h2 class="text-lg font-bold mb-4">{{ $accion === 'edit' ? 'Editar Etiqueta' : 'Nueva Etiqueta' }}</h2>
+
+                <form wire:submit.prevent="guardar" class="space-y-4">
+                    <div>
+                        <label class="block text-sm">Imagen</label>
+                        <input type="file" wire:model="imagen" accept="image/*" class="w-full border p-2 rounded" />
+                        @error('imagen') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
-                </div>
+
+                    <div>
+                        <label class="block text-sm">Capacidad</label>
+                        <input type="text" wire:model="capacidad" class="w-full border p-2 rounded" />
+                        @error('capacidad') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm">Unidad</label>
+                        <select wire:model="unidad" class="w-full border p-2 rounded">
+                            <option value="">Seleccione</option>
+                            <option value="L">L</option>
+                            <option value="ml">ml</option>
+                            <option value="g">g</option>
+                            <option value="Kg">Kg</option>
+                            <option value="unidad">unidad</option>
+                        </select>
+                        @error('unidad') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm">Estado</label>
+                        <select wire:model="estado" class="w-full border p-2 rounded">
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
+                        @error('estado') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm">Cliente</label>
+                        <select wire:model="cliente_id" class="w-full border p-2 rounded">
+                            <option value="">Sin cliente</option>
+                            @foreach ($clientes as $cliente)
+                                <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
+                            @endforeach
+                        </select>
+                        @error('cliente_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="flex justify-end space-x-2 pt-2">
+                        <button type="button" wire:click="cerrarModal"
+                            class="px-4 py-2 border rounded text-gray-700">Cancelar</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Guardar</button>
+                    </div>
+                </form>
             </div>
         </div>
     @endif
