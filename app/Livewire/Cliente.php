@@ -18,15 +18,17 @@ class Cliente extends Component
     public $clienteId = null;
     public $nombre = '';
     public $empresa = '';
+    public $razonSocial = '';
     public $nitCi = '';
     public $telefono = '';
     public $correo = '';
+    public $latitud = '';
+    public $longitud = '';
+    public $foto = '';
     public $estado = 1;
     public $clienteSeleccionado = null;
-
+    public $coordenadas;
     protected $paginationTheme = 'tailwind';
-
-
 
     public function render()
     {
@@ -48,7 +50,19 @@ class Cliente extends Component
 
     public function abrirModal($accion)
     {
-        $this->reset(['nombre', 'empresa', 'nitCi', 'telefono', 'correo', 'estado', 'clienteId']);
+        $this->reset([
+            'nombre',
+            'empresa',
+            'razonSocial',
+            'nitCi',
+            'telefono',
+            'correo',
+            'latitud',
+            'longitud',
+            'foto',
+            'estado',
+            'clienteId'
+        ]);
         $this->accion = $accion;
         $this->estado = 1;
         $this->modal = true;
@@ -61,9 +75,13 @@ class Cliente extends Component
         $this->clienteId = $cliente->id;
         $this->nombre = $cliente->nombre;
         $this->empresa = $cliente->empresa;
+        $this->razonSocial = $cliente->razonSocial;
         $this->nitCi = $cliente->nitCi;
         $this->telefono = $cliente->telefono;
         $this->correo = $cliente->correo;
+        $this->latitud = $cliente->latitud;
+        $this->longitud = $cliente->longitud;
+        $this->foto = $cliente->foto;
         $this->estado = $cliente->estado;
         $this->accion = 'edit';
         $this->modal = true;
@@ -82,25 +100,34 @@ class Cliente extends Component
         $rules = [
             'nombre' => 'required|string|max:255',
             'empresa' => 'nullable|string|max:255',
+            'razonSocial' => 'nullable|string|max:255',
             'nitCi' => 'nullable|string|max:50',
             'telefono' => 'nullable|string|max:20',
             'correo' => 'nullable|email|max:255',
+            'latitud' => 'nullable|numeric|between:-90,90',
+            'longitud' => 'nullable|numeric|between:-180,180',
+            'foto' => 'nullable|string|max:255',
             'estado' => 'required|boolean',
         ];
-        $this->validate($rules);
-        try {
 
+        $this->validate($rules);
+
+        try {
             if ($this->accion === 'edit' && $this->clienteId) {
                 $cliente = ModeloCliente::findOrFail($this->clienteId);
                 $cliente->update([
                     'nombre' => $this->nombre,
                     'empresa' => $this->empresa,
+                    'razonSocial' => $this->razonSocial,
                     'nitCi' => $this->nitCi,
                     'telefono' => $this->telefono,
                     'correo' => $this->correo,
+                    'latitud' => $this->latitud,
+                    'longitud' => $this->longitud,
+                    'foto' => $this->foto,
                     'estado' => $this->estado,
                 ]);
-                // $this->alert('success', 'Cliente actualizado con éxito.');
+
                 LivewireAlert::title('Cliente actualizado con éxito.')
                     ->success()
                     ->show();
@@ -108,12 +135,16 @@ class Cliente extends Component
                 ModeloCliente::create([
                     'nombre' => $this->nombre,
                     'empresa' => $this->empresa,
+                    'razonSocial' => $this->razonSocial,
                     'nitCi' => $this->nitCi,
                     'telefono' => $this->telefono,
                     'correo' => $this->correo,
+                    'latitud' => $this->latitud,
+                    'longitud' => $this->longitud,
+                    'foto' => $this->foto,
                     'estado' => $this->estado,
                 ]);
-                // $this->alert('success', 'Cliente registrado con éxito.');
+
                 LivewireAlert::title('Cliente registrado con éxito.')
                     ->success()
                     ->show();
@@ -126,12 +157,35 @@ class Cliente extends Component
                 ->show();
         }
     }
+    public function separarCoordenadas()
+    {
+        if ($this->coordenadas) {
+            $coords = explode(',', $this->coordenadas);
+            if (count($coords) === 2) {
+                $this->latitud = trim($coords[0]);
+                $this->longitud = trim($coords[1]);
+            }
+        }
+    }
 
     public function cerrarModal()
     {
         $this->modal = false;
         $this->detalleModal = false;
-        $this->reset(['nombre', 'empresa', 'nitCi', 'telefono', 'correo', 'estado', 'clienteId', 'clienteSeleccionado']);
+        $this->reset([
+            'nombre',
+            'empresa',
+            'razonSocial',
+            'nitCi',
+            'telefono',
+            'correo',
+            'latitud',
+            'longitud',
+            'foto',
+            'estado',
+            'clienteId',
+            'clienteSeleccionado'
+        ]);
         $this->resetErrorBag();
     }
 }

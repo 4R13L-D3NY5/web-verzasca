@@ -109,20 +109,36 @@
                             <input type="text" wire:model="empresa" class="p-text input-g">
                             @error('empresa') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
+                            <!-- Razón Social -->
+                            <h3 class="p-text">Razón Social</h3>
+                            <input type="text" wire:model="razonSocial" class="p-text input-g">
+                            @error('razonSocial') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
                             <!-- NIT/CI -->
                             <h3 class="p-text">NIT/CI</h3>
-                            <input type="number" wire:model="nitCi" class="p-text input-g">
+                            <input type="text" wire:model="nitCi" class="p-text input-g">
                             @error('nitCi') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
                             <!-- Teléfono -->
                             <h3 class="p-text">Teléfono</h3>
-                            <input type="number" wire:model="telefono" class="p-text input-g">
+                            <input type="text" wire:model="telefono" class="p-text input-g">
                             @error('telefono') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
                             <!-- Correo -->
                             <h3 class="p-text">Correo</h3>
                             <input type="email" wire:model="correo" class="p-text input-g">
                             @error('correo') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Latitud -->
+                            <h3 class="p-text">Coordenadas (Latitud, Longitud)</h3>
+                            <input type="text" wire:model="coordenadas" wire:change="separarCoordenadas"
+                                class="p-text input-g" placeholder="-17.78, -63.17">
+                            @error('coordenadas') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Foto -->
+                            <h3 class="p-text">Foto (URL)</h3>
+                            <input type="text" wire:model="foto" class="p-text input-g">
+                            @error('foto') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
                             <!-- Estado -->
                             <h3 class="p-text">Estado</h3>
@@ -136,8 +152,6 @@
 
                         <!-- Botones -->
                         <div class="mt-6 flex justify-center w-full space-x-4">
-                          
-
                             <button type="button" wire:click="guardarCliente"
                                 class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
                                 <!-- Icono Guardar -->
@@ -148,7 +162,8 @@
                                     <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
                                     <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
                                     <path d="M14 4l0 4l-6 0l0 -4" />
-                                </svg></button>
+                                </svg>
+                            </button>
                             <button type="button" wire:click="cerrarModal"
                                 class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
                                 <!-- Icono Cancelar -->
@@ -158,7 +173,8 @@
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M18 6l-12 12" />
                                     <path d="M6 6l12 12" />
-                                </svg></button>
+                                </svg>
+                            </button>
                         </div>
 
                     </div>
@@ -166,6 +182,7 @@
             </div>
         </div>
     @endif
+
 
 
     <!-- Modal de detalle -->
