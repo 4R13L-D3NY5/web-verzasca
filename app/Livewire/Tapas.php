@@ -34,10 +34,12 @@ class Tapas extends Component
 
     public function render()
     {
-        $tapas = Tapa::when($this->search, function ($query) {
-            $query->where('color', 'like', '%' . $this->search . '%')
-                  ->orWhere('tipo', 'like', '%' . $this->search . '%');
-        })->paginate(4);
+        $tapas = Tapa::with('existencias') // Cargar las existencias relacionadas
+            ->when($this->search, function ($query) {
+                $query->where('color', 'like', '%' . $this->search . '%')
+                    ->orWhere('tipo', 'like', '%' . $this->search . '%');
+            })
+            ->paginate(4);
 
         return view('livewire.tapas', compact('tapas'));
     }

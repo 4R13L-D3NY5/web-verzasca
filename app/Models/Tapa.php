@@ -14,6 +14,7 @@ class Tapa extends Model
         'color',
         'tipo',
         'estado',
+        'descripcion',
     ];
 
     /**
