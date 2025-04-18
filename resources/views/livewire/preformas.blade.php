@@ -30,43 +30,55 @@
           <tbody>
             @forelse ($preformas as $preforma)
             <tr class="color-bg border border-slate-200">
-              <td class="px-6 py-4 p-text text-left">
-                <div class="mb-2">
-                  <span class="font-semibold block">Estado:</span>
-                  <span class="{{ $preforma->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
-           px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
-                    {{ $preforma->estado ? 'Activo' : 'Inactivo' }}
-                  </span>
-                </div>
-                <div class="mb-2">
-                  <span class="font-semibold block">Insumo:</span>
-                  <span>{{ $preforma->insumo }}</span>
-                </div>
-                <div>
-                  <span class="font-semibold block">Color:</span>
-                  <span>{{ $preforma->color }}</span>
-                </div>
-                <div>
-                  <span class="font-semibold block">Sucursal:</span>
-                  @forelse ($preforma->existencias as $existencia)
-                  <span>
-                    {{ number_format($existencia->cantidad) }}:
-                    {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 15, '...') }}
-                  </span><br>
-                  @empty
-                  <span class="text-xs text-gray-500">Sin stock registrado</span>
-                  @endforelse
+              <td class="px-6 py-4 text-left p-text">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  <!-- Imagen (siempre visible) -->
+                  <div class="flex justify-center items-center">
+                    <img src="{{ asset('storage/' . $preforma->imagen) }}" alt="Preforma"
+                      class="h-24 w-24 object-cover rounded">
+                  </div>
 
-                  <strong class="p-text block mt-1">
-                    {{ number_format($preforma->existencias->sum('cantidad')) }}: Total preformas
-                  </strong>
+                  <!-- Información (solo visible en escritorio) -->
+                  <div class="hidden md:block">
+                    <div>
+                      <span class="font-semibold">Estado:</span>
+                      <span class="{{ $preforma->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
+              px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
+                        {{ $preforma->estado ? 'Activo' : 'Inactivo' }}
+                      </span>
+                    </div>
+                    <div>
+                      <span class="font-semibold">Insumo:</span>
+                      <span>{{ $preforma->insumo }}</span>
+                    </div>
+                    <div>
+                      <span class="font-semibold">Color:</span>
+                      <span>{{ $preforma->color }}</span>
+                    </div>
+                    <div>
+                      <span class="font-semibold">Sucursal:</span>
+                      @forelse ($preforma->existencias as $existencia)
+                      <span>
+                        {{ number_format($existencia->cantidad) }}:
+                        {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 15, '...') }}
+                      </span><br>
+                      @empty
+                      <span class="text-xs text-gray-500">Sin stock registrado</span>
+                      @endforelse
+
+                      <strong class="p-text block mt-1">
+                        {{ number_format($preforma->existencias->sum('cantidad')) }}: Total preformas
+                      </strong>
+                    </div>
+                  </div>
                 </div>
               </td>
 
+              <!-- Botones -->
               <td class="px-6 py-4 text-right">
                 <div class="flex justify-end space-x-2">
                   <button title="Editar Preforma" wire:click="abrirModal('edit', {{ $preforma->id }})"
-                    class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
+                    class="text-blue-500 hover:text-blue-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                       class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
@@ -77,9 +89,8 @@
                     </svg>
                   </button>
 
-                  <!-- Botón de detalles -->
                   <button title="Ver detalles" wire:click="modaldetalle({{ $preforma->id }})"
-                    class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
+                    class="text-yellow-500 hover:text-yellow-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                       class="icon icon-tabler icons-tabler-outline icon-tabler-eye-plus">
@@ -101,6 +112,9 @@
             </tr>
             @endforelse
           </tbody>
+
+
+
         </table>
       </div>
 
@@ -194,31 +208,31 @@
             <dl class="grid grid-cols-2 gap-4">
               <!-- Insumo -->
               <div>
-                <dt class="text-sm font-medium p-text">Insumo</dt>
+                <dt class="text-sm font-semibold p-text">Insumo</dt>
                 <dd class="mt-1 text-sm p-text">{{ $preformaSeleccionada->insumo ?? 'No especificado' }}</dd>
               </div>
 
               <!-- Descripción -->
               <div>
-                <dt class="text-sm font-medium p-text">Descripción</dt>
+                <dt class="text-sm font-semibold p-text">Descripción</dt>
                 <dd class="mt-1 text-sm p-text">{{ $preformaSeleccionada->descripcion ?? 'No especificada' }}</dd>
               </div>
 
               <!-- Capacidad -->
               <div>
-                <dt class="text-sm font-medium p-text">Capacidad</dt>
+                <dt class="text-sm font-semibold p-text">Capacidad</dt>
                 <dd class="mt-1 text-sm p-text">{{ $preformaSeleccionada->capacidad ?? 'No especificada' }}</dd>
               </div>
 
               <!-- Color -->
               <div>
-                <dt class="text-sm font-medium p-text">Color</dt>
+                <dt class="text-sm font-semibold p-text">Color</dt>
                 <dd class="mt-1 text-sm p-text">{{ $preformaSeleccionada->color ?? 'No especificado' }}</dd>
               </div>
 
               <!-- Estado -->
               <div>
-                <dt class="text-sm font-medium p-text">Estado</dt>
+                <dt class="text-sm font-semibold p-text">Estado</dt>
                 <dd class="mt-1 text-sm p-text">
                   @if (($preformaSeleccionada['estado'] ?? false) == 1)
                   <span

@@ -181,7 +181,7 @@ class Productos extends Component
 
     public function modaldetalle($id)
     {
-        $this->productoSeleccionado = Producto::findOrFail($id);
+        $this->productoSeleccionado = Producto::with('base')->findOrFail($id);
         $this->modalDetalle = true;
     }
 

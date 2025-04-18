@@ -271,9 +271,6 @@
     @endif
 
 
-
-
-
     @if ($modalDetalle)
     <div class="modal-first">
         <div class="modal-center">
@@ -282,16 +279,24 @@
                     <h3 class="text-base font-semibold p-text" id="modal-title">Detalles del Producto</h3>
                     <div class="mt-4">
                         <dl class="grid grid-cols-2 gap-4">
+                            <div >
+                                <dt class="text-sm font-semibold p-text">Base Asociada</dt>
+                                <dd class="mt-1 text-sm p-text">
+                                    {{ $productoSeleccionado?->base?->capacidad }}{{ $productoSeleccionado?->base?->unidad }}
+                                    -
+                                    {{ $productoSeleccionado?->base?->preforma?->insumo ?? 'Sin preforma' }}
+                                </dd>
+                            </div>
                             <!-- Nombre -->
                             <div>
-                                <dt class="text-sm font-medium p-text">Nombre</dt>
+                                <dt class="text-sm font-semibold p-text">Nombre</dt>
                                 <dd class="mt-1 text-sm p-text">{{ $productoSeleccionado->nombre ?? 'No especificado' }}
                                 </dd>
                             </div>
 
                             <!-- Tipo de Contenido -->
                             <div>
-                                <dt class="text-sm font-medium p-text">Tipo de Contenido</dt>
+                                <dt class="text-sm font-semibold p-text">Tipo de Contenido</dt>
                                 <dd class="mt-1 text-sm p-text">
                                     {{ $productoSeleccionado->tipoContenido ?? 'No especificado' }}
                                 </dd>
@@ -299,7 +304,7 @@
 
                             <!-- Tipo de Producto -->
                             <div>
-                                <dt class="text-sm font-medium p-text">Tipo de Producto</dt>
+                                <dt class="text-sm font-semibold p-text">Tipo de Producto</dt>
                                 <dd class="mt-1 text-sm p-text">
                                     {{ $productoSeleccionado->tipoProducto ? 'Activo' : 'Inactivo' }}
                                 </dd>
@@ -307,7 +312,7 @@
 
                             <!-- Capacidad -->
                             <div>
-                                <dt class="text-sm font-medium p-text">Capacidad</dt>
+                                <dt class="text-sm font-semibold p-text">Capacidad</dt>
                                 <dd class="mt-1 text-sm p-text">
                                     {{ $productoSeleccionado->capacidad ?? 'No especificada' }}
                                 </dd>
@@ -315,14 +320,14 @@
 
                             <!-- Unidad -->
                             <div>
-                                <dt class="text-sm font-medium p-text">Unidad</dt>
+                                <dt class="text-sm font-semibold p-text">Unidad</dt>
                                 <dd class="mt-1 text-sm p-text">{{ $productoSeleccionado->unidad ?? 'No especificada' }}
                                 </dd>
                             </div>
 
                             <!-- Precio Referencia 1 -->
                             <div>
-                                <dt class="text-sm font-medium p-text">Precio de Referencia</dt>
+                                <dt class="text-sm font-semibold p-text">Precio de Referencia</dt>
                                 <dd class="mt-1 text-sm p-text">
                                     {{ $productoSeleccionado->precioReferencia ?? 'No especificado' }}
                                 </dd>
@@ -330,7 +335,7 @@
 
                             <!-- Precio Referencia 2 -->
                             <div>
-                                <dt class="text-sm font-medium p-text">Precio de Referencia 2</dt>
+                                <dt class="text-sm font-semibold p-text">Precio de Referencia 2</dt>
                                 <dd class="mt-1 text-sm p-text">
                                     {{ $productoSeleccionado->precioReferencia2 ?? 'No especificado' }}
                                 </dd>
@@ -338,7 +343,7 @@
 
                             <!-- Precio Referencia 3 -->
                             <div>
-                                <dt class="text-sm font-medium p-text">Precio de Referencia 3</dt>
+                                <dt class="text-sm font-semibold p-text">Precio de Referencia 3</dt>
                                 <dd class="mt-1 text-sm p-text">
                                     {{ $productoSeleccionado->precioReferencia3 ?? 'No especificado' }}
                                 </dd>
@@ -346,7 +351,7 @@
 
                             <!-- Estado -->
                             <div>
-                                <dt class="text-sm font-medium p-text">Estado</dt>
+                                <dt class="text-sm font-semibold p-text">Estado</dt>
                                 <dd class="mt-1 text-sm p-text">
                                     @if (($productoSeleccionado['estado'] ?? false) == 1)
                                     <span

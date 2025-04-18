@@ -32,37 +32,41 @@
             @forelse ($tapas as $tapa)
             <tr class="color-bg border border-slate-200">
               <td class="px-6 py-4 text-left p-text">
-                <!-- Imagen de la Tapa -->
-                <div class="mb-4">
-                  <img src="{{ asset('storage/' . $tapa->imagen) }}" alt="Tapa" class="h-24 w-24 object-cover rounded">
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  <!-- Imagen de la tapa (siempre visible) -->
+                  <div class="flex justify-center items-center">
+                    <img src="{{ asset('storage/' . $tapa->imagen) }}" alt="Tapa" class="h-24 w-24 object-cover rounded">
+                  </div>
 
-                <!-- Información de la Tapa -->
-                <div class="mb-2">
-                  <span class="font-semibold block">Estado:</span>
-                  <span
-                    class="text-sm {{ $tapa->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} px-3 py-1 rounded-full text-sm font-semibold cursor-default inline-block">
-                    {{ $tapa->estado ? 'Activo' : 'Inactivo' }}
-                  </span>
-                </div>
-                <!-- Existencias -->
-                <div>
-                  <strong>Tapa:</strong> {{ $tapa->color }} - {{ $tapa->tipo }}<br>
-                  <span class="font-semibold block">Sucursal:</span>
-                  @forelse ($tapa->existencias as $existencia)
-                  <span>
-                    {{ number_format($existencia->cantidad) }}:
-                    {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 15, '...') }}
-                  </span><br>
-                  @empty
-                  <span class="text-xs text-gray-500">Sin stock registrado</span>
-                  @endforelse
+                  <!-- Información detallada (solo visible en escritorio) -->
+                  <div class="hidden md:block">
+                    <div>
+                      <span class="font-semibold">Estado:</span>
+                      <span class="{{ $tapa->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
+              px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
+                        {{ $tapa->estado ? 'Activo' : 'Inactivo' }}
+                      </span>
+                    </div>
+                    <div>
+                      <span class="font-semibold">Tapa:</span> {{ $tapa->color }} - {{ $tapa->tipo }}
+                    </div>
+                    <div>
+                      <span class="font-semibold">Sucursal:</span><br>
+                      @forelse ($tapa->existencias as $existencia)
+                      <span>
+                        {{ number_format($existencia->cantidad) }}:
+                        {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 15, '...') }}
+                      </span><br>
+                      @empty
+                      <span class="text-xs text-gray-500">Sin stock registrado</span>
+                      @endforelse
 
-                  <strong class="p-text block mt-1">
-                    {{ number_format($tapa->existencias->sum('cantidad')) }}: Total tapas
-                  </strong>
+                      <strong class="p-text block mt-1">
+                        {{ number_format($tapa->existencias->sum('cantidad')) }}: Total tapas
+                      </strong>
+                    </div>
+                  </div>
                 </div>
-
               </td>
 
               <td class="px-6 py-4 text-right">

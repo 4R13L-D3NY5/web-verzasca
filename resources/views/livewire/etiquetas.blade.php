@@ -34,60 +34,69 @@
                     <tbody>
                         @forelse ($etiquetas as $etiqueta)
                         <tr class="color-bg border border-slate-200">
-                            <td class="px-6 py-4 p-text text-left">
-                                <div class="mb-4">
-                                    <img src="{{ asset('storage/' . $etiqueta->imagen) }}" alt="Etiqueta"
-                                        class="h-24 w-24 object-cover rounded">
-                                </div>
-                                <div class="mb-2">
-                                    <span class="font-semibold block">Capacidad:</span>
-                                    <span>{{ $etiqueta->capacidad }}</span>
-                                </div>
-                                <div class="mb-2">
-                                    <span class="font-semibold block">Estado:</span>
-                                    <span
-                                        class="{{ $etiqueta->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
-                                                                 px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
-                                        {{ $etiqueta->estado ? 'Activo' : 'Inactivo' }}
-                                    </span>
-                                </div>
-                                <div>
-                                    <span class="font-semibold block">Sucursal:</span>
-                                    @forelse ($etiqueta->existencias as $existencia)
-                                    <span>
-                                        {{ number_format($existencia->cantidad) }}:
-                                        {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 15, '...') }}
-                                    </span><br>
-                                    @empty
-                                    <span class="text-xs text-gray-500">Sin stock registrado</span>
-                                    @endforelse
+                            <td class="px-6 py-4 text-left p-text">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <!-- Imagen (siempre visible) -->
+                                    <div class="flex justify-center items-center">
+                                        <img src="{{ asset('storage/' . $etiqueta->imagen) }}" alt="Etiqueta"
+                                            class="h-24 w-24 object-cover rounded">
+                                    </div>
 
-                                    <strong class="p-text block mt-1">
-                                        {{ number_format($etiqueta->existencias->sum('cantidad')) }}: Total etiquetas
-                                    </strong>
-                                </div>
+                                    <!-- Información (solo visible en escritorio) -->
+                                    <div class="hidden md:block">
 
+
+                                        <div>
+                                            <span class="font-semibold ">Estado:</span>
+                                            <span
+                                                class="{{ $etiqueta->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
+              px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
+                                                {{ $etiqueta->estado ? 'Activo' : 'Inactivo' }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span class="font-semibold ">Capacidad:</span>
+                                            <span>{{ $etiqueta->capacidad }}</span>
+                                        </div>
+
+                                        <div>
+                                            <span class="font-semibold block">Sucursal:</span>
+                                            @forelse ($etiqueta->existencias as $existencia)
+                                            <span>
+                                                {{ number_format($existencia->cantidad) }}:
+                                                {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 15, '...') }}
+                                            </span><br>
+                                            @empty
+                                            <span class="text-xs text-gray-500">Sin stock registrado</span>
+                                            @endforelse
+
+                                            <strong class="p-text block mt-1">
+                                                {{ number_format($etiqueta->existencias->sum('cantidad')) }}: Total etiquetas
+                                            </strong>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
+
+                            <!-- Botones -->
                             <td class="px-6 py-4 text-right">
                                 <div class="flex justify-end space-x-2">
                                     <button title="Editar etiqueta" wire:click="abrirModal('edit', {{ $etiqueta->id }})"
-                                        class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
+                                        class="text-blue-500 hover:text-blue-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                             class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                            <path
-                                                d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
                                             <path d="M16 5l3 3" />
                                         </svg>
                                     </button>
+
                                     <button title="Ver Detalles" wire:click="modaldetalle({{ $etiqueta->id }})"
-                                        class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
+                                        class="text-yellow-500 hover:text-yellow-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                             class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
@@ -106,6 +115,7 @@
                         </tr>
                         @endforelse
                     </tbody>
+
                 </table>
             </div>
 
