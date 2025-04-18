@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tapas', function (Blueprint $table) {
             $table->id();
             $table->string('imagen')->nullable();
+            $table->string('descripcion')->nullable();
             $table->string('color');
             $table->string('tipo');
             $table->tinyInteger('estado'); 

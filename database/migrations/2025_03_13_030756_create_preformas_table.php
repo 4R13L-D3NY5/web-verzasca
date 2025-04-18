@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('preformas', function (Blueprint $table) {
             $table->id(); // Clave primaria
             $table->string('imagen')->nullable();
+            $table->string('descripcion')->nullable();
             $table->string('insumo'); // Insumo utilizado en la preforma
             $table->text('descripcion')->nullable(); // Descripción opcional
             $table->integer('capacidad'); // Capacidad de la preforma

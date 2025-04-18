@@ -22,4 +22,13 @@ VENTA
 que se le asigne items al distribuidor
 
 
+TRADUCIR AL ESPAÑOLS EL PROYECTO
+
+COMPLETAR registro de usuarios en personal, que se registre tambien su usuario
+
+TRABAJAR el modulo de compras
+
+EN proveedores campo tipo agregar bases
+
+ARIEL TRABAJA EN base
 
