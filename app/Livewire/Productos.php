@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Base;
 use App\Models\Producto;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -19,7 +20,8 @@ class Productos extends Component
     public $nombre = '';
     public $imagen;
     public $tipoContenido = '';
-    public $tipoProducto = '';
+    public $tipoProducto = 0; // Establecer el valor por defecto como 0
+
     public $capacidad = '';
     public $unidad = 'ml';
     public $precioReferencia = '';
@@ -30,7 +32,7 @@ class Productos extends Component
     public $base_id = null; // Nuevo campo base_id
     public $accion = 'create';
     public $productoSeleccionado = [];
-
+    public $bases = [];
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
@@ -47,9 +49,15 @@ class Productos extends Component
         'estado' => 'required|boolean',
         'base_id' => 'required|integer', // Validación para base_id
     ];
+    public function mount()
+    {
+        $this->bases = \App\Models\Base::with('preforma')->where('estado', 1)->get();
+    }
 
     public function render()
     {
+        $this->bases = \App\Models\Base::with('preforma')->where('estado', 1)->get();
+
         $productos = Producto::with('existencias')
             ->when($this->search, function ($query) {
                 $query->where('nombre', 'like', '%' . $this->search . '%')
@@ -113,9 +121,14 @@ class Productos extends Component
         $this->validate();
 
         try {
-            $imagenPath = null;
+            $precioReferencia2 = $this->precioReferencia2 ?: null; // Si está vacío, asignar null
+            $precioReferencia3 = $this->precioReferencia3 ?: null;
+
             if ($this->imagen) {
                 $imagenPath = $this->imagen->store('productos', 'public');
+            } else {
+                // Si no hay una nueva imagen, mantener la imagen actual si existe
+                $imagenPath = $this->producto_id ? Producto::find($this->producto_id)->imagen : null;
             }
 
             Producto::updateOrCreate(['id' => $this->producto_id], [
@@ -125,8 +138,8 @@ class Productos extends Component
                 'capacidad' => $this->capacidad,
                 'unidad' => $this->unidad,
                 'precioReferencia' => $this->precioReferencia,
-                'precioReferencia2' => $this->precioReferencia2,
-                'precioReferencia3' => $this->precioReferencia3,
+                'precioReferencia2' => $precioReferencia2, // Asignar null si está vacío
+                'precioReferencia3' => $precioReferencia3, // Asignar null si está vacío
                 'observaciones' => $this->observaciones,
                 'estado' => $this->estado,
                 'base_id' => $this->base_id, // Incluir base_id en el guardado

@@ -25,52 +25,59 @@
                     class="w-full text-sm text-left border border-slate-200 dark:border-cyan-200 rounded-lg border-collapse">
                     <thead class="text-x uppercase color-bg">
                         <tr>
-                            <th scope="col" class="px-6 py-3 p-text text-left">Información</th>
-                            <th scope="col" class="px-6 py-3 p-text text-right">Acciones</th>
+                            <th scope="col" class="px-6 py-3 p-text text-left">PRODUCTO</th>
+                            <th scope="col" class="px-6 py-3 p-text text-right">OPCIONES</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($productos as $producto)
                         <tr class="color-bg border border-slate-200">
                             <td class="px-6 py-4 p-text text-left">
-                                <div class="mb-4">
-                                    <img src="{{ asset('storage/' . $producto->imagen) }}" alt="producto" class="h-24 w-24 object-cover rounded">
-                                </div>
-                                <div>
-                                    <span class="font-semibold ">Estado:</span>
-                                    <span class="{{ $producto->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
-                                          px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
-                                        {{ $producto->estado ? 'Activo' : 'Inactivo' }}
-                                    </span>
-                                </div>
-                                <div>
-                                    <span class="font-semibold ">Nombre:</span>
-                                    <span>{{ $producto->nombre }}</span>
-                                </div>
-                                <div>
-                                    <span class="font-semibold ">Tipo Producto:</span>
-                                    <span>{{ $producto->tipoProducto }}</span>
-                                </div>
-                                <div>
-                                    <span class="font-semibold ">Capacidad:</span>
-                                    <span>{{ $producto->capacidad }} ml</span>
-                                </div>
-                                <div>
-                                    <span class="font-semibold ">Sucursal:</span>
-                                    @forelse ($producto->existencias as $existencia)
-                                    <span>
-                                        {{ number_format($existencia->cantidad) }}:
-                                        {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 15, '...') }}
-                                    </span><br>
-                                    @empty
-                                    <span class="text-xs text-gray-500">Sin stock registrado</span>
-                                    @endforelse
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <!-- Imagen del producto (siempre visible en la vista móvil y web) -->
+                                    <div class="flex justify-center items-center">
+                                        <img src="{{ asset('storage/' . $producto->imagen) }}" alt="producto"
+                                            class="h-24 w-24 object-cover rounded">
+                                    </div>
 
-                                    <strong class="p-text block mt-1">
-                                        {{ number_format($producto->existencias->sum('cantidad')) }}: Total productos
-                                    </strong>
-                                </div>
+                                    <!-- Información del producto (solo en la vista de escritorio) -->
+                                    <div class="hidden md:block">
+                                        <div>
+                                            <span class="font-semibold">Estado:</span>
+                                            <span class="{{ $producto->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
+                            px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
+                                                {{ $producto->estado ? 'Activo' : 'Inactivo' }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span class="font-semibold">Nombre:</span>
+                                            <span>{{ $producto->nombre }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="font-semibold">Tipo Producto:</span>
+                                            <span>{{ $producto->tipoProducto }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="font-semibold">Capacidad:</span>
+                                            <span>{{ $producto->capacidad }} ml</span>
+                                        </div>
+                                        <div>
+                                            <span class="font-semibold">Sucursal:</span>
+                                            @forelse ($producto->existencias as $existencia)
+                                            <span>
+                                                {{ number_format($existencia->cantidad) }}:
+                                                {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 15, '...') }}
+                                            </span><br>
+                                            @empty
+                                            <span class="text-xs text-gray-500">Sin stock registrado</span>
+                                            @endforelse
 
+                                            <strong class="p-text block mt-1">
+                                                {{ number_format($producto->existencias->sum('cantidad')) }}: Total productos
+                                            </strong>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
 
                             <td class="px-6 py-4 text-right">
@@ -114,6 +121,7 @@
                         </tr>
                         @endforelse
                     </tbody>
+
                 </table>
             </div>
 
@@ -122,6 +130,7 @@
             </div>
         </div>
     </div>
+
 
     @if ($modal)
     <div class="modal-first">
@@ -145,7 +154,7 @@
 
                         <!-- Capacidad -->
                         <h3 class="p-text">Capacidad</h3>
-                        <input type="number" wire:model="capacidad" class="p-text input-g" />
+                        <input type="text" wire:model="capacidad" class="p-text input-g" />
                         @error('capacidad') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
                         <!-- Unidad -->
@@ -155,13 +164,41 @@
 
                         <!-- Tipo de Contenido -->
                         <h3 class="p-text">Tipo de Contenido</h3>
-                        <input type="number" wire:model="tipoContenido" class="p-text input-g" />
-                        @error('tipoContenido') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+                        <select wire:model="tipoContenido" class="p-text input-g">
+                            <option value="">Selecciona un tipo de contenido</option>
+                            <option value="0">Líquido</option>
+                            <option value="1">Sólido</option>
+                            <option value="2">Polvo</option>
+                            <option value="3">Pastillas</option>
+                            <option value="4">Gel</option>
+                            <option value="5">Aerosol</option>
+                        </select>
+
+                        @error('tipoContenido')
+                        <span class="text-red-600 text-xs">{{ $message }}</span>
+                        @enderror
 
                         <!-- Tipo de Producto -->
                         <h3 class="p-text">Tipo de Producto</h3>
-                        <input type="text" wire:model="tipoProducto" class="p-text input-g" />
-                        @error('tipoProducto') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                        <div class="flex items-center space-x-6">
+                            <!-- Radio button para "Con retorno" -->
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" wire:model="tipoProducto" value="1" class="form-radio">
+                                <span>Con retorno</span>
+                            </label>
+
+                            <!-- Radio button para "Sin retorno" -->
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" wire:model="tipoProducto" value="0" class="form-radio">
+                                <span>Sin retorno</span>
+                            </label>
+                        </div>
+
+                        @error('tipoProducto')
+                        <span class="text-red-600 text-xs">{{ $message }}</span>
+                        @enderror
+
 
                         <!-- Precio de Referencia 1 -->
                         <h3 class="p-text">Precio de Referencia 1</h3>
@@ -182,10 +219,6 @@
                         <h3 class="p-text">Observaciones</h3>
                         <input wire:model="observaciones" class="p-text input-g"></input>
                         @error('observaciones') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                       
-                        <h3 class="p-text">Base ID</h3>
-                        <input type="number" wire:model="base_id" class="p-text input-g" />
-                        @error('base_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
                         <!-- Estado -->
                         <h3 class="p-text">Estado</h3>
@@ -194,6 +227,16 @@
                             <option value="0">Inactivo</option>
                         </select>
                         @error('estado') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+                        <h3 class="p-text">Base</h3>
+                        <select wire:model="base_id" class="p-text input-g">
+                            <option value="">Selecciona una base</option>
+                            @foreach($bases as $base)
+                            <option value="{{ $base->id }}">
+                                {{ $base->capacidad }}{{ $base->unidad }} - {{ $base->preforma->insumo ?? 'Sin preforma' }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('base_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Botones -->

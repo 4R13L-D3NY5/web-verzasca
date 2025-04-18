@@ -139,7 +139,7 @@
 
             {{-- Campo Observaciones --}}
             <h3 class="p-text">Observaciones</h3>
-            <textarea wire:model="observaciones" class="p-text input-g" rows="3"></textarea>
+            <input wire:model="observaciones" class="p-text input-g" rows="3"></input>
             @error('observaciones') <span class="error-message text-red-500 text-xs">{{ $message }}</span> @enderror
 
             {{-- Falta campo para 'imagen' si se requiere --}}
