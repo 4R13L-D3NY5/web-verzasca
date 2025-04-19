@@ -38,7 +38,9 @@ class Cliente extends Component
                 ->orWhere('nitCi', 'like', '%' . $this->search . '%')
                 ->orWhere('telefono', 'like', '%' . $this->search . '%')
                 ->orWhere('correo', 'like', '%' . $this->search . '%');
-        })->paginate(5);
+        })
+        ->orderBy('id','desc')
+        ->paginate(5);
 
         return view('livewire.cliente', compact('clientes'));
     }
@@ -153,6 +155,28 @@ class Cliente extends Component
             $this->cerrarModal();
         } catch (\Exception $e) {
             LivewireAlert::title($e->getMessage())
+                ->error()
+                ->show();
+        }
+    }
+    public function toggleVerificado($clienteId)
+    {
+        try {
+            $cliente = ModeloCliente::findOrFail($clienteId);
+            $nuevoEstado = !$cliente->verificado; // Toggle: 0 -> 1 or 1 -> 0
+            $cliente->update(['verificado' => $nuevoEstado]);
+
+            if ($nuevoEstado) {
+                LivewireAlert::title('Cliente verificado con éxito.')
+                    ->success()
+                    ->show();
+            } else {
+                LivewireAlert::title('Verificación cancelada.')
+                    ->warning()
+                    ->show();
+            }
+        } catch (\Exception $e) {
+            LivewireAlert::title('Error al actualizar la verificación: ' . $e->getMessage())
                 ->error()
                 ->show();
         }

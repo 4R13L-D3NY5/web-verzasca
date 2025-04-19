@@ -28,6 +28,7 @@ return new class extends Migration {
             $table->string('foto')->nullable(); // Ruta o URL de la foto (opcional)
 
             $table->boolean('estado')->default(1); // Estado (1: activo, 0: inactivo)
+            $table->boolean('verificado')->default(1); // Estado (1: activo, 0: inactivo)
             $table->timestamps(); // created_at y updated_at
         });
     }

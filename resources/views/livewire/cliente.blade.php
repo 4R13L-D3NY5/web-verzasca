@@ -5,7 +5,7 @@
 
             <!-- Botón de registro y buscador -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-                <button title="Registrar Cliente" wire:click='abrirModal("create")'
+                <a title="Registrar Cliente" href="{{ route('cliente.registrar') }}"
                     class="text-emerald-500 hover:text-emerald-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -15,7 +15,7 @@
                         <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
                         <path d="M15 19l2 2l4 -4" />
                     </svg>
-                </button>
+                </a>
 
                 <input type="text" wire:model.live="search" placeholder="Buscar por cliente..." class="input-g" />
             </div>
@@ -32,15 +32,23 @@
                     </thead>
                     <tbody>
                         @forelse ($clientes as $cliente)
-                            <tr class="color-bg border border-slate-200">
+                            <tr class="color-bg border border-slate-200">                                
                                 <td class="px-6 py-4 p-text text-left">
                                     <div class="mb-2">
-                                        <span class="font-semibold block">Cliente:</span>
-                                        <span>{{ $cliente->nombre }}</span>
+                                        <!-- Imagen del cliente -->
+                                        @if ($cliente->foto)
+                                            <img src="{{ asset('storage/' . $cliente->foto) }}" alt="Foto de {{ $cliente->nombre }}"
+                                                 class="w-16 h-16 object-cover rounded mb-2">
+                                        @else
+                                            <span class="text-gray-500">Sin foto</span>
+                                        @endif
+                                    </div>
+                                    <div class="mb-2">
+                                        <span><b>Cliente: </b>{{ $cliente->nombre }}</span>
                                     </div>
                                     <div>
-                                        <span class="font-semibold block">Empresa:</span>
-                                        <span>{{ $cliente->empresa ?? 'N/A' }}</span>
+                                        <span><b>Empresa: </b>{{ $cliente->empresa ?? 'N/A' }}</span>
+                                        <span></span>
                                     </div>
                                 </td>
 
@@ -69,6 +77,38 @@
                                                 <path d="M12 9h.01" />
                                                 <path d="M11 12h1v4h1" />
                                             </svg>
+                                        </button>
+                                        <a href="{{ route('clientes.map', $cliente->id) }}"
+                                            title="Ver Mapa"
+                                            class="text-green-500 hover:text-green-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 rounded-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round" class="icon icon-tabler icon-tabler-map-pin">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M12 11m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                                                <path d="M17.657 16.657l-4.414 4.414a2 2 0 0 1 -2.827 0l-4.414 -4.414a8 8 0 1 1 11.314 0z" />
+                                            </svg>
+                                        </a>
+
+                                        <button title="{{ $cliente->verificado ? 'Cancelar Verificación' : 'Confirmar Cliente' }}"
+                                            wire:click="toggleVerificado({{ $cliente->id }})"
+                                            class="text-purple-500 hover:text-purple-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-full">
+                                            @if ($cliente->verificado)
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" class="icon icon-tabler icon-tabler-x">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M18 6l-12 12" />
+                                                    <path d="M6 6l12 12" />
+                                                </svg>
+                                            @else
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" class="icon icon-tabler icon-tabler-check">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M5 12l5 5l10 -10" />
+                                                </svg>
+                                            @endif
                                         </button>
                                     </div>
                                 </td>

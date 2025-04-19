@@ -34,54 +34,58 @@
                     </thead>
                     <tbody>
                         @forelse ($personales as $personal)
-                                    <tr class="color-bg border border-slate-200">
-                                        <td class="px-6 py-4 p-text text-left">
-                                            <div class="mb-2">
-                                                <span class="font-semibold block">Nombre:</span>
-                                                <span>{{ $personal->nombres }} {{ $personal->apellidos }}</span>
-                                            </div>
-                                            <div class="mb-2">
-                                                <span class="font-semibold block">Celular:</span>
-                                                <span>{{ $personal->celular }}</span>
-                                            </div>
-                                            <div class="mb-2">
-                                                <span class="font-semibold block">Estado:</span>
-                                                <span class="{{ $personal->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
-                             px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
-                                                    {{ $personal->estado ? 'Activo' : 'Inactivo' }}
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 text-right">
-                                            <div class="flex justify-end space-x-2">
-                                                <button title="Editar" wire:click="editar({{ $personal->id }})"
-                                                    class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-edit" width="24" height="24"
-                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                                        stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                                        <path
-                                                            d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
-                                                        <path d="M16 5l3 3" />
-                                                    </svg>
-                                                </button>
-                                                <button title="Ver Detalle" wire:click="verDetalle({{ $personal->id }})"
-                                                    class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                        stroke-linecap="round" stroke-linejoin="round"
-                                                        class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                                                        <path
-                                                            d="M22 12c-2.5 -5 -7 -8 -10 -8s-7.5 3 -10 8c2.5 5 7 8 10 8s7.5 -3 10 -8" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
+                            <tr class="color-bg border border-slate-200">
+                                <td class="px-6 py-4 p-text text-left">
+                                    <div class="mb-2">
+                                        <span class="font-semibold block">Nombre:</span>
+                                        <span>{{ $personal->nombres }} {{ $personal->apellidos }}</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <span class="font-semibold block">Celular:</span>
+                                        <span>{{ $personal->celular }}</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <span class="font-semibold block">Email:</span>
+                                        <span>{{ $personal->user->email ?? 'Sin usuario' }}</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <span class="font-semibold block">Estado:</span>
+                                        <span class="{{ $personal->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }}
+                                            px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
+                                            {{ $personal->estado ? 'Activo' : 'Inactivo' }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex justify-end space-x-2">
+                                        <button title="Editar" wire:click="editar({{ $personal->id }})"
+                                            class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="icon icon-tabler icon-tabler-edit" width="24" height="24"
+                                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                                <path
+                                                    d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                                <path d="M16 5l3 3" />
+                                            </svg>
+                                        </button>
+                                        <button title="Ver Detalle" wire:click="verDetalle({{ $personal->id }})"
+                                            class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                <path
+                                                    d="M22 12c-2.5 -5 -7 -8 -10 -8s-7.5 3 -10 8c2.5 5 7 8 10 8s7.5 -3 10 -8" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
                         @empty
                             <tr>
                                 <td colspan="2" class="text-left py-4 text-gray-600 dark:text-gray-400">
@@ -106,7 +110,6 @@
                     <div class="center-col">
                         <h3 class="p-text">{{ $accion === 'create' ? 'Registrar Personal' : 'Editar Personal' }}</h3>
                         <div class="over-col">
-
                             <!-- Nombres -->
                             <h3 class="p-text">Nombres</h3>
                             <input type="text" wire:model.defer="nombres" class="p-text input-g">
@@ -127,6 +130,26 @@
                             <input type="text" wire:model.defer="celular" class="p-text input-g">
                             @error('celular') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
+                            <!-- Email -->
+                            <h3 class="p-text">Email</h3>
+                            <input type="email" wire:model.defer="email" class="p-text input-g">
+                            @error('email') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Password -->
+                            <h3 class="p-text">Contraseña {{ $accion === 'edit' ? '(dejar en blanco para no cambiar)' : '' }}</h3>
+                            <input type="password" wire:model.defer="password" class="p-text input-g">
+                            @error('password') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                            <!-- Rol -->
+                            <h3 class="p-text">Rol</h3>
+                            <select wire:model.defer="rol_id" class="p-text input-g text-sm sm:text-base">
+                                <option value="">Seleccione un rol</option>
+                                @foreach ($roles as $rol)
+                                    <option value="{{ $rol->id }}">{{ $rol->nombre }}</option>
+                                @endforeach
+                            </select>
+                            @error('rol_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
                             <!-- Estado -->
                             <h3 class="p-text">Estado</h3>
                             <select wire:model.defer="estado" class="p-text input-g text-sm sm:text-base">
@@ -135,7 +158,6 @@
                                 <option value="0">Inactivo</option>
                             </select>
                             @error('estado') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-
                         </div>
 
                         <!-- Botones -->
@@ -205,6 +227,20 @@
                                         {{ $personalSeleccionado->celular ?? 'No especificado' }}</dd>
                                 </div>
 
+                                <!-- Email -->
+                                <div>
+                                    <dt class="text-sm font-medium p-text">Email</dt>
+                                    <dd class="mt-1 text-sm p-text">
+                                        {{ $personalSeleccionado->user->email ?? 'No especificado' }}</dd>
+                                </div>
+
+                                <!-- Rol -->
+                                <div>
+                                    <dt class="text-sm font-medium p-text">Rol</dt>
+                                    <dd class="mt-1 text-sm p-text">
+                                        {{ $personalSeleccionado->user->rol->nombre ?? 'No especificado' }}</dd>
+                                </div>
+
                                 <!-- Estado -->
                                 <div>
                                     <dt class="text-sm font-medium p-text">Estado</dt>
@@ -238,7 +274,4 @@
             </div>
         </div>
     @endif
-
-
-
 </div>

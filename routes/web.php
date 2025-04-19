@@ -9,6 +9,9 @@ Auth::routes();
 Route::get('/clientes', [MapaClienteController::class, 'index'])->name('clientes.index');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/clientes/mapa', [MapaClienteController::class, 'mostrar'])->name('clientes.mapa');
+Route::get('/cliente/registrar', [MapaClienteController::class, 'mostrarFormularioMapa'])->name('cliente.registrar');
+Route::post('/cliente/registrar', [MapaClienteController::class, 'store'])->name('clientes.store');
+Route::get('/clientes/{id}/mapa', [MapaClienteController::class, 'showMapClient'])->name('clientes.map');
 Route::middleware('auth')->group(function () {
     Route::view('about', 'about')->name('about');
 

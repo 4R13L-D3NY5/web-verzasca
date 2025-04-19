@@ -15,15 +15,15 @@ class Personal extends Model
         'direccion',
         'celular',
         'estado',
-        'usuario_id',
+        'user_id',
     ];
 
     /**
      * Relación con el modelo Usuario (nullable).
      */
-    public function usuario()
+    public function user()
     {
-        return $this->belongsTo(Usuario::class);
+        return $this->belongsTo(User::class);
     }
 
     /**

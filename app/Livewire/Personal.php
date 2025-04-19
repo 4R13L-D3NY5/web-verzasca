@@ -5,7 +5,11 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Personal as ModelPersonal;
+use App\Models\User;
+use App\Models\Rol;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB; // Added DB facade import
 
 class Personal extends Component
 {
@@ -17,11 +21,17 @@ class Personal extends Component
     public $accion = 'create';
     public $personalId = null;
 
+    // Personal fields
     public $nombres = '';
     public $apellidos = '';
     public $direccion = '';
     public $celular = '';
     public $estado = true;
+
+    // User fields
+    public $email = '';
+    public $password = '';
+    public $rol_id = '';
 
     public $personalSeleccionado = null;
 
@@ -33,19 +43,33 @@ class Personal extends Component
         'direccion' => 'nullable|string|max:255',
         'celular' => 'required|string|max:15',
         'estado' => 'required|boolean',
+        'email' => 'required|email|max:255|unique:users,email',
+        'password' => 'required|string|min:8',
+        'rol_id' => 'required|exists:rols,id',
     ];
+
+    public function mount()
+    {
+        // Initialize rules for edit to allow existing email and optional password
+        $this->rules['email'] = 'required|email|max:255|unique:users,email,' . $this->personalId . ',personal_id';
+        $this->rules['password'] = 'nullable|string|min:8';
+    }
 
     public function render()
     {
         $personales = ModelPersonal::query()
             ->when($this->search, function ($query) {
                 $query->where('nombres', 'like', '%' . $this->search . '%')
-                      ->orWhere('apellidos', 'like', '%' . $this->search . '%')
-                      ->orWhere('celular', 'like', '%' . $this->search . '%');
+                    ->orWhere('apellidos', 'like', '%' . $this->search . '%')
+                    ->orWhere('celular', 'like', '%' . $this->search . '%');
             })
+            ->orderBy('id', 'desc')
+            ->with('user') // Eager load user relationship
             ->paginate(perPage: 4);
 
-        return view('livewire.personal', compact('personales'));
+        $roles = Rol::all(); // Fetch roles for dropdown
+
+        return view('livewire.personal', compact('personales', 'roles'));
     }
 
     public function updatingSearch()
@@ -55,7 +79,7 @@ class Personal extends Component
 
     public function abrirModal($accion = 'create', $id = null)
     {
-        $this->reset(['nombres', 'apellidos', 'direccion', 'celular', 'estado', 'personalId']);
+        $this->reset(['nombres', 'apellidos', 'direccion', 'celular', 'estado', 'personalId', 'email', 'password', 'rol_id']);
         $this->accion = $accion;
         if ($accion === 'edit' && $id) {
             $this->editar($id);
@@ -65,13 +89,16 @@ class Personal extends Component
 
     public function editar($id)
     {
-        $personal = ModelPersonal::findOrFail($id);
+        $personal = ModelPersonal::with('user')->findOrFail($id);
         $this->personalId = $personal->id;
         $this->nombres = $personal->nombres;
         $this->apellidos = $personal->apellidos;
         $this->direccion = $personal->direccion;
         $this->celular = $personal->celular;
         $this->estado = $personal->estado;
+        $this->email = $personal->user->email ?? '';
+        $this->rol_id = $personal->user->rol_id ?? '';
+        $this->password = ''; // Password is not loaded for security
         $this->accion = 'edit';
         $this->modal = true;
         $this->detalleModal = false;
@@ -79,17 +106,26 @@ class Personal extends Component
 
     public function verDetalle($id)
     {
-        $this->personalSeleccionado = ModelPersonal::findOrFail($id);
+        $this->personalSeleccionado = ModelPersonal::with('user')->findOrFail($id);
         $this->modal = false;
         $this->detalleModal = true;
     }
 
     public function guardarPersonal()
     {
+        // Adjust rules for edit
+        if ($this->accion === 'edit') {
+            $this->rules['email'] = 'required|email|max:255|unique:users,email,' . ($this->personalSeleccionado?->user?->id ?? 0);
+            $this->rules['password'] = 'nullable|string|min:8';
+        }
+
         $this->validate();
 
         try {
+            DB::beginTransaction();
+
             if ($this->accion === 'edit' && $this->personalId) {
+                // Update Personal
                 $personal = ModelPersonal::findOrFail($this->personalId);
                 $personal->update([
                     'nombres' => $this->nombres,
@@ -98,20 +134,60 @@ class Personal extends Component
                     'celular' => $this->celular,
                     'estado' => $this->estado,
                 ]);
-                LivewireAlert::title('Personal actualizado con éxito.')->success()->show();
+
+                // Update or Create User
+                $user = $personal->user;
+                if ($user) {
+                    $user->update([
+                        'email' => $this->email,
+                        'password' => $this->password ? Hash::make($this->password) : $user->password,
+                        'rol_id' => $this->rol_id, // Asegúrate de que siempre se actualice
+                        'estado' => $this->estado,
+                    ]);
+                } else {
+                    $user = User::create([
+                        'email' => $this->email,
+                        'password' => Hash::make($this->password),
+                        'rol_id' => $this->rol_id, // Asegúrate de que siempre se incluya
+                        'estado' => $this->estado,
+                    ]);
+                    $personal->update(['user_id' => $user->id]);
+                }
+
+                LivewireAlert::title('Personal y usuario actualizados con éxito.')->success()->show();
             } else {
-                ModelPersonal::create([
+                // Create Personal
+                $personal = ModelPersonal::create([
                     'nombres' => $this->nombres,
                     'apellidos' => $this->apellidos,
                     'direccion' => $this->direccion,
                     'celular' => $this->celular,
                     'estado' => $this->estado,
                 ]);
-                LivewireAlert::title('Personal registrado con éxito.')->success()->show();
+
+                // Verificar que rol_id tenga un valor antes de crear el usuario
+                if (empty($this->rol_id)) {
+                    throw new \Exception('El rol_id no puede estar vacío.');
+                }
+
+                // Create User
+                $user = User::create([
+                    'email' => $this->email,
+                    'password' => Hash::make($this->password),
+                    'rol_id' => $this->rol_id, // Asegúrate de que siempre se incluya
+                    'estado' => $this->estado,
+                ]);
+
+                // Link User to Personal
+                $personal->update(['user_id' => $user->id]);
+
+                LivewireAlert::title('Personal y usuario registrados con éxito.')->success()->show();
             }
 
+            DB::commit();
             $this->cerrarModal();
         } catch (\Exception $e) {
+            DB::rollBack();
             LivewireAlert::title('Ocurrió un error: ' . $e->getMessage())->error()->show();
         }
     }
@@ -120,7 +196,7 @@ class Personal extends Component
     {
         $this->modal = false;
         $this->detalleModal = false;
-        $this->reset(['nombres', 'apellidos', 'direccion', 'celular', 'estado', 'personalId', 'personalSeleccionado']);
+        $this->reset(['nombres', 'apellidos', 'direccion', 'celular', 'estado', 'personalId', 'personalSeleccionado', 'email', 'password', 'rol_id']);
         $this->resetErrorBag();
     }
 }
