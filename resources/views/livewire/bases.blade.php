@@ -33,10 +33,8 @@
             <tr class="color-bg border border-slate-200">
               <td class="px-6 py-4 p-text text-left">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  <!-- Imagen (si decides incluirla en el futuro) -->
                   <div class="flex justify-center items-center">
-                    <img src="{{ asset('images/base-placeholder.png') }}" alt="base"
-                      class="h-24 w-24 object-cover rounded">
+                    <img src="{{ asset('storage/' . $base->imagen) }}" alt="Tapa" class="h-24 w-24 object-cover rounded">
                   </div>
 
                   <!-- Información (solo en escritorio) -->
@@ -46,9 +44,13 @@
                       <span>{{ $base->capacidad }} {{ $base->unidad }}</span>
                     </div>
                     <div>
+                      <span class="font-semibold">Descripción:</span> {{ $base->descripcion ? $base->descripcion : 'Sin descripción' }}
+                    </div>
+                    <div>
                       <span class="font-semibold">Preforma:</span>
                       <span>{{ $base->preforma->insumo ?? 'Sin preforma' }}</span>
                     </div>
+
                     <div>
                       <span class="font-semibold">Sucursal:</span>
                       @forelse ($base->existencias as $existencia)
@@ -116,27 +118,24 @@
     </div>
   </div>
 
-
-
-
-
   @if ($modal)
   <div class="modal-first">
     <div class="modal-center">
       <div class="modal-hiden">
         <div class="center-col">
           <h3 class="p-text">
-            {{-- Título del modal adaptado --}}
             {{ $accion === 'create' ? 'Registrar Base' : 'Editar Base' }}
           </h3>
           <div class="over-col">
 
-            {{-- Campo Capacidad --}}
+            <h3 class="p-text">Imagen</h3>
+            <input type="file" wire:model="imagen" accept="image/*" class="p-text input-g" />
+            @error('imagen') <span class="error-message text-red-500">{{ $message }}</span> @enderror
+
             <h3 class="p-text">Capacidad (ml)</h3>
             <input type="number" wire:model="capacidad" class="p-text input-g" min="0" />
             @error('capacidad') <span class="error-message text-red-500 text-xs">{{ $message }}</span> @enderror
 
-            {{-- Campo Preforma Asociada (Dropdown) --}}
             <h3 class="p-text">Preforma Asociada (Opcional)</h3>
             <select wire:model="preforma_id" class="p-text input-g">
               <option value="">-- Ninguna --</option>
@@ -148,20 +147,21 @@
             </select>
             @error('preforma_id') <span class="error-message text-red-500 text-xs">{{ $message }}</span> @enderror
 
-            {{-- Campo Estado --}}
             <h3 class="p-text">Estado</h3>
             <select wire:model="estado" class="p-text input-g">
               <option value="1">Activo</option>
               <option value="0">Inactivo</option>
             </select>
             @error('estado') <span class="error-message text-red-500 text-xs">{{ $message }}</span> @enderror
+            
+            <h3 class="p-text">Descripción</h3>
+            <input type="text" wire:model="descripcion" class="p-text input-g" />
+            @error('descripcion') <span class="error-message text-red-500">{{ $message }}</span> @enderror
 
-            {{-- Campo Observaciones --}}
             <h3 class="p-text">Observaciones</h3>
             <input wire:model="observaciones" class="p-text input-g" rows="3"></input>
             @error('observaciones') <span class="error-message text-red-500 text-xs">{{ $message }}</span> @enderror
 
-            {{-- Falta campo para 'imagen' si se requiere --}}
 
           </div>
           <div class="mt-6 flex justify-center w-full space-x-4">
@@ -194,7 +194,7 @@
   </div>
   @endif
 
-  @if ($modalDetalle && $baseSeleccionada)
+  @if ($modalDetalle)
   <div class="modal-first">
     <div class="modal-center">
       <div class="modal-hiden">
@@ -203,11 +203,15 @@
           <div class="mt-4">
             <dl class="grid grid-cols-2 gap-4">
               <!-- ID -->
-              <div>
+              <!-- <div>
                 <dt class="text-sm font-semibold p-text">ID</dt>
                 <dd class="mt-1 text-sm p-text">{{ $baseSeleccionada->id }}</dd>
-              </div>
+              </div> -->
 
+              <div class="col-span-2">
+                <dt class="text-sm font-semibold p-text">Descripción</dt>
+                <dd class="mt-1 text-sm p-text">{{ $baseSeleccionada->descripcion ?: 'Sin descripción' }}</dd>
+              </div>
               <!-- Capacidad -->
               <div>
                 <dt class="text-sm font-semibold p-text">Capacidad</dt>

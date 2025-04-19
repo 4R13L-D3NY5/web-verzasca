@@ -2,8 +2,9 @@
 
 namespace App\Livewire;
 
+use Livewire\WithFileUploads;
 use App\Models\Base;
-use App\Models\Preforma; // Necesario para el dropdown
+use App\Models\Preforma;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
@@ -11,30 +12,32 @@ use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 class Bases extends Component
 {
     use WithPagination;
-
+    use WithFileUploads;
     public $search = '';
     public $modal = false;
     public $modalDetalle = false;
-    public $base_id = null; // Cambiado de preforma_id
-    public $capacidad = ''; // Campo de la tabla bases
-    public $estado = 1; // Campo de la tabla bases
-    public $observaciones = ''; // Campo de la tabla bases
-    public $preforma_id = null; // Clave foránea
+    public $imagen;
+    public $descripcion = '';
+    public $base_id = null;
+    public $capacidad = '';
+    public $estado = 1;
+    public $observaciones = '';
+    public $preforma_id = null;
     public $accion = 'create';
-    public $baseSeleccionada = null; // Cambiado de preformaSeleccionada
-    public $todasLasPreformas = []; // Para el dropdown del modal
+    public $baseSeleccionada = null;
+    public $todasLasPreformas = [];
 
     protected $paginationTheme = 'tailwind';
 
-    // Reglas de validación adaptadas para Bases
     protected $rules = [
+        'imagen' => 'nullable|image|max:1024',
         'capacidad' => 'required|integer|min:0',
         'estado' => 'required|boolean',
+        'descripcion' => 'nullable|string|max:255',
         'observaciones' => 'nullable|string',
-        'preforma_id' => 'nullable|exists:preformas,id', // Validar que la preforma exista si se selecciona
+        'preforma_id' => 'nullable|exists:preformas,id',
     ];
 
-    // Mensajes de error personalizados (opcional)
     protected $messages = [
         'capacidad.required' => 'La capacidad es obligatoria.',
         'capacidad.integer' => 'La capacidad debe ser un número entero.',
@@ -43,7 +46,6 @@ class Bases extends Component
         'preforma_id.exists' => 'La preforma seleccionada no es válida.',
     ];
 
-    // Cargar preformas activas cuando el componente se inicializa
     public function mount()
     {
         $this->todasLasPreformas = Preforma::where('estado', 1)->orderBy('insumo')->get();
@@ -51,16 +53,15 @@ class Bases extends Component
 
     public function render()
     {
-        $bases = Base::with(['existencias', 'preforma']) // Cargar relaciones para mostrar info
+        $bases = Base::with(['existencias', 'preforma'])
             ->when($this->search, function ($query) {
                 $searchTerm = '%' . $this->search . '%';
-                $query->where('capacidad', 'like', $searchTerm) // Buscar por capacidad
-                    ->orWhereHas('preforma', function ($subQuery) use ($searchTerm) { // Buscar por insumo de preforma relacionada
+                $query->where('capacidad', 'like', $searchTerm)
+                    ->orWhereHas('preforma', function ($subQuery) use ($searchTerm) {
                         $subQuery->where('insumo', 'like', $searchTerm);
                     });
-                    //->orWhere('observaciones', 'like', $searchTerm); // Opcional: buscar en observaciones
             })
-            ->paginate(4); // Ajusta la paginación si es necesario
+            ->paginate(4);
 
         return view('livewire.bases', compact('bases'));
     }
@@ -72,8 +73,7 @@ class Bases extends Component
 
     public function abrirModal($accion = 'create', $id = null)
     {
-        // Resetear propiedades del formulario para Bases
-        $this->reset(['capacidad', 'estado', 'observaciones', 'preforma_id', 'base_id']);
+        $this->reset(['capacidad', 'estado', 'imagen', 'descripcion', 'observaciones', 'preforma_id', 'base_id']);
         $this->accion = $accion;
         if ($accion === 'edit' && $id) {
             $this->editar($id);
@@ -88,21 +88,29 @@ class Bases extends Component
         $this->capacidad = $base->capacidad;
         $this->estado = $base->estado;
         $this->observaciones = $base->observaciones;
-        $this->preforma_id = $base->preforma_id; // Cargar ID de preforma asociada
+        $this->preforma_id = $base->preforma_id;
         $this->accion = 'edit';
     }
 
     public function guardar()
     {
-        $this->validate(); // Validar con las reglas definidas
+        $this->validate();
 
         try {
+            if ($this->imagen) {
+                $imagenPath = $this->imagen->store('bases', 'public');
+            } else {
+                $imagenPath = $this->base_id ? Base::find($this->base_id)->imagen : null;
+            }
+
+            // Asegúrate de guardar la descripción
             Base::updateOrCreate(['id' => $this->base_id], [
                 'capacidad' => $this->capacidad,
                 'estado' => $this->estado,
                 'observaciones' => $this->observaciones,
-                'preforma_id' => $this->preforma_id ?: null, // Guardar null si no se selecciona preforma
-                // Falta manejar 'imagen' si se implementa subida de archivos
+                'preforma_id' => $this->preforma_id ?: null,
+                'imagen' => $imagenPath,
+                'descripcion' => $this->descripcion, // Añadido aquí
             ]);
 
             LivewireAlert::title($this->base_id ? 'Base actualizada con éxito.' : 'Base creada con éxito.')
@@ -117,18 +125,17 @@ class Bases extends Component
         }
     }
 
+
+
     public function cerrarModal()
     {
         $this->modal = false;
-        // Resetear propiedades del formulario para Bases
         $this->reset(['capacidad', 'estado', 'observaciones', 'preforma_id', 'base_id']);
-        $this->resetErrorBag(); // Limpiar errores de validación
+        $this->resetErrorBag();
     }
 
-    // FUNCIONALIDAD PARA MODAL DE DETALLES
     public function modaldetalle($id)
     {
-        // Cargar Base con su Preforma asociada para mostrar detalles
         $this->baseSeleccionada = Base::with('preforma')->findOrFail($id);
         $this->modalDetalle = true;
     }
@@ -136,6 +143,6 @@ class Bases extends Component
     public function cerrarModalDetalle()
     {
         $this->modalDetalle = false;
-        $this->baseSeleccionada = null; // Limpiar la base seleccionada
+        $this->baseSeleccionada = null;
     }
 }
