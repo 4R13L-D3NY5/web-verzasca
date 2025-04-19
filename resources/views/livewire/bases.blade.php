@@ -22,60 +22,51 @@
       <!-- Tabla -->
       <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left border border-slate-200 dark:border-cyan-200 rounded-lg border-collapse">
-          <thead class="text-x uppercase color-bg">
-            <tr>
-              <th scope="col" class="px-6 py-3 p-text text-left">BASE</th>
-              <th scope="col" class="px-6 py-3 p-text text-right">OPCIONES</th>
+          <thead class="text-xs md:text-sm uppercase color-bg">
+            <tr class="bg-gray-100 dark:bg-gray-800">
+              <th scope="col" class="px-4 py-3 p-text text-left">IMAGEN Y DETALLES</th>
+              <th scope="col" class="px-4 py-3 p-text text-left">SUCURSAL Y STOCK</th>
+              <th scope="col" class="px-4 py-3 p-text text-right">ACCIONES</th>
             </tr>
           </thead>
           <tbody>
             @forelse ($bases as $base)
             <tr class="color-bg border border-slate-200">
-              <td class="px-6 py-4 p-text text-left">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  <div class="flex justify-center items-center">
-                    <img src="{{ asset('storage/' . $base->imagen) }}" alt="Tapa" class="h-24 w-24 object-cover rounded">
-                  </div>
-
-                  <!-- Información (solo en escritorio) -->
-                  <div class="hidden md:block">
-                    <div>
-                      <span class="font-semibold">Capacidad:</span>
-                      <span>{{ $base->capacidad }} {{ $base->unidad }}</span>
-                    </div>
-                    <div>
-                      <span class="font-semibold">Descripción:</span> {{ $base->descripcion ? $base->descripcion : 'Sin descripción' }}
-                    </div>
-                    <div>
-                      <span class="font-semibold">Preforma:</span>
-                      <span>{{ $base->preforma->insumo ?? 'Sin preforma' }}</span>
-                    </div>
-
-                    <div>
-                      <span class="font-semibold">Sucursal:</span>
-                      @forelse ($base->existencias as $existencia)
-                      <span>
-                        {{ number_format($existencia->cantidad) }}:
-                        {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 15, '...') }}
-                      </span><br>
-                      @empty
-                      <span class="text-xs text-gray-500">Sin stock registrado</span>
-                      @endforelse
-
-                      <strong class="p-text block mt-1">
-                        {{ number_format($base->existencias->sum('cantidad')) }}: Total bases
-                      </strong>
-                    </div>
+              <!-- Columna 1: Imagen + Detalles -->
+              <td class="px-4 py-4 text-left p-text align-top">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                  <img src="{{ asset('storage/' . $base->imagen) }}" alt="Base" class="h-20 w-20 sm:h-24 sm:w-24 object-cover rounded mb-2 sm:mb-0">
+                  <div class="text-sm space-y-1">
+                    <div><strong>Capacidad:</strong> {{ $base->capacidad }} {{ $base->unidad }}</div>
+                    <div><strong>Descripción:</strong> {{ $base->descripcion ?? 'Sin descripción' }}</div>
+                    <div><strong>Preforma:</strong> {{ $base->preforma->insumo ?? 'Sin preforma' }}</div>
                   </div>
                 </div>
               </td>
 
-              <td class="px-6 py-4 text-right">
+              <!-- Columna 2: Sucursal + Stock -->
+              <td class="px-4 py-4 text-left align-top text-sm">
+                <strong class="block mb-1">Sucursal:</strong>
+                @forelse ($base->existencias as $existencia)
+                <span class="block">
+                  {{ number_format($existencia->cantidad) }}:
+                  {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 18, '...') }}
+                </span>
+                @empty
+                <span class="text-xs text-gray-500">Sin stock registrado</span>
+                @endforelse
+                <strong class="p-text block mt-2">
+                  {{ number_format($base->existencias->sum('cantidad')) }}: Total bases
+                </strong>
+              </td>
+
+              <!-- Columna 3: Acciones -->
+              <td class="px-4 py-4 text-right align-center">
                 <div class="flex justify-end space-x-2">
                   <!-- Editar -->
                   <button title="Editar Base" wire:click="abrirModal('edit', {{ $base->id }})"
-                    class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                    class="text-blue-500 hover:text-blue-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                       class="icon icon-tabler icon-tabler-edit">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -87,8 +78,8 @@
 
                   <!-- Detalles -->
                   <button title="Ver detalles" wire:click="modaldetalle({{ $base->id }})"
-                    class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                    class="text-yellow-500 hover:text-yellow-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                       class="icon icon-tabler icon-tabler-eye-plus">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -103,7 +94,7 @@
             </tr>
             @empty
             <tr>
-              <td colspan="2" class="text-center py-4 text-gray-600 dark:text-gray-400">
+              <td colspan="3" class="text-center py-4 text-gray-600 dark:text-gray-400 text-sm">
                 No hay bases registradas.
               </td>
             </tr>
@@ -111,6 +102,7 @@
           </tbody>
         </table>
       </div>
+
 
       <div class="mt-4 flex justify-center">
         {{ $bases->links() }}
@@ -153,7 +145,7 @@
               <option value="0">Inactivo</option>
             </select>
             @error('estado') <span class="error-message text-red-500 text-xs">{{ $message }}</span> @enderror
-            
+
             <h3 class="p-text">Descripción</h3>
             <input type="text" wire:model="descripcion" class="p-text input-g" />
             @error('descripcion') <span class="error-message text-red-500">{{ $message }}</span> @enderror
