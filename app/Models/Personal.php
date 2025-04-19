@@ -65,4 +65,8 @@ class Personal extends Model
     {
         return $this->hasMany(Compra::class);
     }
+    public function trabajos()
+    {
+        return $this->hasMany(Trabajo::class);
+    }
 }
