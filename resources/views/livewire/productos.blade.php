@@ -143,10 +143,10 @@
                         <input type="text" wire:model="unidad" class="p-text input-g" />
                         @error('unidad') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-                        <!-- Tipo de Contenido -->
                         <h3 class="p-text">Tipo de Contenido</h3>
-                        <select wire:model="tipoContenido" class="p-text input-g">
-                            <option value="">Selecciona un tipo de contenido</option>
+                        <select id="tipoContenido" wire:model="tipoContenido"
+                            class="p-text input-g">
+
                             <option value="0">Líquido</option>
                             <option value="1">Sólido</option>
                             <option value="2">Polvo</option>
@@ -162,17 +162,21 @@
                         <!-- Tipo de Producto -->
                         <h3 class="p-text">Tipo de Producto</h3>
 
-                        <div class="flex items-center space-x-6">
-                            <!-- Radio button para "Con retorno" -->
+                        <div class="flex space-x-6 justify-center">
+                            <!-- Botón de radio para "Con retorno" -->
                             <label class="flex items-center space-x-2">
-                                <input type="radio" wire:model="tipoProducto" value="1" class="form-radio">
-                                <span>Con retorno</span>
+                                <input type="radio" wire:model="tipoProducto" value="1" class="form-radio hidden peer" />
+                                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                                    Con retorno
+                                </span>
                             </label>
 
-                            <!-- Radio button para "Sin retorno" -->
+                            <!-- Botón de radio para "Sin retorno" -->
                             <label class="flex items-center space-x-2">
-                                <input type="radio" wire:model="tipoProducto" value="0" class="form-radio">
-                                <span>Sin retorno</span>
+                                <input type="radio" wire:model="tipoProducto" value="0" class="form-radio hidden peer" />
+                                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                                    Sin retorno
+                                </span>
                             </label>
                         </div>
 
@@ -203,21 +207,40 @@
 
                         <!-- Estado -->
                         <h3 class="p-text">Estado</h3>
-                        <select wire:model="estado" class="p-text input-g">
-                            <option value="1">Activo</option>
-                            <option value="0">Inactivo</option>
-                        </select>
+
+                        <div class="flex space-x-6 justify-center">
+                            <!-- Botón para "Activo" -->
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" wire:model="estado" value="1" class="form-radio hidden peer" />
+                                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                                    Activo
+                                </span>
+                            </label>
+
+                            <!-- Botón para "Inactivo" -->
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" wire:model="estado" value="0" class="form-radio hidden peer" />
+                                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                                    Inactivo
+                                </span>
+                            </label>
+                        </div>
                         @error('estado') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
                         <h3 class="p-text">Base</h3>
                         <select wire:model="base_id" class="p-text input-g">
-                            <option value="">Selecciona una base</option>
                             @foreach($bases as $base)
                             <option value="{{ $base->id }}">
                                 {{ $base->capacidad }}{{ $base->unidad }} - {{ $base->preforma->insumo ?? 'Sin preforma' }}
                             </option>
                             @endforeach
                         </select>
-                        @error('base_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+                        @error('base_id')
+                        <span class="text-red-600 text-xs">{{ $message }}</span>
+                        @enderror
+
+
                     </div>
 
                     <!-- Botones -->
@@ -279,17 +302,31 @@
                             <div>
                                 <dt class="text-sm font-semibold p-text">Tipo de Contenido</dt>
                                 <dd class="mt-1 text-sm p-text">
-                                    {{ $productoSeleccionado->tipoContenido ?? 'No especificado' }}
+                                    {{ $productoSeleccionado->tipoContenido === 0 ? 'Líquido' : ($productoSeleccionado->tipoContenido === 1 ? 'Sólido' : 
+        ($productoSeleccionado->tipoContenido === 2 ? 'Polvo' : 
+        ($productoSeleccionado->tipoContenido === 3 ? 'Pastillas' : 
+        ($productoSeleccionado->tipoContenido === 4 ? 'Gel' : 
+        ($productoSeleccionado->tipoContenido === 5 ? 'Aerosol' : 'No especificado'))))) }}
                                 </dd>
                             </div>
 
                             <!-- Tipo de Producto -->
                             <div>
-                                <dt class="text-sm font-semibold p-text">Tipo de Producto</dt>
+                                <dt class="text-sm font-semibold p-text">Tipo de Retorno</dt>
                                 <dd class="mt-1 text-sm p-text">
-                                    {{ $productoSeleccionado->tipoProducto ? 'Activo' : 'Inactivo' }}
+                                    @if (($productoSeleccionado['tipoProducto'] ?? false) == 1)
+                                    <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-600 text-white">
+                                        Con retorno
+                                    </span>
+                                    @else
+                                    <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-red-600 text-white">
+                                        Sin retorno
+                                    </span>
+                                    @endif
                                 </dd>
                             </div>
+
+
 
                             <!-- Capacidad -->
                             <div>

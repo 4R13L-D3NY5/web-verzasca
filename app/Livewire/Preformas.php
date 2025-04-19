@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Livewire\WithFileUploads;
 use App\Models\Preforma;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -9,7 +10,7 @@ use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 
 class Preformas extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     public $search = '';
     public $modal = false;
@@ -23,7 +24,7 @@ class Preformas extends Component
     public $observaciones = '';
     public $accion = 'create';
     public $preformaSeleccionada = [];
-
+    public $imagen;
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
@@ -33,6 +34,7 @@ class Preformas extends Component
         'color' => 'required|string',
         'estado' => 'required|boolean',
         'observaciones' => 'nullable|string',
+        'imagen' => 'nullable|image|max:1024',
     ];
 
     public function render()
@@ -81,7 +83,15 @@ class Preformas extends Component
         $this->validate();
 
         try {
+            if ($this->imagen) {
+                // Si se sube una nueva imagen, la almacenamos en el directorio 'public/tapas'
+                $imagenPath = $this->imagen->store('tapas', 'public');
+            } else {
+                // Si no hay una nueva imagen, mantenemos la imagen actual (si existe)
+                $imagenPath = $this->preforma_id ? Preforma::find($this->preforma_id)->imagen : null;
+            }
             Preforma::updateOrCreate(['id' => $this->preforma_id], [
+                'imagen' => $imagenPath,
                 'insumo' => $this->insumo,
                 'descripcion' => $this->descripcion,
                 'capacidad' => $this->capacidad,
@@ -105,7 +115,7 @@ class Preformas extends Component
     public function cerrarModal()
     {
         $this->modal = false;
-        $this->reset(['insumo', 'descripcion', 'capacidad', 'color', 'estado', 'observaciones', 'preforma_id']);
+        $this->reset(['insumo', 'descripcion', 'capacidad', 'color', 'estado', 'observaciones', 'imagen', 'preforma_id']);
         $this->resetErrorBag();
     }
 

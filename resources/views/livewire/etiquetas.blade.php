@@ -116,65 +116,78 @@
 
     <!-- Modal de Registro/Edición -->
     @if ($modal)
-    <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-        <div class="bg-white p-6 rounded w-full max-w-md shadow-lg">
-            <h2 class="text-lg font-bold mb-4">{{ $accion === 'edit' ? 'Editar Etiqueta' : 'Nueva Etiqueta' }}</h2>
+    <div class="modal-first">
+        <div class="modal-center">
+            <div class="modal-hiden">
+                <div class="center-col">
+                    <h3 class="p-text">
+                        {{ $accion === 'edit' ? 'Editar Etiqueta' : 'Nueva Etiqueta' }}
+                    </h3>
 
-            <form wire:submit.prevent="guardar" class="space-y-4">
-                <div>
-                    <label class="block text-sm">Imagen</label>
-                    <input type="file" wire:model="imagen" accept="image/*" class="w-full border p-2 rounded" />
-                    @error('imagen') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
+                    <div class="over-col">
 
-                <div>
-                    <label class="block text-sm">Capacidad</label>
-                    <input type="text" wire:model="capacidad" class="w-full border p-2 rounded" />
-                    @error('capacidad') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
+                        <h3 class="p-text">Imagen</h3>
+                        <input type="file" wire:model="imagen" accept="image/*" class="p-text input-g" />
+                        @error('imagen') <span class="error-message text-red-500">{{ $message }}</span> @enderror
 
-                <div>
-                    <label class="block text-sm">Unidad</label>
-                    <select wire:model="unidad" class="w-full border p-2 rounded">
-                        <option value="">Seleccione</option>
-                        <option value="L">L</option>
-                        <option value="ml">ml</option>
-                        <option value="g">g</option>
-                        <option value="Kg">Kg</option>
-                        <option value="unidad">unidad</option>
-                    </select>
-                    @error('unidad') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
+                        <h3 class="p-text">Capacidad</h3>
+                        <input type="text" wire:model="capacidad" class="p-text input-g" />
+                        @error('capacidad') <span class="error-message text-red-500">{{ $message }}</span> @enderror
 
-                <div>
-                    <label class="block text-sm">Estado</label>
-                    <select wire:model="estado" class="w-full border p-2 rounded">
-                        <option value="1">Activo</option>
-                        <option value="0">Inactivo</option>
-                    </select>
-                    @error('estado') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
+                        <h3 class="p-text">Descripción</h3>
+                        <input type="text" wire:model="descripcion" class="p-text input-g" />
+                        @error('descripcion') <span class="error-message text-red-500">{{ $message }}</span> @enderror
 
-                <div>
-                    <label class="block text-sm">Cliente</label>
-                    <select wire:model="cliente_id" class="w-full border p-2 rounded">
-                        <option value="">Sin cliente</option>
-                        @foreach ($clientes as $cliente)
-                        <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
-                        @endforeach
-                    </select>
-                    @error('cliente_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
+                        <h3 class="p-text">Estado</h3>
+                        <select wire:model="estado" class="p-text input-g">
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
+                        @error('estado') <span class="error-message text-red-500">{{ $message }}</span> @enderror
 
-                <div class="flex justify-end space-x-2 pt-2">
-                    <button type="button" wire:click="cerrarModal"
-                        class="px-4 py-2 border rounded text-gray-700">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Guardar</button>
+                        <h3 class="p-text">Cliente</h3>
+                        <select wire:model="cliente_id" class="p-text input-g">
+                            <option value="">Seleccione un cliente</option>
+                            @foreach ($clientes as $cliente)
+                            <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
+                            @endforeach
+                        </select>
+                        @error('cliente_id') <span class="error-message text-red-500">{{ $message }}</span> @enderror
+
+                    </div>
+
+                    <div class="mt-6 flex justify-center w-full space-x-4">
+                        <button type="button" wire:click="guardar"
+                            class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
+                                <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                <path d="M14 4l0 4l-6 0l0 -4" />
+                            </svg>
+                        </button>
+
+                        <button type="button" wire:click="cerrarModal"
+                            class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M18 6l-12 12" />
+                                <path d="M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
                 </div>
-            </form>
+            </div>
         </div>
     </div>
     @endif
+
+
 
     <!-- Modal de Detalle -->
     @if ($modalDetalle)
@@ -185,12 +198,6 @@
                     <h3 class="p-text mb-4">Detalles de la Etiqueta</h3>
 
                     <div class="mt-4 grid grid-cols-2 gap-4">
-                        <!-- Columna de Imagen -->
-                        <div class="flex justify-center">
-                            <img src="{{ asset('storage/' . $etiquetaSeleccionada['imagen']) }}" alt="Etiqueta"
-                                class="h-52 w-52 object-cover rounded">
-                        </div>
-
                         <!-- Columna de Información -->
                         <div class="flex flex-col gap-4">
                             <p class="text-semibold">
@@ -198,12 +205,20 @@
                                 {{ $etiquetaSeleccionada['capacidad'] }}
                             </p>
                             <p class="text-semibold">
+                                <strong class="p-text">Descripción:</strong>
+                                {{ $etiquetaSeleccionada['descripcion'] }}
+                            </p>
+                            <p class="text-semibold">
                                 <strong class="p-text">Estado:</strong>
                                 <span class="text-{{ $etiquetaSeleccionada['estado'] ? 'green' : 'red' }}-500">
                                     {{ $etiquetaSeleccionada['estado'] ? 'Activo' : 'Inactivo' }}
                                 </span>
                             </p>
-                            <!-- Agregar más datos aquí si es necesario -->
+                            <p class="text-semibold">
+                                <strong class="p-text">Cliente:</strong>
+                                {{ $etiquetaSeleccionada['cliente']['nombre'] ?? 'Sin cliente' }}
+                            </p>
+                            <!-- Si quieres mostrar más información, puedes agregar más datos aquí -->
                         </div>
                     </div>
 
@@ -226,6 +241,7 @@
         </div>
     </div>
     @endif
+
 
 
 </div>

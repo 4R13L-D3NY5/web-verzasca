@@ -23,6 +23,7 @@ class Etiquetas extends Component
     public $estado = 1;
     public $cliente_id = '';
     public $clientes;
+    public $descripcion = '';
     public $accion = 'create';
     public $etiquetaSeleccionada = [];
 
@@ -32,6 +33,7 @@ class Etiquetas extends Component
         'imagen' => 'nullable|image|max:1024',
         'capacidad' => 'required|string|max:255',
         'unidad' => 'nullable|in:L,ml,g,Kg,unidad',
+        'descripcion' => 'nullable|string|max:255',
         'estado' => 'required|boolean',
         'cliente_id' => 'nullable|exists:clientes,id',
     ];
@@ -75,19 +77,23 @@ class Etiquetas extends Component
         $this->capacidad = $etiqueta->capacidad;
         $this->unidad = $etiqueta->unidad;
         $this->estado = $etiqueta->estado;
+        $this->descripcion = $etiqueta->descripcion;  // Cargar la descripcion
         $this->cliente_id = $etiqueta->cliente_id;
         $this->accion = 'edit';
     }
+
 
     public function guardar()
     {
         $this->validate();
 
         try {
-            $imagenPath = null;
-
+            
             if ($this->imagen) {
                 $imagenPath = $this->imagen->store('etiquetas', 'public');
+            } else {
+                // Si no hay una nueva imagen, mantener la imagen actual si existe
+                $imagenPath = $this->etiqueta_id ? Etiqueta::find($this->etiqueta_id)->imagen : null;
             }
 
             Etiqueta::updateOrCreate(['id' => $this->etiqueta_id], [
@@ -95,6 +101,7 @@ class Etiquetas extends Component
                 'capacidad' => $this->capacidad,
                 'unidad' => $this->unidad,
                 'estado' => $this->estado,
+                'descripcion' => $this->descripcion,  // Guardando la descripción
                 'cliente_id' => $this->cliente_id ?: null,
             ]);
 
@@ -109,6 +116,7 @@ class Etiquetas extends Component
                 ->show();
         }
     }
+
 
     public function cerrarModal()
     {

@@ -30,14 +30,16 @@
           </thead>
           <tbody>
             @forelse ($preformas as $preforma)
-            <tr class="color-bg border border-slate-200">
+            <tr class="color-bg border border-slate-200 text-sm">
               <!-- Columna 1: Imagen + Información -->
               <td class="px-4 py-4 text-left p-text align-top">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                  <!-- Imagen -->
                   <img src="{{ asset('storage/' . $preforma->imagen) }}" alt="Preforma"
                     class="h-20 w-20 sm:h-24 sm:w-24 object-cover rounded mb-2 sm:mb-0">
-                  <div class="space-y-1 text-sm">
-                    
+
+                  <!-- Información -->
+                  <div class="text-sm">
                     <div><strong>Insumo:</strong> {{ $preforma->insumo }}</div>
                     <div><strong>Color:</strong> {{ $preforma->color }}</div>
                   </div>
@@ -104,6 +106,7 @@
       </div>
 
 
+
       <div class="mt-4 flex justify-center">
         {{ $preformas->links() }}
       </div>
@@ -121,43 +124,51 @@
       <div class="modal-hiden">
         <div class="center-col">
           <h3 class="p-text">
-            {{ $accion === 'create' ? 'Registrar Preforma' : 'Editar Preforma' }}
+            {{ $accion === 'edit' ? 'Editar Preforma' : 'Nueva Preforma' }}
           </h3>
+
           <div class="over-col">
+
+            <!-- Campo de Imagen -->
+            <h3 class="p-text">Imagen</h3>
+            <input type="file" wire:model="imagen" accept="image/*" class="p-text input-g" />
+            @error('imagen') <span class="error-message text-red-500">{{ $message }}</span> @enderror
+
+            <!-- Campo de Insumo -->
             <h3 class="p-text">Insumo</h3>
             <input type="text" wire:model="insumo" class="p-text input-g" />
-            @if ($accion === 'create')
             @error('insumo') <span class="error-message text-red-500">{{ $message }}</span> @enderror
-            @endif
 
+            <!-- Campo de Descripción -->
             <h3 class="p-text">Descripción</h3>
             <input type="text" wire:model="descripcion" class="p-text input-g" />
-            @if ($accion === 'create')
             @error('descripcion') <span class="error-message text-red-500">{{ $message }}</span> @enderror
-            @endif
 
+            <!-- Campo de Capacidad -->
             <h3 class="p-text">Capacidad</h3>
             <input type="number" wire:model="capacidad" class="p-text input-g" />
-            @if ($accion === 'create')
             @error('capacidad') <span class="error-message text-red-500">{{ $message }}</span> @enderror
-            @endif
 
+            <!-- Campo de Color -->
             <h3 class="p-text">Color</h3>
             <input type="text" wire:model="color" class="p-text input-g" />
-            @if ($accion === 'create')
             @error('color') <span class="error-message text-red-500">{{ $message }}</span> @enderror
-            @endif
 
+            <!-- Campo de Estado -->
             <h3 class="p-text">Estado</h3>
             <select wire:model="estado" class="p-text input-g">
               <option value="1">Activo</option>
               <option value="0">Inactivo</option>
             </select>
+            @error('estado') <span class="error-message text-red-500">{{ $message }}</span> @enderror
+
           </div>
+
+          <!-- Botones de Acción -->
           <div class="mt-6 flex justify-center w-full space-x-4">
             <button type="button" wire:click="guardar"
-              class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full"><svg
-                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -166,9 +177,10 @@
                 <path d="M14 4l0 4l-6 0l0 -4" />
               </svg>
             </button>
+
             <button type="button" wire:click="cerrarModal"
-              class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full"><svg
-                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="icon icon-tabler icons-tabler-outline icon-tabler-x">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -177,11 +189,13 @@
               </svg>
             </button>
           </div>
+
         </div>
       </div>
     </div>
   </div>
   @endif
+
 
   <!-- Modal de Detalles -->
   @if ($modalDetalle)
