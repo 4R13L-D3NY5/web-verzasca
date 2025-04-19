@@ -20,57 +20,56 @@
       </div>
 
       <!-- Tabla -->
-      <!-- Tabla -->
       <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left border border-slate-200 dark:border-cyan-200 rounded-lg border-collapse">
-          <thead class="text-x uppercase color-bg">
-            <tr>
-              <th scope="col" class="px-6 py-3 p-text text-left">IMAGEN Y DETALLES</th>
-              <th scope="col" class="px-6 py-3 p-text text-left">SUCURSAL Y STOCK</th>
-              <th scope="col" class="px-6 py-3 p-text text-right">ACCIONES</th>
+          <thead class="text-xs md:text-sm uppercase color-bg">
+            <tr class="bg-gray-100 dark:bg-gray-800">
+              <th scope="col" class="px-4 py-3 p-text text-left">IMAGEN Y DETALLES</th>
+              <th scope="col" class="px-4 py-3 p-text text-left">SUCURSAL Y STOCK</th>
+              <th scope="col" class="px-4 py-3 p-text text-right">ACCIONES</th>
             </tr>
           </thead>
           <tbody>
             @forelse ($tapas as $tapa)
-            <tr class="color-bg border border-slate-200">
+            <tr class="color-bg border border-slate-200 text-sm">
               <!-- Primera columna: Imagen, color, tipo y descripción -->
-              <td class="px-6 py-4 text-left p-text">
-                <div class="flex flex-col items-center">
-                  <img src="{{ asset('storage/' . $tapa->imagen) }}" alt="Tapa" class="h-24 w-24 object-cover rounded mb-2">
-                  <div>
-                    <strong>Color:</strong> {{ $tapa->color }}<br>
-                    <strong>Tipo:</strong> {{ $tapa->tipo }}<br>
-                    <strong>Descripción:</strong> {{ $tapa->descripcion ? $tapa->descripcion : 'Sin descripción' }}
+              <td class="px-4 py-4 text-left p-text align-top">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                  <img src="{{ asset('storage/' . $tapa->imagen) }}" alt="Tapa"
+                    class="h-20 w-20 sm:h-24 sm:w-24 object-cover rounded mb-2 sm:mb-0">
+                  <div class="text-sm">
+                    <div><strong>Color:</strong> {{ $tapa->color }}</div>
+                    <div><strong>Tipo:</strong> {{ $tapa->tipo }}</div>
+                    <div><strong>Descripción:</strong> {{ $tapa->descripcion ?: 'Sin descripción' }}</div>
                   </div>
                 </div>
               </td>
 
               <!-- Segunda columna: Sucursal y Stock -->
-              <td class="px-6 py-4 text-left">
-                <div>
-                  <strong class="block">Sucursal:</strong>
-                  @forelse ($tapa->existencias as $existencia)
-                  <span>
-                    {{ number_format($existencia->cantidad) }}:
-                    {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 15, '...') }}
-                  </span><br>
-                  @empty
-                  <span class="text-xs text-gray-500">Sin stock registrado</span>
-                  @endforelse
-                  <strong class="block mt-2">
-                    {{ number_format($tapa->existencias->sum('cantidad')) }}: Total tapas
-                  </strong>
-                </div>
+              <td class="px-4 py-4 text-left align-top text-sm">
+                <strong class="block mb-1">Sucursal:</strong>
+                @forelse ($tapa->existencias as $existencia)
+                <span class="block">
+                  {{ number_format($existencia->cantidad) }}:
+                  {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 18, '...') }}
+                </span>
+                @empty
+                <span class="text-xs text-gray-500">Sin stock registrado</span>
+                @endforelse
+                <strong class="block mt-2">
+                  {{ number_format($tapa->existencias->sum('cantidad')) }}: Total tapas
+                </strong>
               </td>
 
               <!-- Tercera columna: Acciones -->
-              <td class="px-6 py-4 text-right">
+              <td class="px-4 py-4 text-right align-center">
                 <div class="flex justify-end space-x-2">
+                  <!-- Editar -->
                   <button title="Editar Tapa" wire:click="abrirModal('edit', {{ $tapa->id }})"
                     class="text-blue-500 hover:text-blue-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                      class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                      class="icon icon-tabler icon-tabler-edit">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                       <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
                       <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
@@ -78,11 +77,12 @@
                     </svg>
                   </button>
 
+                  <!-- Detalles -->
                   <button title="Ver detalles" wire:click="modaldetalle({{ $tapa->id }})"
                     class="text-yellow-500 hover:text-yellow-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                      class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle">
+                      class="icon icon-tabler icon-tabler-info-circle">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                       <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
                       <path d="M12 9h.01" />
@@ -94,7 +94,7 @@
             </tr>
             @empty
             <tr>
-              <td colspan="3" class="text-center py-4 text-gray-600 dark:text-gray-400">
+              <td colspan="3" class="text-center py-4 text-gray-600 dark:text-gray-400 text-sm">
                 No hay tapas registradas.
               </td>
             </tr>
@@ -102,6 +102,7 @@
           </tbody>
         </table>
       </div>
+
 
 
       <!-- Paginación -->
