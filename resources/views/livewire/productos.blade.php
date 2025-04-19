@@ -21,88 +21,69 @@
 
             <!-- Tabla -->
             <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
-                <table
-                    class="w-full text-sm text-left border border-slate-200 dark:border-cyan-200 rounded-lg border-collapse">
-                    <thead class="text-x uppercase color-bg">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 p-text text-left">PRODUCTO</th>
-                            <th scope="col" class="px-6 py-3 p-text text-right">OPCIONES</th>
+                <table class="w-full text-sm text-left border border-slate-200 dark:border-cyan-200 rounded-lg border-collapse">
+                    <thead class="text-xs md:text-sm uppercase color-bg">
+                        <tr class="bg-gray-100 dark:bg-gray-800">
+                            <th scope="col" class="px-4 py-3 p-text text-left">DETALLES DEL PRODUCTO</th>
+                            <th scope="col" class="px-4 py-3 p-text text-left">SUCURSAL Y STOCK</th>
+                            <th scope="col" class="px-4 py-3 p-text text-right">ACCIONES</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($productos as $producto)
                         <tr class="color-bg border border-slate-200">
-                            <td class="px-6 py-4 p-text text-left">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                    <!-- Imagen del producto (siempre visible en la vista móvil y web) -->
-                                    <div class="flex justify-center items-center">
-                                        <img src="{{ asset('storage/' . $producto->imagen) }}" alt="producto"
-                                            class="h-24 w-24 object-cover rounded">
-                                    </div>
+                            <!-- Columna 1: Imagen + Info producto -->
+                            <td class="px-4 py-4 p-text text-left align-top">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                                    <img src="{{ asset('storage/' . $producto->imagen) }}" alt="producto"
+                                        class="h-20 w-20 sm:h-24 sm:w-24 object-cover rounded mb-2 sm:mb-0">
+                                    <div class="text-sm space-y-1">
 
-                                    <!-- Información del producto (solo en la vista de escritorio) -->
-                                    <div class="hidden md:block">
-                                        <div>
-                                            <span class="font-semibold">Estado:</span>
-                                            <span class="{{ $producto->estado ? 'bg-green-900 text-white' : 'bg-red-900 text-white' }} 
-                            px-3 py-1 rounded-full text-sm font-medium cursor-default inline-block">
-                                                {{ $producto->estado ? 'Activo' : 'Inactivo' }}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span class="font-semibold">Nombre:</span>
-                                            <span>{{ $producto->nombre }}</span>
-                                        </div>
-                                        <div>
-                                            <span class="font-semibold">Tipo Producto:</span>
-                                            <span>{{ $producto->tipoProducto }}</span>
-                                        </div>
-                                        <div>
-                                            <span class="font-semibold">Capacidad:</span>
-                                            <span>{{ $producto->capacidad }} ml</span>
-                                        </div>
-                                        <div>
-                                            <span class="font-semibold">Sucursal:</span>
-                                            @forelse ($producto->existencias as $existencia)
-                                            <span>
-                                                {{ number_format($existencia->cantidad) }}:
-                                                {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 15, '...') }}
-                                            </span><br>
-                                            @empty
-                                            <span class="text-xs text-gray-500">Sin stock registrado</span>
-                                            @endforelse
-
-                                            <strong class="p-text block mt-1">
-                                                {{ number_format($producto->existencias->sum('cantidad')) }}: Total productos
-                                            </strong>
-                                        </div>
+                                        <div><strong>Nombre:</strong> {{ $producto->nombre }}</div>
+                                        <div><strong>Tipo Producto:</strong> {{ $producto->tipoProducto }}</div>
+                                        <div><strong>Capacidad:</strong> {{ $producto->capacidad }} ml</div>
                                     </div>
                                 </div>
                             </td>
 
-                            <td class="px-6 py-4 text-right">
+                            <!-- Columna 2: Sucursal + stock -->
+                            <td class="px-4 py-4 text-left align-top text-sm">
+                                <strong class="block mb-1">Sucursal:</strong>
+                                @forelse ($producto->existencias as $existencia)
+                                <span class="block">
+                                    {{ number_format($existencia->cantidad) }}:
+                                    {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 18, '...') }}
+                                </span>
+                                @empty
+                                <span class="text-xs text-gray-500">Sin stock registrado</span>
+                                @endforelse
+                                <strong class="p-text block mt-2">
+                                    {{ number_format($producto->existencias->sum('cantidad')) }}: Total productos
+                                </strong>
+                            </td>
+
+                            <!-- Columna 3: Acciones -->
+                            <td class="px-4 py-4 text-right align-middle">
                                 <div class="flex justify-end space-x-2">
+                                    <!-- Editar -->
                                     <button title="Editar Producto" wire:click="abrirModal('edit', {{ $producto->id }})"
-                                        class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                                        class="text-blue-500 hover:text-blue-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-tabler icon-tabler-edit">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                            <path
-                                                d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
                                             <path d="M16 5l3 3" />
                                         </svg>
                                     </button>
 
-                                    <!-- Botón de detalles -->
+                                    <!-- Detalles -->
                                     <button title="Ver detalles" wire:click="modaldetalle({{ $producto->id }})"
-                                        class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="icon icon-tabler icons-tabler-outline icon-tabler-eye-plus">
+                                        class="text-yellow-500 hover:text-yellow-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-tabler icon-tabler-eye-plus">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
                                             <path d="M12 18c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
@@ -115,15 +96,15 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="2" class="text-center py-4 text-gray-600 dark:text-gray-400">
+                            <td colspan="3" class="text-center py-4 text-gray-600 dark:text-gray-400 text-sm">
                                 No hay productos registrados.
                             </td>
                         </tr>
                         @endforelse
                     </tbody>
-
                 </table>
             </div>
+
 
             <div class="mt-4 flex justify-center">
                 {{ $productos->links() }}
@@ -279,7 +260,7 @@
                     <h3 class="text-base font-semibold p-text" id="modal-title">Detalles del Producto</h3>
                     <div class="mt-4">
                         <dl class="grid grid-cols-2 gap-4">
-                            <div >
+                            <div>
                                 <dt class="text-sm font-semibold p-text">Base Asociada</dt>
                                 <dd class="mt-1 text-sm p-text">
                                     {{ $productoSeleccionado?->base?->capacidad }}{{ $productoSeleccionado?->base?->unidad }}
