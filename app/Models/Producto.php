@@ -41,4 +41,8 @@ class Producto extends Model
     {
         return $this->morphMany(Existencia::class, 'existenciable');
     }
+    public function base()
+    {
+        return $this->belongsTo(Base::class, 'base_id');
+    }
 }

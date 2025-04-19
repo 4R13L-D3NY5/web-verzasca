@@ -13,6 +13,7 @@ class Base extends Model
         'imagen',
         'unidad',
         'capacidad',
+        'descripcion',
         'estado',
         'observaciones',
         'preforma_id',

@@ -14,6 +14,7 @@ class Etiqueta extends Model
         'imagen',
         'capacidad',
         'estado',
+        'descripcion',
         'cliente_id',
     ];
 

@@ -11,7 +11,7 @@ use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 class Tapas extends Component
 {
     use WithPagination, WithFileUploads;
-
+    public $descripcion = '';
     public $search = '';
     public $modal = false;
     public $modalDetalle = false;
@@ -30,14 +30,18 @@ class Tapas extends Component
         'color' => 'required|string|max:255',
         'tipo' => 'required|string|max:255',
         'estado' => 'required|boolean',
+        'descripcion' => 'nullable|string|max:255',
+
     ];
 
     public function render()
     {
-        $tapas = Tapa::when($this->search, function ($query) {
-            $query->where('color', 'like', '%' . $this->search . '%')
-                  ->orWhere('tipo', 'like', '%' . $this->search . '%');
-        })->paginate(4);
+        $tapas = Tapa::with('existencias') // Cargar las existencias relacionadas
+            ->when($this->search, function ($query) {
+                $query->where('color', 'like', '%' . $this->search . '%')
+                    ->orWhere('tipo', 'like', '%' . $this->search . '%');
+            })
+            ->paginate(4);
 
         return view('livewire.tapas', compact('tapas'));
     }
@@ -49,7 +53,14 @@ class Tapas extends Component
 
     public function abrirModal($accion = 'create', $id = null)
     {
-        $this->reset(['color', 'tipo', 'estado', 'imagen', 'tapa_id']);
+        $this->reset([
+            'tapa_id',
+            'color',
+            'tipo',
+            'descripcion',
+            'estado',
+            'imagen',
+        ]);
         $this->accion = $accion;
         if ($accion === 'edit' && $id) {
             $this->editar($id);
@@ -64,6 +75,7 @@ class Tapas extends Component
         $this->color = $tapa->color;
         $this->tipo = $tapa->tipo;
         $this->estado = $tapa->estado;
+        $this->descripcion = $tapa->descripcion;
         $this->accion = 'edit';
     }
 
@@ -72,15 +84,19 @@ class Tapas extends Component
         $this->validate();
 
         try {
-            $imagenPath = null;
+
 
             if ($this->imagen) {
                 $imagenPath = $this->imagen->store('tapas', 'public');
+            } else {
+                // Si no hay una nueva imagen, mantener la imagen actual si existe
+                $imagenPath = $this->tapa_id ? Tapa::find($this->tapa_id)->imagen : null;
             }
 
             Tapa::updateOrCreate(['id' => $this->tapa_id], [
                 'color' => $this->color,
                 'tipo' => $this->tipo,
+                'descripcion' => $this->descripcion,
                 'estado' => $this->estado,
                 'imagen' => $imagenPath,
             ]);
@@ -100,7 +116,8 @@ class Tapas extends Component
     public function cerrarModal()
     {
         $this->modal = false;
-        $this->reset(['color', 'tipo', 'estado', 'imagen', 'tapa_id']);
+        $this->reset(['color', 'tipo', 'descripcion', 'estado', 'imagen', 'tapa_id']);
+
         $this->resetErrorBag();
     }
 

@@ -35,17 +35,17 @@ class Stocks extends Component
 
     public function render()
     {
-        $stocks = Stock::with(['producto', 'etiqueta']) // Pre-carga relaciones
+        $stocks = Stock::with(['producto', 'etiqueta', 'existencias']) // Pre-carga relaciones, incluyendo 'existencias'
             ->when($this->search, function ($query) {
                 $query->whereHas('producto', function ($q) {
                     $q->where('nombre', 'like', '%' . $this->search . '%');
                 });
             })
             ->paginate(4);
-
+    
         $productos = \App\Models\Producto::all();
         $etiquetas = \App\Models\Etiqueta::all();
-
+    
         return view('livewire.stocks', compact('stocks', 'productos', 'etiquetas'));
     }
     public function setFechaActualElaboracion()

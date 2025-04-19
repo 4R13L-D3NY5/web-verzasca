@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id(); // Clave primaria
+            $table->string('imagen')->nullable();
             $table->date('fechaElaboracion'); // Fecha de elaboración del lote
             $table->date('fechaVencimiento'); // Fecha de vencimiento del lote
             // $table->integer('tapas'); // Número de tapas en el lote

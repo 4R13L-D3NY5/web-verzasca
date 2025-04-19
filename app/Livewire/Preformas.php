@@ -37,13 +37,16 @@ class Preformas extends Component
 
     public function render()
     {
-        $preformas = Preforma::when($this->search, function ($query) {
-            $query->where('insumo', 'like', '%' . $this->search . '%')
-                  ->orWhere('descripcion', 'like', '%' . $this->search . '%');
-        })->paginate(4);
+        $preformas = Preforma::with('existencias')
+            ->when($this->search, function ($query) {
+                $query->where('insumo', 'like', '%' . $this->search . '%')
+                    ->orWhere('descripcion', 'like', '%' . $this->search . '%');
+            })
+            ->paginate(4);
 
         return view('livewire.preformas', compact('preformas'));
     }
+
 
     public function updatingSearch()
     {

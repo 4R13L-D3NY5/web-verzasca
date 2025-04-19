@@ -43,10 +43,12 @@ class Etiquetas extends Component
 
     public function render()
     {
-        $etiquetas = Etiqueta::when($this->search, function ($query) {
-            $query->where('imagen', 'like', '%' . $this->search . '%')
-                  ->orWhere('capacidad', 'like', '%' . $this->search . '%');
-        })->paginate(4);
+        $etiquetas = Etiqueta::with('existencias')
+            ->when($this->search, function ($query) {
+                $query->where('imagen', 'like', '%' . $this->search . '%')
+                    ->orWhere('capacidad', 'like', '%' . $this->search . '%');
+            })
+            ->paginate(4);
 
         return view('livewire.etiquetas', compact('etiquetas'));
     }
