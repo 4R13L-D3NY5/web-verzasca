@@ -40,11 +40,11 @@
           </div>
           <div class="mb-2">
             <span class="font-semibold block">Proveedor:</span>
-            <span>{{ $compra->proveedor->nombre ?? 'Proveedor no registrado' }}</span>
+            <span>{{ $compra->proveedor->razonSocial }}</span>
           </div>
           <div class="mb-2">
             <span class="font-semibold block">Personal:</span>
-            <span>{{ $compra->personal->nombre ?? 'Personal no registrado' }}</span>
+            <span>{{ $compra->personal->apellidos }}</span>
           </div>
           <div>
             <span class="font-semibold block">Observaciones:</span>
@@ -116,7 +116,7 @@
         <select wire:model.defer="proveedor_id" class="p-text text-sm sm:text-base input-g">
           <option value="">Seleccione un proveedor</option>
           @foreach ($proveedors as $proveedor)
-        <option value="{{ $proveedor->id }}">{{ $proveedor->nombreContacto }}</option>
+        <option value="{{ $proveedor->id }}">{{ $proveedor->razonSocial }}</option>
       @endforeach
         </select>
         @error('proveedor_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror

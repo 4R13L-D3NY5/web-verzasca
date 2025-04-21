@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('direccion');
             $table->integer('telefono');
             $table->string('correo');
-            $table->string('tipo'); // tapas, preformas, etiquetas
-            $table->string('servicio'); // soplado, transporte
+            $table->string('tipo')->nullable(); // tapas, preformas, bases, etiquetas
+            $table->string('servicio')->nullable(); // soplado, transporte
             $table->string('descripcion');
             $table->double('precio');
             $table->string('tiempoEntrega');

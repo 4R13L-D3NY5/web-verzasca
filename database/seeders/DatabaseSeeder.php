@@ -48,6 +48,7 @@ class DatabaseSeeder extends Seeder
         Rol::create(['nombre' => 'Administrador', 'descripcion' => 'Acceso acceso a ventas']);
         Rol::create(['nombre' => 'Distribuidor', 'descripcion' => 'Acceso acceso a ventas']);
         Rol::create(['nombre' => 'Planta', 'descripcion' => 'Acceso acceso a ventas']);
+        Rol::create(['nombre' => 'Cliente', 'descripcion' => 'Acceso la aplicacion móvil, catálogo y compras por internet.']);
 
         $adminUser = User::create([
             'email' => 'admin@mail.com',

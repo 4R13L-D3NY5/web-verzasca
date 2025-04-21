@@ -52,14 +52,16 @@
             </form>
         </div>
     </header>
-    <nav id="menu" class="w-[95%]  max-w-[1700px] text-white bg-slate-950 px-6 py-4 shadow-lg 
+    <nav id="menu" class="w-[95%] max-w-[1700px] text-white bg-slate-950 px-6 py-4 shadow-lg 
        fixed left-1/2 -translate-x-1/2 top-[65px] hidden transition-all 
        rounded-xl backdrop-blur-md z-20">
         <div class="max-h-[80vh] overflow-y-auto">
             <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 w-full">
                 <!-- Gestión de Usuarios -->
+                @if(in_array(auth()->user()->rol_id, [1, 2]))
                 <div>
-                    <h3 class="text-yellow-500">GESTION DE USUARIOS</h3>
+                    <h3 class="text-violet-500">GESTION DE USUARIOS</h3>
+                    <!-- PERSONAL (1,2) -->
                     <li class="nav-item @if($seleccion == 'Personal') @endif">
                         <a wire:click="$set('seleccion', 'Personal')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -79,6 +81,7 @@
                             <span class="text-custom">PERSONAL</span>
                         </a>
                     </li>
+                    <!-- ROLES (1,2) -->
                     <li class="nav-item @if($seleccion == 'Roles') @endif">
                         <a wire:click="$set('seleccion', 'Roles')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -95,18 +98,14 @@
                             <span class="text-custom">ROLES</span>
                         </a>
                     </li>
-                    <!-- <li class="nav-item @if($seleccion == 'Pruebaestilo') @endif">
-                        <a wire:click="$set('seleccion', 'Pruebaestilo')" class="flex items-center space-x-2">
-                            <span class="icon">
-
-                            </span>
-                            <span class="text-custom">Pruebaestilo</span>
-                        </a>
-                    </li> -->
                 </div>
+                @endif
+
                 <!-- Gestión de Compras -->
+                @if(in_array(auth()->user()->rol_id, [1, 2]))
                 <div>
-                    <h3 class="text-emerald-500">GESTION DE COMPRAS</h3>
+                    <h3 class="text-violet-500">GESTION DE COMPRAS</h3>
+                    <!-- COMPRAS (1,2) -->
                     <li class="nav-item @if($seleccion == 'Compras') @endif">
                         <a wire:click="$set('seleccion', 'Compras')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -124,7 +123,8 @@
                             <span class="text-custom">COMPRAS</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Proveedores')  @endif">
+                    <!-- PROVEEDORES (1,2) -->
+                    <li class="nav-item @if($seleccion == 'Proveedores') @endif">
                         <a wire:click="$set('seleccion', 'Proveedores')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -136,19 +136,22 @@
                                     <path d="M19 21v-4" />
                                     <path d="M19 17a2 2 0 0 0 2 -2v-2a2 2 0 1 0 -4 0v2a2 2 0 0 0 2 2z" />
                                     <path d="M14 21v-14a3 3 0 0 0 -3 -3h-4a3 3 0 0 0 -3 3v14" />
-                                    <path d="M9 17v4" />
-                                    <path d="M8 13h2" />
-                                    <path d="M8 9h2" />
+                                    <path d="M9 17v4豫">
+                                        <path d="M8 13h2" />
+                                        <path d="M8 9h2" />
                                 </svg>
                             </span>
                             <span class="text-custom">PROVEEDORES</span>
                         </a>
                     </li>
                 </div>
+                @endif
 
-
+                <!-- Almacén -->
+                @if(in_array(auth()->user()->rol_id, [1, 2]))
                 <div>
                     <h3 class="text-violet-500">ALMACEN</h3>
+                    <!-- STOCK (1,2) -->
                     <li class="nav-item @if($seleccion == 'Stocks') color-bg @endif">
                         <a wire:click="$set('seleccion', 'Stocks')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -163,13 +166,14 @@
                             <span class="text-custom">STOCK</span>
                         </a>
                     </li>
+                    <!-- TAPAS (1,2) -->
                     <li class="nav-item @if($seleccion == 'Tapas') color-bg @endif">
                         <a wire:click="$set('seleccion', 'Tapas')" class="flex items-center space-x-2">
                             <span class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 28"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-pepsi ">
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-pepsi">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
                                     <path d="M4 16c5.713 -2.973 11 -3.5 13.449 -11.162" />
@@ -179,6 +183,7 @@
                             <span class="text-custom">TAPAS</span>
                         </a>
                     </li>
+                    <!-- ETIQUETAS (1,2) -->
                     <li class="nav-item @if($seleccion == 'Etiquetas') color-bg @endif">
                         <a wire:click="$set('seleccion', 'Etiquetas')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -188,7 +193,7 @@
                                     class="icon icon-tabler icons-tabler-outline icon-tabler-ticket">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M15 5l0 2" />
-                                    <path d="M15 11l0 2" />
+                                    <acol d="M15 11l0 2" />
                                     <path d="M15 17l0 2" />
                                     <path
                                         d="M5 5h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-3a2 2 0 0 0 0 -4v-3a2 2 0 0 1 2 -2" />
@@ -197,6 +202,7 @@
                             <span class="text-custom">ETIQUETAS</span>
                         </a>
                     </li>
+                    <!-- PRODUCTOS (1,2) -->
                     <li class="nav-item @if($seleccion == 'Productos') color-bg @endif">
                         <a wire:click="$set('seleccion', 'Productos')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -216,6 +222,7 @@
                             <span class="text-custom">PRODUCTOS</span>
                         </a>
                     </li>
+                    <!-- BASES (1,2) -->
                     <li class="nav-item @if($seleccion == 'Bases') color-bg @endif">
                         <a wire:click="$set('seleccion', 'Bases')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -234,6 +241,7 @@
                             <span class="text-custom">BASES</span>
                         </a>
                     </li>
+                    <!-- PREFORMAS (1,2) -->
                     <li class="nav-item @if($seleccion == 'Preformas') color-bg @endif">
                         <a wire:click="$set('seleccion', 'Preformas')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -251,12 +259,15 @@
                             <span class="text-custom">PREFORMAS</span>
                         </a>
                     </li>
-
                 </div>
+                @endif
+
+                <!-- Gestión de Producción -->
+                @if(in_array(auth()->user()->rol_id, [1, 2, 4]))
                 <div>
                     <h3 class="text-violet-500 mt-4">GESTIÓN DE PRODUCCIÓN</h3>
-
-                    <li class="nav-item @if($seleccion == 'Elaboracion')  @endif">
+                    <!-- ELABORACIÓN (1,2,4) -->
+                    <li class="nav-item @if($seleccion == 'Elaboracion') @endif">
                         <a wire:click="$set('seleccion', 'Elaboracion')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -269,11 +280,11 @@
                                     <path d="M20 12l-4 -2l4 -2" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Elaboración</span>
+                            <span class="text-custom">ELABORACIÓN</span>
                         </a>
                     </li>
-
-                    <li class="nav-item @if($seleccion == 'Embotellado')  @endif">
+                    <!-- EMBOTELLADO (1,2,4) -->
+                    <li class="nav-item @if($seleccion == 'Embotellado') @endif">
                         <a wire:click="$set('seleccion', 'Embotellado')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -285,11 +296,11 @@
                                     <path d="M10 3h4" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Embotellado</span>
+                            <span class="text-custom">EMBOTELLADO</span>
                         </a>
                     </li>
-
-                    <li class="nav-item @if($seleccion == 'Etiquetado')  @endif">
+                    <!-- ETIQUETADO (1,2,4) -->
+                    <li class="nav-item @if($seleccion == 'Etiquetado') @endif">
                         <a wire:click="$set('seleccion', 'Etiquetado')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -300,11 +311,12 @@
                                     <path d="M7 7h.01" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Etiquetado</span>
+                            <span class="text-custom">ETIQUETADO</span>
                         </a>
                     </li>
-
-                    <li class="nav-item @if($seleccion == 'Traspaso')  @endif">
+                    <!-- TRASPASO (1,2) -->
+                    @if(in_array(auth()->user()->rol_id, [1, 2]))
+                    <li class="nav-item @if($seleccion == 'Traspaso') @endif">
                         <a wire:click="$set('seleccion', 'Traspaso')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -317,14 +329,20 @@
                                     <path d="M14 11l2 2l-2 2" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Traspaso</span>
+                            <span class="text-custom">TRASPASO</span>
                         </a>
                     </li>
+                    @endif
                 </div>
+                @endif
 
+                <!-- Gestión de Ventas -->
+                @if(in_array(auth()->user()->rol_id, [1, 2, 3]))
                 <div>
                     <h3 class="text-violet-500">GESTION DE VENTAS</h3>
-                    <li class="nav-item @if($seleccion == 'Cliente')  @endif">
+                    <!-- CLIENTE (1,2) -->
+                    @if(in_array(auth()->user()->rol_id, [1, 2]))
+                    <li class="nav-item @if($seleccion == 'Cliente') @endif">
                         <a wire:click="$set('seleccion', 'Cliente')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -339,7 +357,9 @@
                             <span class="text-custom">CLIENTE</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Venta')  @endif">
+                    @endif
+                    <!-- VENTA (1,2,3) -->
+                    <li class="nav-item @if($seleccion == 'Venta') @endif">
                         <a wire:click="$set('seleccion', 'Venta')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -359,9 +379,14 @@
                         </a>
                     </li>
                 </div>
+                @endif
+
+                <!-- Gestión de Distribución -->
+                @if(in_array(auth()->user()->rol_id, [1, 2, 3]))
                 <div>
                     <h3 class="text-violet-500">GESTION DE DISTRIBUCION</h3>
-                    <li class="nav-item @if($seleccion == 'Distribucion')  @endif">
+                    <!-- DISTRIBUCION (1,2,3) -->
+                    <li class="nav-item @if($seleccion == 'Distribucion') @endif">
                         <a wire:click="$set('seleccion', 'Distribucion')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -379,7 +404,9 @@
                             <span class="text-custom">DISTRIBUCIOIN</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Pedidos')  @endif">
+                    <!-- PEDIDOS (1,2,3,4) -->
+                    @if(in_array(auth()->user()->rol_id, [1, 2, 3, 4]))
+                    <li class="nav-item @if($seleccion == 'Pedidos') @endif">
                         <a wire:click="$set('seleccion', 'Pedidos')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -394,10 +421,13 @@
                                     <path d="M10.096 5.764l7.608 2.472" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Pedidos</span>
+                            <span class="text-custom">PEDIDOS</span>
                         </a>
                     </li>
-                    <li class="nav-item @if($seleccion == 'Asignacion')  @endif">
+                    @endif
+                    <!-- ASIGNACION (1,2) -->
+                    @if(in_array(auth()->user()->rol_id, [1, 2]))
+                    <li class="nav-item @if($seleccion == 'Asignacion') @endif">
                         <a wire:click="$set('seleccion', 'Asignacion')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -413,6 +443,9 @@
                             <span class="text-custom">ASIGNACION</span>
                         </a>
                     </li>
+                    @endif
+                    <!-- COCHE (1,2) -->
+                    @if(in_array(auth()->user()->rol_id, [1, 2]))
                     <li class="nav-item @if($seleccion == 'Coche') @endif">
                         <a wire:click="$set('seleccion', 'Coche')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -429,9 +462,15 @@
                             <span class="text-custom">COCHE</span>
                         </a>
                     </li>
+                    @endif
                 </div>
+                @endif
+
+                <!-- Sucursales -->
+                @if(in_array(auth()->user()->rol_id, [1, 2, 3, 4]))
                 <div>
                     <h3 class="text-violet-500">SUCURSALES</h3>
+                    <!-- EMPRESA (1,2,3,4) -->
                     <li class="nav-item @if($seleccion == 'Empresa') @endif">
                         <a wire:click="$set('seleccion', 'Empresa')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -450,10 +489,11 @@
                             <span class="text-custom">EMPRESA</span>
                         </a>
                     </li>
+                    <!-- SUCURSAL (1,2,3,4) -->
                     <li class="nav-item @if($seleccion == 'Sucursal') @endif">
                         <a wire:click="$set('seleccion', 'Sucursal')" class="flex items-center space-x-2">
                             <span class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                <svg xmlns="-MEMBER://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round"
                                     class="icon icon-tabler icons-tabler-outline icon-tabler-building">
@@ -472,6 +512,8 @@
                             <span class="text-custom">SUCURSAL</span>
                         </a>
                     </li>
+                    <!-- TRABAJADOR (1,2) -->
+                    @if(in_array(auth()->user()->rol_id, [1, 2]))
                     <li class="nav-item @if($seleccion == 'Trabajador') @endif">
                         <a wire:click="$set('seleccion', 'Trabajador')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -487,150 +529,128 @@
                                     <path d="M10.096 5.764l7.608 2.472" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Trabajador</span>
+                            <span class="text-custom">TRABAJADOR</span>
                         </a>
                     </li>
+                    @endif
                 </div>
+                @endif
+
+                <!-- Gestión de Tesorería -->
+                @if(in_array(auth()->user()->rol_id, [1, 2]))
                 <div>
                     <h3 class="text-violet-500">GESTION DE TESORERIA</h3>
+                    <!-- INGRESO (1,2) -->
                     <li class="nav-item @if($seleccion == 'Ingreso') @endif">
                         <a wire:click="$set('seleccion', 'Ingreso')" class="flex items-center space-x-2">
                             <span class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-stackoverflow">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-1" />
-                                    <path d="M8 16h8" />
-                                    <path d="M8.322 12.582l7.956 .836" />
-                                    <path d="M8.787 9.168l7.826 1.664" />
-                                    <path d="M10.096 5.764l7.608 2.472" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 8V4M12 4L8 8M12 4L16 8" />
+                                    <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1 -1v-7" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Ingreso</span>
+                            <span class="text-custom">INGRESO</span>
                         </a>
                     </li>
+                    <!-- CREDITO (1,2) -->
                     <li class="nav-item @if($seleccion == 'Credito') @endif">
                         <a wire:click="$set('seleccion', 'Credito')" class="flex items-center space-x-2">
                             <span class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-stackoverflow">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-1" />
-                                    <path d="M8 16h8" />
-                                    <path d="M8.322 12.582l7.956 .836" />
-                                    <path d="M8.787 9.168l7.826 1.664" />
-                                    <path d="M10.096 5.764l7.608 2.472" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 7h16M4 11h16M10 15h4" />
+                                    <rect x="4" y="3" width="16" height="18" rx="2" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Credito</span>
+                            <span class="text-custom">CREDITO</span>
                         </a>
                     </li>
+                    <!-- SALARIO (1,2) -->
                     <li class="nav-item @if($seleccion == 'Salario') @endif">
                         <a wire:click="$set('seleccion', 'Salario')" class="flex items-center space-x-2">
                             <span class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-stackoverflow">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-1" />
-                                    <path d="M8 16h8" />
-                                    <path d="M8.322 12.582l7.956 .836" />
-                                    <path d="M8.787 9.168l7.826 1.664" />
-                                    <path d="M10.096 5.764l7.608 2.472" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 8v-4" />
+                                    <path d="M12 16v4" />
+                                    <path d="M8 12h8" />
+                                    <circle cx="12" cy="12" r="9" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Salario</span>
+                            <span class="text-custom">SALARIO</span>
                         </a>
                     </li>
                 </div>
+                @endif
+
+                <!-- Reportes -->
+                @if(in_array(auth()->user()->rol_id, [1, 2]))
                 <div>
                     <h3 class="text-violet-500">REPORTES</h3>
+                    <!-- REPORTE VENTA (1,2) -->
                     <li class="nav-item @if($seleccion == 'Reporteventa') @endif">
                         <a wire:click="$set('seleccion', 'Reporteventa')" class="flex items-center space-x-2">
                             <span class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-stackoverflow">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-1" />
-                                    <path d="M8 16h8" />
-                                    <path d="M8.322 12.582l7.956 .836" />
-                                    <path d="M8.787 9.168l7.826 1.664" />
-                                    <path d="M10.096 5.764l7.608 2.472" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 3v18h18" />
+                                    <path d="M18 14v4h4" />
+                                    <path d="M7 12l3 3 7-7" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Reporteventa</span>
+                            <span class="text-custom">REPORTE VENTA</span>
                         </a>
                     </li>
+                    <!-- REPORTE COMPRA (1,2) -->
                     <li class="nav-item @if($seleccion == 'Reportecompra') @endif">
                         <a wire:click="$set('seleccion', 'Reportecompra')" class="flex items-center space-x-2">
                             <span class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-stackoverflow">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-1" />
-                                    <path d="M8 16h8" />
-                                    <path d="M8.322 12.582l7.956 .836" />
-                                    <path d="M8.787 9.168l7.826 1.664" />
-                                    <path d="M10.096 5.764l7.608 2.472" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 7h14M5 12h14M5 17h14" />
+                                    <path d="M3 3h18v18H3z" stroke="none" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Reportecompra</span>
+                            <span class="text-custom">REPORTE COMPRA</span>
                         </a>
                     </li>
+                    <!-- REPORTE STOCK (1,2) -->
                     <li class="nav-item @if($seleccion == 'Reportestock') @endif">
                         <a wire:click="$set('seleccion', 'Reportestock')" class="flex items-center space-x-2">
                             <span class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-stackoverflow">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-1" />
-                                    <path d="M8 16h8" />
-                                    <path d="M8.322 12.582l7.956 .836" />
-                                    <path d="M8.787 9.168l7.826 1.664" />
-                                    <path d="M10.096 5.764l7.608 2.472" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16v4H4zM4 12h16v4H4zM4 20h16v-4H4z" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Reportestock</span>
+                            <span class="text-custom">REPORTE STOCK</span>
                         </a>
                     </li>
+                    <!-- REPORTE CREDITO (1,2) -->
                     <li class="nav-item @if($seleccion == 'Reportecredito') @endif">
                         <a wire:click="$set('seleccion', 'Reportecredito')" class="flex items-center space-x-2">
                             <span class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-stackoverflow">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-1" />
-                                    <path d="M8 16h8" />
-                                    <path d="M8.322 12.582l7.956 .836" />
-                                    <path d="M8.787 9.168l7.826 1.664" />
-                                    <path d="M10.096 5.764l7.608 2.472" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                                    <path d="M3 10h18" />
+                                    <path d="M7 15h1" />
+                                    <path d="M10 15h2" />
                                 </svg>
                             </span>
-                            <span class="text-custom">Reportecredito</span>
+                            <span class="text-custom">REPORTE CREDITO</span>
                         </a>
                     </li>
-                    <!-- <div class="mt-4">
-                       
-                        <a href="{{ route('clientes.index') }}"
-                            class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                            Ir a Clientes
-                        </a>
-                    </div> -->
                 </div>
-
+                @endif
             </ul>
         </div>
     </nav>
@@ -638,103 +658,103 @@
     <main class="w-full min-h-screen dark:bg-gray-900" id="main-content">
         <div class="w-full p-2  dark:bg-gray-900">
             @if ($seleccion == 'Compras')
-                @livewire('compras')
+            @livewire('compras')
             @endif
             @if ($seleccion == 'Personal')
-                @livewire('personal')
+            @livewire('personal')
             @endif
             @if ($seleccion == 'Proveedores')
-                @livewire('proveedores')
+            @livewire('proveedores')
             @endif
             @if ($seleccion == 'Roles')
-                @livewire('roles')
+            @livewire('roles')
             @endif
             @if ($seleccion == 'Elaboracion')
-                @livewire('elaboracion')
+            @livewire('elaboracion')
             @endif
             @if ($seleccion == 'Etiquetas')
-                @livewire('Etiquetas')
+            @livewire('Etiquetas')
             @endif
             @if ($seleccion == 'Preformas')
-                @livewire('preformas')
+            @livewire('preformas')
             @endif
             @if ($seleccion == 'Tapas')
-                @livewire('tapas')
+            @livewire('tapas')
             @endif
             @if ($seleccion == 'Raiz')
-                @livewire('raiz')
+            @livewire('raiz')
             @endif
             @if ($seleccion == 'Productos')
-                @livewire('productos')
+            @livewire('productos')
             @endif
             @if ($seleccion == 'Embotellado')
-                @livewire('embotellado')
+            @livewire('embotellado')
             @endif
             @if ($seleccion == 'Etiquetado')
-                @livewire('etiquetado')
+            @livewire('etiquetado')
             @endif
             @if ($seleccion == 'Traspaso')
-                @livewire('traspaso')
+            @livewire('traspaso')
             @endif
             @if ($seleccion == 'Stocks')
-                @livewire('stocks')
+            @livewire('stocks')
             @endif
             @if ($seleccion == 'Egresoingreso')
-                @livewire('egresoingreso')
+            @livewire('egresoingreso')
             @endif
             @if ($seleccion == 'Cliente')
-                @livewire('cliente')
+            @livewire('cliente')
             @endif
             @if ($seleccion == 'Venta')
-                @livewire('venta')
+            @livewire('venta')
             @endif
             @if ($seleccion == 'Distribucion')
-                @livewire('distribucion')
+            @livewire('distribucion')
             @endif
             @if ($seleccion == 'Pedidos')
-                @livewire('pedidos')
+            @livewire('pedidos')
             @endif
             @if ($seleccion == 'Asignacion')
-                @livewire('asignacion')
+            @livewire('asignacion')
             @endif
             @if ($seleccion == 'Coche')
-                @livewire('coche')
+            @livewire('coche')
             @endif
             @if ($seleccion == 'Empresa')
-                @livewire('empresa')
+            @livewire('empresa')
             @endif
             @if ($seleccion == 'Sucursal')
-                @livewire('sucursal')
+            @livewire('sucursal')
             @endif
             @if ($seleccion == 'Trabajador')
-                @livewire('trabajador')
+            @livewire('trabajador')
             @endif
             @if ($seleccion == 'Ingreso')
-                @livewire('ingreso')
+            @livewire('ingreso')
             @endif
             @if ($seleccion == 'Credito')
-                @livewire('credito')
+            @livewire('credito')
             @endif
             @if ($seleccion == 'Salario')
-                @livewire('salario')
+            @livewire('salario')
             @endif
             @if ($seleccion == 'Reporteventa')
-                @livewire('reporteventa')
+            @livewire('reporteventa')
             @endif
             @if ($seleccion == 'Reportecompra')
-                @livewire('reportecompra')
+            @livewire('reportecompra')
             @endif
             @if ($seleccion == 'Reportestock')
-                @livewire('reportestock')
+            @livewire('reportestock')
             @endif
             @if ($seleccion == 'Reportecredito')
-                @livewire('reportecredito')
+            @livewire('reportecredito')
             @endif
             @if ($seleccion == 'Pruebaestilo')
-                @livewire('pruebaestilo')
+            @livewire('pruebaestilo')
             @endif
             @if ($seleccion == 'Bases')
-                @livewire('bases')
+            @livewire('bases')
             @endif
 
 
