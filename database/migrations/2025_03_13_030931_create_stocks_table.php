@@ -21,7 +21,8 @@ return new class extends Migration
             $table->text('observaciones')->nullable(); // Observaciones (opcional)
             $table->foreignId('etiqueta_id')->nullable()->constrained('etiquetas')->onDelete('cascade'); // Relación con Producto
             $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade'); // Relación con Producto
-            // $table->foreignId('sucursal_id')->constrained('sucursals')->onDelete('cascade'); // Relación con Sucursal
+            $table->foreignId('sucursal_id')->nullable()->constrained('sucursals')->onDelete('cascade');
+
             $table->timestamps(); // created_at y updated_at
         });
     }

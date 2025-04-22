@@ -124,6 +124,7 @@
 
           <div class="over-col">
 
+            {{-- Producto --}}
             <h3 class="p-text">Producto</h3>
             <select wire:model="producto_id" class="p-text input-g">
               <option value="">Selecciona un producto</option>
@@ -133,20 +134,36 @@
             </select>
             @error('producto_id') <span class="error-message text-red-500">{{ $message }}</span> @enderror
 
-            <h3 class="p-text">Etiqueta/capacidad</h3>
+            {{-- Etiqueta --}}
+            <h3 class="p-text">Etiqueta / Capacidad</h3>
             <select wire:model="etiqueta_id" class="p-text input-g">
               <option value="">Sin etiqueta</option>
               @foreach ($etiquetas as $etiqueta)
-              <option value="{{ $etiqueta->id }}">{{ $etiqueta->capacidad }}- ml</option>
+              <option value="{{ $etiqueta->id }}">{{ $etiqueta->capacidad }} ml</option>
               @endforeach
             </select>
             @error('etiqueta_id') <span class="error-message text-red-500">{{ $message }}</span> @enderror
 
+            {{-- Sucursal --}}
+            <h3 class="p-text">Sucursal</h3>
+            <select wire:model="sucursal_id" class="p-text input-g">
+              <option value="">Selecciona una sucursal</option>
+              @foreach ($sucursales as $sucursal)
+              <option value="{{ $sucursal->id }}">{{ $sucursal->nombre }}</option>
+              @endforeach
+            </select>
+            @error('sucursal_id') <span class="error-message text-red-500">{{ $message }}</span> @enderror
+
+            {{-- Cantidad de Existencias --}}
+            <h3 class="p-text">Cantidad</h3>
+            <input type="number" min="0" wire:model="cantidad" class="p-text input-g" placeholder="Cantidad de existencias">
+            @error('cantidad') <span class="error-message text-red-500">{{ $message }}</span> @enderror
+
+            {{-- Fecha de elaboración --}}
             <div>
               <h3 class="p-text">Fecha de Elaboración</h3>
               <div class="flex items-center space-x-2">
-                <input type="text" wire:model="fechaElaboracion" placeholder="YYYY-MM-DD"
-                  class="p-text input-g w-full" />
+                <input type="text" wire:model="fechaElaboracion" placeholder="YYYY-MM-DD" class="p-text input-g w-full" />
                 <button type="button" wire:click="setFechaActualElaboracion"
                   class="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm">
                   Ahora
@@ -155,11 +172,11 @@
               @error('fechaElaboracion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
+            {{-- Fecha de vencimiento --}}
             <div>
               <h3 class="p-text">Fecha de Vencimiento</h3>
               <div class="flex items-center space-x-2">
-                <input type="text" wire:model="fechaVencimiento" placeholder="YYYY-MM-DD"
-                  class="p-text input-g w-full" />
+                <input type="text" wire:model="fechaVencimiento" placeholder="YYYY-MM-DD" class="p-text input-g w-full" />
                 <button type="button" wire:click="setFechaActualVencimiento"
                   class="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm">
                   Ahora
@@ -168,10 +185,13 @@
               @error('fechaVencimiento') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
+            {{-- Observaciones --}}
             <h3 class="p-text">Observaciones</h3>
             <input wire:model="observaciones" class="p-text input-g" rows="2"></input>
             @error('observaciones') <span class="error-message text-red-500">{{ $message }}</span> @enderror
+
           </div>
+
 
           <div class="mt-6 flex justify-center w-full space-x-4">
             <button type="button" wire:click="guardar"
