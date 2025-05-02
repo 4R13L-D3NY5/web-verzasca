@@ -62,7 +62,7 @@
                 <div>
                     <h3 class="text-violet-500">GESTION DE USUARIOS</h3>
                     <!-- PERSONAL (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Personal') @endif">
+                    <li class="nav-item @if($seleccion == 'Personal') bg-indigo-950 @endif">
                         <a wire:click="$set('seleccion', 'Personal')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -82,7 +82,7 @@
                         </a>
                     </li>
                     <!-- ROLES (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Roles') @endif">
+                    <li class="nav-item @if($seleccion == 'Roles') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Roles')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -106,7 +106,7 @@
                 <div>
                     <h3 class="text-violet-500">GESTION DE COMPRAS</h3>
                     <!-- COMPRAS (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Compras') @endif">
+                    <li class="nav-item @if($seleccion == 'Compras') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Compras')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -124,7 +124,7 @@
                         </a>
                     </li>
                     <!-- PROVEEDORES (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Proveedores') @endif">
+                    <li class="nav-item @if($seleccion == 'Proveedores') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Proveedores')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -152,7 +152,7 @@
                 <div>
                     <h3 class="text-violet-500">ALMACEN</h3>
                     <!-- STOCK (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Stocks') color-bg @endif">
+                    <li class="nav-item @if($seleccion == 'Stocks') bg-indigo-950 @endif">
                         <a wire:click="$set('seleccion', 'Stocks')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -167,7 +167,7 @@
                         </a>
                     </li>
                     <!-- TAPAS (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Tapas') color-bg @endif">
+                    <li class="nav-item @if($seleccion == 'Tapas') bg-indigo-950 @endif">
                         <a wire:click="$set('seleccion', 'Tapas')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 28"
@@ -184,7 +184,7 @@
                         </a>
                     </li>
                     <!-- ETIQUETAS (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Etiquetas') color-bg @endif">
+                    <li class="nav-item @if($seleccion == 'Etiquetas') bg-indigo-950 @endif">
                         <a wire:click="$set('seleccion', 'Etiquetas')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -203,7 +203,7 @@
                         </a>
                     </li>
                     <!-- PRODUCTOS (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Productos') color-bg @endif">
+                    <li class="nav-item @if($seleccion == 'Productos') bg-indigo-950 @endif">
                         <a wire:click="$set('seleccion', 'Productos')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -223,7 +223,7 @@
                         </a>
                     </li>
                     <!-- BASES (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Bases') color-bg @endif">
+                    <li class="nav-item @if($seleccion == 'Bases') bg-indigo-950 @endif">
                         <a wire:click="$set('seleccion', 'Bases')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -242,7 +242,7 @@
                         </a>
                     </li>
                     <!-- PREFORMAS (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Preformas') color-bg @endif">
+                    <li class="nav-item @if($seleccion == 'Preformas') bg-indigo-950 @endif">
                         <a wire:click="$set('seleccion', 'Preformas')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -267,7 +267,7 @@
                 <div>
                     <h3 class="text-violet-500 mt-4">GESTIÓN DE PRODUCCIÓN</h3>
                     <!-- ELABORACIÓN (1,2,4) -->
-                    <li class="nav-item @if($seleccion == 'Elaboracion') @endif">
+                    <li class="nav-item @if($seleccion == 'Elaboracion') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Elaboracion')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -284,7 +284,7 @@
                         </a>
                     </li>
                     <!-- EMBOTELLADO (1,2,4) -->
-                    <li class="nav-item @if($seleccion == 'Embotellado') @endif">
+                    <li class="nav-item @if($seleccion == 'Embotellado') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Embotellado')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -300,7 +300,7 @@
                         </a>
                     </li>
                     <!-- ETIQUETADO (1,2,4) -->
-                    <li class="nav-item @if($seleccion == 'Etiquetado') @endif">
+                    <li class="nav-item @if($seleccion == 'Etiquetado') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Etiquetado')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -316,7 +316,7 @@
                     </li>
                     <!-- TRASPASO (1,2) -->
                     @if(in_array(auth()->user()->rol_id, [1, 2]))
-                    <li class="nav-item @if($seleccion == 'Traspaso') @endif">
+                    <li class="nav-item @if($seleccion == 'Traspaso') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Traspaso')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -342,7 +342,7 @@
                     <h3 class="text-violet-500">GESTION DE VENTAS</h3>
                     <!-- CLIENTE (1,2) -->
                     @if(in_array(auth()->user()->rol_id, [1, 2]))
-                    <li class="nav-item @if($seleccion == 'Cliente') @endif">
+                    <li class="nav-item @if($seleccion == 'Cliente') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Cliente')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -359,7 +359,7 @@
                     </li>
                     @endif
                     <!-- VENTA (1,2,3) -->
-                    <li class="nav-item @if($seleccion == 'Venta') @endif">
+                    <li class="nav-item @if($seleccion == 'Venta') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Venta')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -386,7 +386,7 @@
                 <div>
                     <h3 class="text-violet-500">GESTION DE DISTRIBUCION</h3>
                     <!-- DISTRIBUCION (1,2,3) -->
-                    <li class="nav-item @if($seleccion == 'Distribucion') @endif">
+                    <li class="nav-item @if($seleccion == 'Distribucion') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Distribucion')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -406,7 +406,7 @@
                     </li>
                     <!-- PEDIDOS (1,2,3,4) -->
                     @if(in_array(auth()->user()->rol_id, [1, 2, 3, 4]))
-                    <li class="nav-item @if($seleccion == 'Pedidos') @endif">
+                    <li class="nav-item @if($seleccion == 'Pedidos') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Pedidos')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -427,7 +427,7 @@
                     @endif
                     <!-- ASIGNACION (1,2) -->
                     @if(in_array(auth()->user()->rol_id, [1, 2]))
-                    <li class="nav-item @if($seleccion == 'Asignacion') @endif">
+                    <li class="nav-item @if($seleccion == 'Asignacion') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Asignacion')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -446,7 +446,7 @@
                     @endif
                     <!-- COCHE (1,2) -->
                     @if(in_array(auth()->user()->rol_id, [1, 2]))
-                    <li class="nav-item @if($seleccion == 'Coche') @endif">
+                    <li class="nav-item @if($seleccion == 'Coche') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Coche')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -471,7 +471,7 @@
                 <div>
                     <h3 class="text-violet-500">SUCURSALES</h3>
                     <!-- EMPRESA (1,2,3,4) -->
-                    <li class="nav-item @if($seleccion == 'Empresa') @endif">
+                    <li class="nav-item @if($seleccion == 'Empresa') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Empresa')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -490,7 +490,7 @@
                         </a>
                     </li>
                     <!-- SUCURSAL (1,2,3,4) -->
-                    <li class="nav-item @if($seleccion == 'Sucursal') @endif">
+                    <li class="nav-item @if($seleccion == 'Sucursal') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Sucursal')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="-MEMBER://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -514,7 +514,7 @@
                     </li>
                     <!-- TRABAJADOR (1,2) -->
                     @if(in_array(auth()->user()->rol_id, [1, 2]))
-                    <li class="nav-item @if($seleccion == 'Trabajador') @endif">
+                    <li class="nav-item @if($seleccion == 'Trabajador') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Trabajador')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -541,7 +541,7 @@
                 <div>
                     <h3 class="text-violet-500">GESTION DE TESORERIA</h3>
                     <!-- INGRESO (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Ingreso') @endif">
+                    <li class="nav-item @if($seleccion == 'Ingreso') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Ingreso')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -555,7 +555,7 @@
                         </a>
                     </li>
                     <!-- CREDITO (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Credito') @endif">
+                    <li class="nav-item @if($seleccion == 'Credito') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Credito')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -569,7 +569,7 @@
                         </a>
                     </li>
                     <!-- SALARIO (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Salario') @endif">
+                    <li class="nav-item @if($seleccion == 'Salario') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Salario')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -592,7 +592,7 @@
                 <div>
                     <h3 class="text-violet-500">REPORTES</h3>
                     <!-- REPORTE VENTA (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Reporteventa') @endif">
+                    <li class="nav-item @if($seleccion == 'Reporteventa') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Reporteventa')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -607,7 +607,7 @@
                         </a>
                     </li>
                     <!-- REPORTE COMPRA (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Reportecompra') @endif">
+                    <li class="nav-item @if($seleccion == 'Reportecompra') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Reportecompra')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -621,7 +621,7 @@
                         </a>
                     </li>
                     <!-- REPORTE STOCK (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Reportestock') @endif">
+                    <li class="nav-item @if($seleccion == 'Reportestock') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Reportestock')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -634,7 +634,7 @@
                         </a>
                     </li>
                     <!-- REPORTE CREDITO (1,2) -->
-                    <li class="nav-item @if($seleccion == 'Reportecredito') @endif">
+                    <li class="nav-item @if($seleccion == 'Reportecredito') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Reportecredito')" class="flex items-center space-x-2">
                             <span class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"

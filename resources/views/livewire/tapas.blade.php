@@ -79,7 +79,7 @@
 
                   <!-- Detalles -->
                   <button title="Ver detalles" wire:click="modaldetalle({{ $tapa->id }})"
-                    class="text-yellow-500 hover:text-yellow-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
+                    class="text-indigo-500 hover:text-indigo-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                       class="icon icon-tabler icon-tabler-info-circle">
@@ -138,12 +138,28 @@
             <input type="text" wire:model="descripcion" class="p-text input-g" />
             @error('descripcion') <span class="error-message text-red-500">{{ $message }}</span> @enderror
 
-            <h3 class="p-text">Estado</h3>
-            <select wire:model="estado" class="p-text input-g">
-              <option value="1">Activo</option>
-              <option value="0">Inactivo</option>
-            </select>
-            @error('estado') <span class="error-message text-red-500">{{ $message }}</span> @enderror
+            <h3 class="p-text mb-2">Estado</h3>
+            <div class="flex space-x-6 justify-center">
+              <!-- Botón para "Activo" -->
+              <label class="flex items-center space-x-2">
+                <input type="radio" wire:model="estado" value="1" class="form-radio hidden peer" />
+                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                  Activo
+                </span>
+              </label>
+
+              <!-- Botón para "Inactivo" -->
+              <label class="flex items-center space-x-2">
+                <input type="radio" wire:model="estado" value="0" class="form-radio hidden peer" />
+                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                  Inactivo
+                </span>
+              </label>
+            </div>
+            @error('estado')
+            <span class="text-red-600 text-xs">{{ $message }}</span>
+            @enderror
+
 
 
 
