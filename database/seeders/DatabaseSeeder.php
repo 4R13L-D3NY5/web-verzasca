@@ -66,9 +66,10 @@ class DatabaseSeeder extends Seeder
         Cliente::factory(10)->create();
         $this->call(ClienteSeeder::class);
         Proveedor::factory(10)->create();
-        Empresa::factory(1)->create();
-        $sucursales = Sucursal::factory(2)->create();
-
+        $empresa = Empresa::factory(1)->create();
+        Sucursal::create(['nombre' => 'Cochabamba Central', 'direccion' => 'Av. Heroínas 123, Cochabamba, Bolivia', 'telefono' => '591 4 4251234', 'zona' => 'Centro', 'empresa_id' => 1]);
+        Sucursal::create(['nombre' => 'Santa Cruz Norte', 'direccion' => 'Av. Banzer 456, Santa Cruz, Bolivia', 'telefono' => '591 3 3435678', 'zona' => 'Norte', 'empresa_id' => 1]);
+        $sucursales = Sucursal::all();
 
         $preformas = Preforma::factory(5)->create();
         $bases = Base::factory(5)->create();
@@ -226,18 +227,18 @@ class DatabaseSeeder extends Seeder
 
         }
         
-        Compra::factory(10)->create()->each(function ($compra) {
-            // Obtener existencias aleatorias para vincularlas a los itemcompras
-            $existencias = Existencia::inRandomOrder()->limit(rand(1, 3))->get();
+        // Compra::factory(10)->create()->each(function ($compra) {
+        //     // Obtener existencias aleatorias para vincularlas a los itemcompras
+        //     $existencias = Existencia::inRandomOrder()->limit(rand(1, 3))->get();
 
-            // Crear de 1 a 3 itemcompras por compra
-            foreach ($existencias as $existencia) {
-                Itemcompra::factory()->create([
-                    'compra_id' => $compra->id,
-                    'existencia_id' => $existencia->id,
-                ]);
-            }
-        });
+        //     // Crear de 1 a 3 itemcompras por compra
+        //     foreach ($existencias as $existencia) {
+        //         Itemcompra::factory()->create([
+        //             'compra_id' => $compra->id,
+        //             'existencia_id' => $existencia->id,
+        //         ]);
+        //     }
+        // });
 
 
         //Generar 10 ventas

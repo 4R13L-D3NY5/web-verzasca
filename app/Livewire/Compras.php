@@ -7,6 +7,9 @@ use Livewire\WithPagination;
 use App\Models\Compra;
 use App\Models\Proveedor;
 use App\Models\Personal;
+use App\Models\Sucursal;
+use App\Models\Existencia;
+use App\Models\ItemCompra;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 
 class Compras extends Component
@@ -23,17 +26,36 @@ class Compras extends Component
     public $observaciones;
     public $proveedor_id;
     public $personal_id;
-
+    public $sucursal_id;
+    public $existencia_id;
+    public $item_cantidad;
+    public $item_precio;
+    public $items = [];
+    public $proveedors;
+    public $personals;
+    public $sucursals;
+    public $existenciasDisponibles = [];
     public $compraSeleccionada = null;
 
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
         'fecha' => 'required|date',
-        'observaciones' => 'nullable|string',
+        'observaciones' => 'nullable|string|max:500',
         'proveedor_id' => 'required|exists:proveedors,id',
         'personal_id' => 'required|exists:personals,id',
+        'sucursal_id' => 'required|exists:sucursals,id',
+        'existencia_id' => 'required|exists:existencias,id',
+        'item_cantidad' => 'required|integer|min:1',
+        'item_precio' => 'required|numeric|min:0',
     ];
+
+    public function mount()
+    {
+        $this->proveedors = Proveedor::all();
+        $this->personals = Personal::all();
+        $this->sucursals = Sucursal::all();
+    }
 
     public function render()
     {
@@ -44,10 +66,7 @@ class Compras extends Component
             ->orderBy('fecha', 'desc')
             ->paginate(5);
 
-        $proveedors = Proveedor::all();
-        $personals = Personal::all();
-
-        return view('livewire.compras', compact('compras', 'proveedors', 'personals'));
+        return view('livewire.compras', compact('compras'));
     }
 
     public function updatingSearch()
@@ -55,22 +74,36 @@ class Compras extends Component
         $this->resetPage();
     }
 
-    public function abrirModal($accion)
+    public function abrirModal($accion, $id = null)
     {
-        $this->reset(['fecha', 'observaciones', 'proveedor_id', 'personal_id', 'compraId']);
+        $this->reset(['fecha', 'observaciones', 'proveedor_id', 'personal_id', 'sucursal_id', 'compraId', 'items', 'existencia_id', 'item_cantidad', 'item_precio']);
         $this->accion = $accion;
+        if ($accion === 'edit' && $id) {
+            $this->editarCompra($id);
+        } else {
+            $this->fecha = now()->format('Y-m-d');
+        }
         $this->modal = true;
         $this->detalleModal = false;
     }
 
     public function editarCompra($id)
     {
-        $compra = Compra::findOrFail($id);
+        $compra = Compra::with('itemCompras.existencia')->findOrFail($id);
         $this->compraId = $compra->id;
         $this->fecha = $compra->fecha;
         $this->observaciones = $compra->observaciones;
         $this->proveedor_id = $compra->proveedor_id;
         $this->personal_id = $compra->personal_id;
+        $this->sucursal_id = $compra->sucursal_id;
+        $this->items = $compra->itemCompras->map(function ($item) {
+            return [
+                'existencia' => $item->existencia,
+                'cantidad' => $item->cantidad,
+                'precio' => $item->precio,
+            ];
+        })->toArray();
+        $this->cargarExistencias();
         $this->accion = 'edit';
         $this->modal = true;
         $this->detalleModal = false;
@@ -78,14 +111,76 @@ class Compras extends Component
 
     public function verDetalle($id)
     {
-        $this->compraSeleccionada = Compra::with(['proveedor', 'personal', 'itemCompras'])->findOrFail($id);
+        $this->compraSeleccionada = Compra::with(['proveedor', 'personal', 'itemCompras.existencia'])->findOrFail($id);
         $this->modal = false;
         $this->detalleModal = true;
     }
 
+    public function cargarExistencias()
+    {
+        if ($this->proveedor_id && $this->sucursal_id) {
+            $proveedor = Proveedor::find($this->proveedor_id);
+            $tipo = $proveedor->tipo;
+
+            $this->existenciasDisponibles = Existencia::where('sucursal_id', $this->sucursal_id)
+                ->when($tipo, function ($query) use ($tipo) {
+                    $modelos = [
+                        'tapas' => \App\Models\Tapa::class,
+                        'preformas' => \App\Models\Preforma::class,
+                        'bases' => \App\Models\Base::class,
+                        'etiquetas' => \App\Models\Etiqueta::class,
+                    ];
+
+                    if (isset($modelos[$tipo])) {
+                        $query->where('existenciable_type', $modelos[$tipo]);
+                    }
+                })
+                ->with('existenciable', 'sucursal')
+                ->get();
+        } else {
+            $this->existenciasDisponibles = [];
+        }
+    }
+
+    public function agregarItem()
+    {
+        $this->validate([
+            'existencia_id' => 'required|exists:existencias,id',
+            'item_cantidad' => 'required|integer|min:1',
+            'item_precio' => 'required|numeric|min:0',
+        ]);
+
+        $existencia = Existencia::find($this->existencia_id);
+
+        $this->items[] = [
+            'existencia' => $existencia,
+            'cantidad' => $this->item_cantidad,
+            'precio' => $this->item_precio,
+        ];
+
+        $this->reset(['existencia_id', 'item_cantidad', 'item_precio']);
+    }
+
+    public function eliminarItem($index)
+    {
+        unset($this->items[$index]);
+        $this->items = array_values($this->items);
+    }
+
     public function guardarCompra()
     {
-        $this->validate();
+        $this->validate([
+            'fecha' => 'required|date',
+            'observaciones' => 'nullable|string|max:500',
+            'proveedor_id' => 'required|exists:proveedors,id',
+            'personal_id' => 'required|exists:personals,id',
+            'sucursal_id' => 'required|exists:sucursals,id',
+        ]);
+
+        if (empty($this->items)) {
+            LivewireAlert::title('Debe agregar al menos un ítem a la compra.')->error()->show();
+            return;
+        }
 
         try {
             if ($this->accion === 'edit' && $this->compraId) {
@@ -95,18 +190,33 @@ class Compras extends Component
                     'observaciones' => $this->observaciones,
                     'proveedor_id' => $this->proveedor_id,
                     'personal_id' => $this->personal_id,
+                    'sucursal_id' => $this->sucursal_id,
                 ]);
-                LivewireAlert::title('Compra actualizada con éxito.')->success()->show();
+                $compra->itemCompras()->delete(); // Eliminar ítems anteriores
             } else {
-                Compra::create([
+                $compra = Compra::create([
                     'fecha' => $this->fecha,
                     'observaciones' => $this->observaciones,
                     'proveedor_id' => $this->proveedor_id,
                     'personal_id' => $this->personal_id,
+                    'sucursal_id' => $this->sucursal_id,
                 ]);
-                LivewireAlert::title('Compra registrada con éxito.')->success()->show();
             }
 
+            foreach ($this->items as $item) {
+                ItemCompra::create([
+                    'cantidad' => $item['cantidad'],
+                    'precio' => $item['precio'],
+                    'existencia_id' => $item['existencia']->id,
+                    'compra_id' => $compra->id,
+                ]);
+
+                // Actualizar la cantidad en la existencia
+                $existencia = Existencia::find($item['existencia']->id);
+                $existencia->increment('cantidad', $item['cantidad']);
+            }
+
+            LivewireAlert::title($this->accion === 'edit' ? 'Compra actualizada con éxito.' : 'Compra registrada con éxito.')->success()->show();
             $this->cerrarModal();
         } catch (\Exception $e) {
             LivewireAlert::title('Error: ' . $e->getMessage())->error()->show();
@@ -117,7 +227,7 @@ class Compras extends Component
     {
         $this->modal = false;
         $this->detalleModal = false;
-        $this->reset(['fecha', 'observaciones', 'proveedor_id', 'personal_id', 'compraId', 'compraSeleccionada']);
+        $this->reset(['fecha', 'observaciones', 'proveedor_id', 'personal_id', 'sucursal_id', 'compraId', 'items', 'existencia_id', 'item_cantidad', 'item_precio', 'existenciasDisponibles', 'compraSeleccionada']);
         $this->resetErrorBag();
     }
 }
