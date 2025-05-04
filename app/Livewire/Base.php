@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class Base extends Component
 {
-    public $seleccion = 'Preformas'; // Default value for $seleccion
+    public $seleccion = 'Stocks'; // Default value for $seleccion
     public function render()
     {
         return view('livewire.base');

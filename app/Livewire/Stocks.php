@@ -28,7 +28,7 @@ class Stocks extends Component
     public $cantidad = null;
     public $accion = 'create';
     public $stockSeleccionado = null;
-
+    public $sucursal_original_id = null;
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
@@ -95,42 +95,58 @@ class Stocks extends Component
         $this->observaciones = $stock->observaciones;
         $this->etiqueta_id = $stock->etiqueta_id;
         $this->producto_id = $stock->producto_id;
-        $this->sucursal_id = $stock->sucursal_id;  // Verifica si este campo está correcto
+        $this->sucursal_id = $stock->sucursal_id;
+        $this->sucursal_original_id = $stock->sucursal_id;
 
-        $existencia = $stock->existencias->first();
+        $existencia = $stock->existencias()
+            ->where('sucursal_id', $stock->sucursal_id)
+            ->first();
         $this->cantidad = $existencia ? $existencia->cantidad : 0;
+
     }
+
 
     public function guardar()
     {
         $this->validate();
 
         try {
-            // Guardar o actualizar el Stock
+            // Actualizar o crear stock
             $stock = Stock::updateOrCreate(['id' => $this->stock_id], [
-                'fechaElaboracion'   => $this->fechaElaboracion ?: null,
-                'fechaVencimiento'   => $this->fechaVencimiento ?: null,
-                'observaciones'      => $this->observaciones,
-                'etiqueta_id'        => $this->etiqueta_id,
-                'producto_id'        => $this->producto_id,
-                'sucursal_id'        => $this->sucursal_id,
+                'fechaElaboracion' => $this->fechaElaboracion ?: null,
+                'fechaVencimiento' => $this->fechaVencimiento ?: null,
+                'observaciones'    => $this->observaciones,
+                'etiqueta_id'      => $this->etiqueta_id,
+                'producto_id'      => $this->producto_id,
+                'sucursal_id'      => $this->sucursal_id,
             ]);
 
-            // Verificar si ya existe una existencia asociada
-            $existencia = $stock->existencias()
-                ->where('sucursal_id', $this->sucursal_id)
-                ->first();
+            // Aquí manejamos la relación entre el stock y las existencias
+            // Verificamos si estamos editando o creando un nuevo stock
+            if ($this->stock_id) {
+                // Si ya existe un stock, actualizamos o creamos la existencia correspondiente
+                $existencia = $stock->existencias()
+                    ->where('sucursal_id', $this->sucursal_id)  // Asegúrate de que estamos buscando por sucursal correcta
+                    ->first();
 
-            if ($existencia) {
-                // Actualizar cantidad
-                $existencia->update([
-                    'cantidad' => $this->cantidad,
-                ]);
+                if ($existencia) {
+                    // Si ya existe la existencia, la actualizamos con la nueva cantidad
+                    $existencia->update([
+                        'cantidad' => $this->cantidad,
+                        'sucursal_id' => $this->sucursal_id, // Cambiar sucursal si fue modificada
+                    ]);
+                } else {
+                    // Si no existe, creamos una nueva existencia para este stock y sucursal
+                    $stock->existencias()->create([
+                        'cantidad' => $this->cantidad,
+                        'sucursal_id' => $this->sucursal_id,
+                    ]);
+                }
             } else {
-                // Crear nueva existencia
+                // Si estamos creando un nuevo stock, creamos la existencia
                 $stock->existencias()->create([
-                    'cantidad'    => $this->cantidad,
-                    'sucursal_id' => $this->sucursal_id,  // Asegúrate de que esto no sea null
+                    'cantidad' => $this->cantidad,
+                    'sucursal_id' => $this->sucursal_id,
                 ]);
             }
 
@@ -140,11 +156,14 @@ class Stocks extends Component
 
             $this->cerrarModal();
         } catch (\Exception $e) {
+            // Si ocurre un error, lo mostramos
             LivewireAlert::title('Ocurrió un error: ' . $e->getMessage())
                 ->error()
                 ->show();
         }
     }
+
+
 
 
     public function cerrarModal()
@@ -175,6 +194,7 @@ class Stocks extends Component
             'etiqueta_id',
             'producto_id',
             'sucursal_id',
+            'sucursal_original_id',
             'cantidad',
             'stock_id',
         ]);

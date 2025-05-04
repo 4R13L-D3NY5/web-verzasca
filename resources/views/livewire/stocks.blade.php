@@ -82,7 +82,7 @@
 
                   <!-- Detalles -->
                   <button title="Ver detalles" wire:click="modaldetalle({{ $stock->id }})"
-                  class="text-indigo-500 hover:text-indigo-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
+                    class="text-indigo-500 hover:text-indigo-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                       class="icon icon-tabler icon-tabler-info-circle">
@@ -123,35 +123,39 @@
 
           <div class="over-col">
 
-            {{-- Producto --}}
-            <h3 class="p-text">Producto</h3>
-            <select wire:model="producto_id" class="p-text input-g">
+           
+            <label>Producto</label>
+            <select wire:model="producto_id" class="form-control">
               <option value="">Selecciona un producto</option>
-              @foreach ($productos as $producto)
-              <option value=""> {{ $producto->id }} - {{ $producto->nombre }}</option>
+              @foreach($productos as $producto)
+              <option value="{{ $producto->id }}">
+                {{ $producto->id }} - {{ $producto->nombre }}
+              </option>
               @endforeach
             </select>
             @error('producto_id') <span class="error-message text-red-500">{{ $message }}</span> @enderror
 
-            {{-- Etiqueta --}}
+
             <h3 class="p-text">Etiqueta / Capacidad</h3>
-            <select wire:model="etiqueta_id" class="p-text input-g">
-              <option value="">Sin etiqueta</option>
+            <select wire:model="etiqueta_id" class="form-select w-full">
+              <option value="" >Sin etiqueta</option>
               @foreach ($etiquetas as $etiqueta)
-              <option value="{{ $etiqueta->id }}">{{ $etiqueta->capacidad }} ml</option>
+              <option value="{{ $etiqueta->id }}">{{ $etiqueta->capacidad }}</option>
               @endforeach
             </select>
             @error('etiqueta_id') <span class="error-message text-red-500">{{ $message }}</span> @enderror
 
-            {{-- Sucursal --}}
+
             <h3 class="p-text">Sucursal</h3>
-            <select wire:model="sucursal_id" class="p-text input-g">
-              <option value="">Selecciona una sucursal</option>
+            <select wire:model="sucursal_id" class="form-select w-full">
+              <option value="" >Selecciona una sucursal</option>
               @foreach ($sucursales as $sucursal)
               <option value="{{ $sucursal->id }}">{{ $sucursal->nombre }}</option>
               @endforeach
             </select>
-            @error('sucursal_id') <span class="error-message text-red-500">{{ $message }}</span> @enderror
+            @error('sucursal_id')
+            <span class="error-message text-red-500">{{ $message }}</span>
+            @enderror
 
             {{-- Cantidad de Existencias --}}
             <h3 class="p-text">Cantidad</h3>
