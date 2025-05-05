@@ -15,6 +15,7 @@ class Stock extends Model
         'observaciones',
         'etiqueta_id',
         'producto_id',
+        'sucursal_id', 
     ];
 
     /**

@@ -3,9 +3,8 @@
 namespace App\Livewire;
 
 use App\Models\Stock;
-use App\Models\Existencia;
-use App\Models\Producto;
 use App\Models\Etiqueta;
+use App\Models\Producto;
 use App\Models\Sucursal;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -22,51 +21,43 @@ class Stocks extends Component
     public $fechaElaboracion = '';
     public $fechaVencimiento = '';
     public $observaciones = '';
-    public $etiqueta_id = null;
-    public $producto_id = null;
-    public $sucursal_id = null;
-    public $cantidad = null;
+    public $etiqueta_id = '';
+    public $producto_id = '';
+    public $sucursal_id = '';
     public $accion = 'create';
-    public $stockSeleccionado = null;
-    public $sucursal_original_id = null;
+    public $stockSeleccionado = [];
+
+    public $etiquetas;
+    public $productos;
+    public $sucursales;
+
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
-        'fechaElaboracion' => 'required|date_format:Y-m-d',
-        'fechaVencimiento' => 'required|date_format:Y-m-d',
-        'observaciones' => 'nullable|string',
+        'fechaElaboracion' => 'required|date',
+        'fechaVencimiento' => 'required|date|after_or_equal:fechaElaboracion',
+        'observaciones' => 'nullable|string|max:255',
         'etiqueta_id' => 'nullable|exists:etiquetas,id',
-        'producto_id' => 'required|exists:productos,id',
-        'sucursal_id' => 'required|exists:sucursals,id',
-        'cantidad' => 'required|integer|min:1',
+        'producto_id' => 'nullable|exists:productos,id',
+        'sucursal_id' => 'nullable|exists:sucursals,id',
     ];
 
+    public function mount()
+    {
+        $this->etiquetas = Etiqueta::all();
+        $this->productos = Producto::all();
+        $this->sucursales = Sucursal::all();
+    }
 
     public function render()
     {
-        $stocks = Stock::with(['producto', 'etiqueta', 'existencias', 'sucursal'])
+        $stocks = Stock::with(['etiqueta', 'producto', 'sucursal'])
             ->when($this->search, function ($query) {
-                $query->whereHas('producto', function ($q) {
-                    $q->where('nombre', 'like', '%' . $this->search . '%');
-                });
+                $query->where('observaciones', 'like', '%' . $this->search . '%');
             })
-            ->paginate(4);
+            ->paginate(5);
 
-        $productos = Producto::all();
-        $etiquetas = Etiqueta::all();
-        $sucursales = Sucursal::all();
-
-        return view('livewire.stocks', compact('stocks', 'productos', 'etiquetas', 'sucursales'));
-    }
-
-    public function setFechaActualElaboracion()
-    {
-        $this->fechaElaboracion = now()->format('Y-m-d');
-    }
-
-    public function setFechaActualVencimiento()
-    {
-        $this->fechaVencimiento = now()->format('Y-m-d');
+        return view('livewire.stocks', compact('stocks'));
     }
 
     public function updatingSearch()
@@ -76,7 +67,7 @@ class Stocks extends Component
 
     public function abrirModal($accion = 'create', $id = null)
     {
-        $this->resetInputFields();
+        $this->reset(['fechaElaboracion', 'fechaVencimiento', 'observaciones', 'etiqueta_id', 'producto_id', 'sucursal_id']);
         $this->accion = $accion;
 
         if ($accion === 'edit' && $id) {
@@ -88,7 +79,8 @@ class Stocks extends Component
 
     public function editar($id)
     {
-        $stock = Stock::with('existencias')->findOrFail($id);
+        $stock = Stock::findOrFail($id);
+
         $this->stock_id = $stock->id;
         $this->fechaElaboracion = $stock->fechaElaboracion;
         $this->fechaVencimiento = $stock->fechaVencimiento;
@@ -96,59 +88,22 @@ class Stocks extends Component
         $this->etiqueta_id = $stock->etiqueta_id;
         $this->producto_id = $stock->producto_id;
         $this->sucursal_id = $stock->sucursal_id;
-        $this->sucursal_original_id = $stock->sucursal_id;
-
-        $existencia = $stock->existencias()
-            ->where('sucursal_id', $stock->sucursal_id)
-            ->first();
-        $this->cantidad = $existencia ? $existencia->cantidad : 0;
-
+        $this->accion = 'edit';
     }
-
 
     public function guardar()
     {
         $this->validate();
 
         try {
-            // Actualizar o crear stock
-            $stock = Stock::updateOrCreate(['id' => $this->stock_id], [
-                'fechaElaboracion' => $this->fechaElaboracion ?: null,
-                'fechaVencimiento' => $this->fechaVencimiento ?: null,
-                'observaciones'    => $this->observaciones,
-                'etiqueta_id'      => $this->etiqueta_id,
-                'producto_id'      => $this->producto_id,
-                'sucursal_id'      => $this->sucursal_id,
+            Stock::updateOrCreate(['id' => $this->stock_id], [
+                'fechaElaboracion' => $this->fechaElaboracion,
+                'fechaVencimiento' => $this->fechaVencimiento,
+                'observaciones' => $this->observaciones,
+                'etiqueta_id' => $this->etiqueta_id ?: null,
+                'producto_id' => $this->producto_id ?: null,
+                'sucursal_id' => $this->sucursal_id ?: null,
             ]);
-
-            // Aquí manejamos la relación entre el stock y las existencias
-            // Verificamos si estamos editando o creando un nuevo stock
-            if ($this->stock_id) {
-                // Si ya existe un stock, actualizamos o creamos la existencia correspondiente
-                $existencia = $stock->existencias()
-                    ->where('sucursal_id', $this->sucursal_id)  // Asegúrate de que estamos buscando por sucursal correcta
-                    ->first();
-
-                if ($existencia) {
-                    // Si ya existe la existencia, la actualizamos con la nueva cantidad
-                    $existencia->update([
-                        'cantidad' => $this->cantidad,
-                        'sucursal_id' => $this->sucursal_id, // Cambiar sucursal si fue modificada
-                    ]);
-                } else {
-                    // Si no existe, creamos una nueva existencia para este stock y sucursal
-                    $stock->existencias()->create([
-                        'cantidad' => $this->cantidad,
-                        'sucursal_id' => $this->sucursal_id,
-                    ]);
-                }
-            } else {
-                // Si estamos creando un nuevo stock, creamos la existencia
-                $stock->existencias()->create([
-                    'cantidad' => $this->cantidad,
-                    'sucursal_id' => $this->sucursal_id,
-                ]);
-            }
 
             LivewireAlert::title($this->stock_id ? 'Stock actualizado con éxito.' : 'Stock creado con éxito.')
                 ->success()
@@ -156,26 +111,22 @@ class Stocks extends Component
 
             $this->cerrarModal();
         } catch (\Exception $e) {
-            // Si ocurre un error, lo mostramos
             LivewireAlert::title('Ocurrió un error: ' . $e->getMessage())
                 ->error()
                 ->show();
         }
     }
 
-
-
-
     public function cerrarModal()
     {
         $this->modal = false;
-        $this->resetInputFields();
+        $this->reset(['fechaElaboracion', 'fechaVencimiento', 'observaciones', 'etiqueta_id', 'producto_id', 'sucursal_id', 'stock_id']);
         $this->resetErrorBag();
     }
 
     public function modaldetalle($id)
     {
-        $this->stockSeleccionado = Stock::with(['producto', 'etiqueta', 'sucursal', 'distribucion', 'existencias'])->findOrFail($id);
+        $this->stockSeleccionado = Stock::with(['etiqueta', 'producto', 'sucursal'])->findOrFail($id);
         $this->modalDetalle = true;
     }
 
@@ -183,20 +134,5 @@ class Stocks extends Component
     {
         $this->modalDetalle = false;
         $this->stockSeleccionado = null;
-    }
-
-    private function resetInputFields()
-    {
-        $this->reset([
-            'fechaElaboracion',
-            'fechaVencimiento',
-            'observaciones',
-            'etiqueta_id',
-            'producto_id',
-            'sucursal_id',
-            'sucursal_original_id',
-            'cantidad',
-            'stock_id',
-        ]);
     }
 }

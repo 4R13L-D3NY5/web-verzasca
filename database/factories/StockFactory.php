@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Factories;
-
+use App\Models\Sucursal;
 use App\Models\Producto; // Importa el modelo relacionado
 use App\Models\Etiqueta; // Importa el modelo relacionad
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,8 +22,9 @@ class StockFactory extends Factory
             'fechaElaboracion' => $this->faker->date,
             'fechaVencimiento' => $this->faker->date,
             'observaciones' => $this->faker->optional()->sentence,
-            'etiqueta_id' => Producto::get()->random()->id,
-            'producto_id' => Etiqueta::get()->random()->id,
+            'producto_id' => Producto::inRandomOrder()->first()?->id,
+            'etiqueta_id' => Etiqueta::inRandomOrder()->first()?->id,
+            'sucursal_id' => Sucursal::inRandomOrder()->first()?->id,
             'created_at' => now(),
             'updated_at' => now(),
         ];
