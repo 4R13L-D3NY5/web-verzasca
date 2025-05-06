@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Stock;
 use App\Models\Etiqueta;
+use App\Models\Existencia;
 use App\Models\Producto;
 use App\Models\Sucursal;
 use Livewire\Component;
@@ -13,6 +14,13 @@ use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 class Stocks extends Component
 {
     use WithPagination;
+    // Modal de Existencia
+    public $modalExistencia = false;
+    public $existencia_id = null;
+    public $cantidad = '';
+    public $existencia_sucursal_id = '';
+    public $existenciable_id = '';
+    public $existenciable_type = '';
 
     public $search = '';
     public $modal = false;
@@ -27,10 +35,12 @@ class Stocks extends Component
     public $accion = 'create';
     public $stockSeleccionado = [];
 
+    public $todasExistencias;
+
     public $etiquetas;
     public $productos;
     public $sucursales;
-
+    public $existencias;
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
@@ -47,6 +57,7 @@ class Stocks extends Component
         $this->etiquetas = Etiqueta::all();
         $this->productos = Producto::all();
         $this->sucursales = Sucursal::all();
+        $this->existencias = Existencia::all();
     }
 
     public function render()
@@ -134,5 +145,68 @@ class Stocks extends Component
     {
         $this->modalDetalle = false;
         $this->stockSeleccionado = null;
+    }
+    public function abrirModalExistencia($id = null)
+    {
+        $this->reset(['existencia_id', 'cantidad', 'existencia_sucursal_id', 'existenciable_id', 'existenciable_type']);
+
+        if ($id) {
+            $existencia = \App\Models\Existencia::findOrFail($id);
+            $this->existencia_id = $existencia->id;
+            $this->cantidad = $existencia->cantidad;
+            $this->existencia_sucursal_id = $existencia->sucursal_id;
+            $this->existenciable_id = $existencia->existenciable_id;
+            $this->existenciable_type = $existencia->existenciable_type;
+        }
+
+        $this->modalExistencia = true;
+    }
+    public function guardarExistencia()
+    {
+        $this->validate([
+            'cantidad' => 'required|numeric|min:0',
+            'existencia_sucursal_id' => 'required|exists:sucursals,id',
+            'existenciable_id' => 'required|integer',
+            'existenciable_type' => 'required|string',
+        ]);
+
+        try {
+            \App\Models\Existencia::updateOrCreate(['id' => $this->existencia_id], [
+                'cantidad' => $this->cantidad,
+                'sucursal_id' => $this->existencia_sucursal_id,
+                'existenciable_id' => $this->existenciable_id,
+                'existenciable_type' => $this->existenciable_type,
+            ]);
+
+            LivewireAlert::title($this->existencia_id ? 'Existencia actualizada' : 'Existencia creada')
+                ->success()
+                ->show();
+
+            $this->cerrarModalExistencia();
+        } catch (\Exception $e) {
+            LivewireAlert::title('Error: ' . $e->getMessage())->error()->show();
+        }
+    }
+    public function cerrarModalExistencia()
+    {
+        $this->modalExistencia = false;
+        $this->reset(['existencia_id', 'cantidad', 'existencia_sucursal_id', 'existenciable_id', 'existenciable_type']);
+        $this->resetErrorBag();
+    }
+    public $modalVerExistencias = false;
+
+    public function abrirModalVerExistencias()
+    {
+        $this->todasExistencias = Existencia::with(['sucursal', 'existenciable'])->get();
+        $this->modalVerExistencias = true;
+    }
+
+    public function cerrarModalVerExistencias()
+    {
+        $this->modalVerExistencias = false;
+    }
+    public function cargarExistencias()
+    {
+        $this->todasExistencias = Existencia::with(['sucursal', 'existenciable'])->get();
     }
 }
