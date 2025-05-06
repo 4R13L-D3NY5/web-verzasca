@@ -21,6 +21,7 @@ class Stocks extends Component
     public $existencia_sucursal_id = '';
     public $existenciable_id = '';
     public $existenciable_type = '';
+    public $cantidadMinima = '';
 
     public $search = '';
     public $modal = false;
@@ -148,12 +149,13 @@ class Stocks extends Component
     }
     public function abrirModalExistencia($id = null)
     {
-        $this->reset(['existencia_id', 'cantidad', 'existencia_sucursal_id', 'existenciable_id', 'existenciable_type']);
+        $this->reset(['existencia_id', 'cantidad', 'cantidadMinima', 'existencia_sucursal_id', 'existenciable_id', 'existenciable_type']); // Resetear cantidad mínima
 
         if ($id) {
             $existencia = \App\Models\Existencia::findOrFail($id);
             $this->existencia_id = $existencia->id;
             $this->cantidad = $existencia->cantidad;
+            $this->cantidadMinima = $existencia->cantidadMinima; // Asignar cantidad mínima
             $this->existencia_sucursal_id = $existencia->sucursal_id;
             $this->existenciable_id = $existencia->existenciable_id;
             $this->existenciable_type = $existencia->existenciable_type;
@@ -161,36 +163,44 @@ class Stocks extends Component
 
         $this->modalExistencia = true;
     }
+
     public function guardarExistencia()
     {
+        // Validación actualizada
         $this->validate([
-            'cantidad' => 'required|numeric|min:0',
+            'cantidad' => 'required|integer|min:1',
+            'cantidadMinima' => 'required|integer|min:0',
             'existencia_sucursal_id' => 'required|exists:sucursals,id',
-            'existenciable_id' => 'required|integer',
-            'existenciable_type' => 'required|string',
+            'existenciable_id' => 'required|exists:existencias,id'
         ]);
 
         try {
-            \App\Models\Existencia::updateOrCreate(['id' => $this->existencia_id], [
-                'cantidad' => $this->cantidad,
-                'sucursal_id' => $this->existencia_sucursal_id,
-                'existenciable_id' => $this->existenciable_id,
-                'existenciable_type' => $this->existenciable_type,
-            ]);
+            // Obtener la existencia relacionada para determinar el tipo
+            $existenciaRelacionada = Existencia::findOrFail($this->existenciable_id);
 
-            LivewireAlert::title($this->existencia_id ? 'Existencia actualizada' : 'Existencia creada')
-                ->success()
-                ->show();
+            // Guardar o actualizar
+            Existencia::updateOrCreate(
+                ['id' => $this->existencia_id],
+                [
+                    'cantidad' => $this->cantidad,
+                    'cantidadMinima' => $this->cantidadMinima,
+                    'sucursal_id' => $this->existencia_sucursal_id,
+                    'existenciable_id' => $this->existenciable_id,
+                    'existenciable_type' => $existenciaRelacionada->existenciable_type
+                ]
+            );
 
+            LivewireAlert::success('Existencia guardada correctamente');
             $this->cerrarModalExistencia();
+            $this->cargarExistencias();
         } catch (\Exception $e) {
-            LivewireAlert::title('Error: ' . $e->getMessage())->error()->show();
+            LivewireAlert::error('Error: ' . $e->getMessage());
         }
     }
     public function cerrarModalExistencia()
     {
         $this->modalExistencia = false;
-        $this->reset(['existencia_id', 'cantidad', 'existencia_sucursal_id', 'existenciable_id', 'existenciable_type']);
+        $this->reset(['existencia_id', 'cantidad', 'cantidadMinima', 'existencia_sucursal_id', 'existenciable_id', 'existenciable_type']);
         $this->resetErrorBag();
     }
     public $modalVerExistencias = false;

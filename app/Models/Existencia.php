@@ -14,6 +14,7 @@ class Existencia extends Model
     protected $fillable = [
         'existenciable_id',
         'existenciable_type',
+        'cantidadMinima',
         'cantidad',
         'sucursal_id',
     ];

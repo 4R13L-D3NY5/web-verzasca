@@ -269,56 +269,50 @@
           <h3 class="p-text">{{ $existencia_id ? 'Editar Existencia' : 'Nueva Existencia' }}</h3>
 
           <div class="over-col">
+            <!-- Cantidad -->
             <h3 class="p-text">Cantidad</h3>
-            <input type="number" wire:model="cantidad" class="p-text input-g" />
+            <input type="number" wire:model="cantidad" min="1" class="p-text input-g" />
             @error('cantidad') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
 
+            <!-- Cantidad Mínima -->
+            <h3 class="p-text">Cantidad Mínima</h3>
+            <input type="number" wire:model="cantidadMinima" min="0" class="p-text input-g" />
+            @error('cantidadMinima') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
+            <!-- Sucursal -->
             <h3 class="p-text">Sucursal</h3>
             <select wire:model="existencia_sucursal_id" class="p-text input-g">
-              <option value="">Seleccione una sucursal</option>
+              <option value="">Seleccione sucursal</option>
               @foreach ($sucursales as $sucursal)
               <option value="{{ $sucursal->id }}">{{ $sucursal->nombre }}</option>
               @endforeach
             </select>
             @error('existencia_sucursal_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
 
-            <h3 class="p-text">Producto</h3>
+            <!-- Existencia -->
+            <h3 class="p-text">Existencia</h3>
             <select wire:model="existenciable_id" class="p-text input-g">
-              <option value="">Seleccione producto</option>
+              <option value="">Seleccione existencia</option>
               @foreach ($existencias as $existencia)
               <option value="{{ $existencia->id }}">
-                {{ $existencia->id}} - {{ $existencia->existenciable ? $existencia->existenciable_type  : 'No disponible' }}- {{ $existencia->existenciable ? $existencia->existenciable->descripcion  : 'sin descipcion' }}
+                {{ $existencia->id }} -
+                {{ class_basename($existencia->existenciable_type) }}:
+                {{ $existencia->existenciable->descripcion ?? 'Sin descripción' }}
               </option>
               @endforeach
             </select>
             @error('existenciable_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
           </div>
 
+          <!-- Botones -->
           <div class="mt-6 flex justify-center w-full space-x-4">
-            <button type="button" wire:click="guardarExistencia"
-              class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
-              <!-- Icono guardar -->
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
-                <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                <path d="M14 4l0 4l-6 0l0 -4" />
-              </svg>
+            <button type="button" wire:click="guardarExistencia" class="btn-primary">
+              Guardar
             </button>
-
-            <button type="button" wire:click="cerrarModalExistencia"
-              class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
-              <!-- Icono cerrar -->
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M18 6l-12 12" />
-                <path d="M6 6l12 12" />
-              </svg>
+            <button type="button" wire:click="cerrarModalExistencia" class="btn-secondary">
+              Cancelar
             </button>
           </div>
-
         </div>
       </div>
     </div>
@@ -338,6 +332,7 @@
                   <th class="text-left p-2 border-b">Sucursal</th>
                   <th class="text-left p-2 border-b">Producto</th>
                   <th class="text-left p-2 border-b">Cantidad</th>
+                  <th class="text-left p-2 border-b">Cantidad Mínima</th> <!-- Nueva columna -->
                 </tr>
               </thead>
               <tbody>
@@ -346,6 +341,7 @@
                   <td class="p-2 border-b">{{ $existencia->sucursal->nombre ?? 'N/A' }}</td>
                   <td class="p-2 border-b">{{ $existencia->existenciable->descripcion ?? 'Sin nombre' }}</td>
                   <td class="p-2 border-b">{{ $existencia->cantidad }}</td>
+                  <td class="p-2 border-b">{{ $existencia->cantidadMinima ?? 'No definida' }}</td> <!-- Mostrar cantidad mínima -->
                 </tr>
                 @endforeach
               </tbody>
@@ -370,6 +366,7 @@
     </div>
   </div>
   @endif
+
 
 
 </div>
