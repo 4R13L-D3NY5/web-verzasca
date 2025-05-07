@@ -36,4 +36,8 @@ class Distribucion extends Model
     {
         return $this->hasMany(Retorno::class);
     }
+    public function itemdistribucions(): HasMany
+    {
+        return $this->hasMany(Itemdistribucion::class);
+    }
 }

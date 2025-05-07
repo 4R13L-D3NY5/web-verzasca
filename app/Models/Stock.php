@@ -26,7 +26,7 @@ class Stock extends Model
     //     return $this->belongsTo(Producto::class);
     // }
 
-    public function existencias()
+    public function existencia()
     {
         return $this->morphMany(Existencia::class, 'existenciable');
     }
