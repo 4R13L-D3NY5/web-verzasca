@@ -7,13 +7,10 @@
       <div class="flex justify-center items-center gap-4 w-full max-w-2xl mx-auto">
         <button title="Registrar Embotellado" wire:click='abrirModal'
           class="text-emerald-500 hover:text-emerald-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus" width="24"
-            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-plus">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <circle cx="12" cy="12" r="9" />
-            <line x1="9" y1="12" x2="15" y2="12" />
-            <line x1="12" y1="9" x2="12" y2="15" />
+            <path d="M12 5v14m7-7h-14" />
           </svg>
         </button>
         <input type="text" wire:model.live="search" placeholder="Buscar por fecha o encargado..."
@@ -45,12 +42,25 @@
               <td class="px-6 py-4 text-right">
                 <div class="flex justify-end space-x-2">
                   <button title="Editar" wire:click="editar({{ $emb->id }})"
-                    class="text-blue-500 hover:text-blue-600 mx-1 hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
-                    ✏️
+                    class="text-blue-500 hover:text-blue-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="icon icon-tabler icon-tabler-edit">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                      <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                      <path d="M16 5l3 3" />
+                    </svg>
                   </button>
                   <button title="Detalles" wire:click="modaldetalle({{ $emb->id }})"
-                    class="text-yellow-500 hover:text-yellow-600 mx-1 hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
-                    👁️
+                    class="text-indigo-500 hover:text-indigo-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-info-circle">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                      <path d="M12 9h.01" />
+                      <path d="M11 12h1v4h1" />
+                    </svg>
                   </button>
                 </div>
               </td>
@@ -134,7 +144,7 @@
 
             <!-- Observaciones -->
             <h3 class="p-text">Observaciones</h3>
-            <textarea wire:model.defer="observaciones" class="p-text input-g"></textarea>
+            <input wire:model.defer="observaciones" class="p-text input-g"></input>
             @error('observaciones') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
           </div>
 
@@ -142,11 +152,24 @@
           <div class="mt-6 flex justify-center w-full space-x-4">
             <button type="button" wire:click="guardar"
               class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
-              💾
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
+                <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                <path d="M14 4l0 4l-6 0l0 -4" />
+              </svg>
             </button>
             <button type="button" wire:click="cerrarModal"
               class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
-              ❌
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M18 6l-12 12" />
+                <path d="M6 6l12 12" />
+              </svg>
             </button>
           </div>
         </div>

@@ -7,13 +7,10 @@
       <div class="flex justify-center items-center gap-4 w-full max-w-2xl mx-auto">
         <button title="Registrar Elaboración" wire:click='abrirModal'
           class="text-emerald-500 hover:text-emerald-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="icon icon-tabler icon-tabler-circle-plus">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-plus">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <circle cx="12" cy="12" r="9" />
-            <line x1="9" y1="12" x2="15" y2="12" />
-            <line x1="12" y1="9" x2="12" y2="15" />
+            <path d="M12 5v14m7-7h-14" />
           </svg>
         </button>
         <input type="text" wire:model.live="search" placeholder="Buscar por fecha o encargado..."
@@ -67,13 +64,13 @@
                     </svg>
                   </button>
                   <button title="Detalles" wire:click="modaldetalle({{ $elaboracion->id }})"
-                    class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                      class="icon icon-tabler icon-tabler-eye">
+                  class="text-indigo-500 hover:text-indigo-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-info-circle">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <circle cx="12" cy="12" r="2" />
-                      <path d="M22 12c0 5.523 -4.477 10 -10 10s-10 -4.477 -10 -10s4.477 -10 10 -10s10 4.477 10 10z" />
+                      <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                      <path d="M12 9h.01" />
+                      <path d="M11 12h1v4h1" />
                     </svg>
                   </button>
                 </div>
@@ -166,7 +163,7 @@
 
             <!-- Observaciones -->
             <h3 class="p-text">Observaciones</h3>
-            <textarea wire:model.defer="observaciones" class="p-text input-g"></textarea>
+            <input wire:model.defer="observaciones" class="p-text input-g"></input>
             @error('observaciones') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
           </div>
 
