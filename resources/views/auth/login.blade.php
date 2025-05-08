@@ -34,6 +34,7 @@
                     name="password"
                     class="bg-transparent text-white form-input w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('email') border-red-500 @enderror"
                     placeholder="Contraseña"
+                     style="-webkit-text-security: disc;"
                     required>
                 @error('password')
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
