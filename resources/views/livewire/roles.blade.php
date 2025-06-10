@@ -4,7 +4,7 @@
             <h6 class="text-xl font-bold mb-4 px-4 p-text">Gestión de Roles</h6>
 
             <!-- Botón de registro y buscador -->
-            <div class="flex justify-center items-center gap-4 w-full max-w-2xl mx-auto">
+            <!-- <div class="flex justify-center items-center gap-4 w-full max-w-2xl mx-auto">
                 <button title="Registrar Rol" wire:click="abrirModal"
                     class="text-emerald-500 hover:text-emerald-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -17,7 +17,7 @@
 
                 <input type="text" wire:model.live="search" placeholder="Buscar rol..."
                     class="input-g w-auto sm:w-64" />
-            </div>
+            </div> -->
 
             <!-- Tabla -->
             <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
@@ -25,7 +25,7 @@
                     <thead class="text-x uppercase color-bg">
                         <tr>
                             <th scope="col" class="px-6 py-3 p-text text-left">Información</th>
-                            <th scope="col" class="px-6 py-3 p-text text-right">Acciones</th>
+                            <!-- <th scope="col" class="px-6 py-3 p-text text-right">Acciones</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -43,7 +43,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end space-x-2">
-                                        <button title="Editar" wire:click="editar({{ $rol->id }})"
+                                        <!-- <button title="Editar" wire:click="editar({{ $rol->id }})"
                                             class="text-blue-500 hover:text-blue-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                 class="icon icon-tabler icon-tabler-edit" width="24" height="24"
@@ -54,7 +54,7 @@
                                                 <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
                                                 <path d="M16 5l3 3" />
                                             </svg>
-                                        </button>
+                                        </button> -->
                                         <!-- <button title="Ver Detalle" wire:click="verDetalle({{ $rol->id }})"
                                             class="text-yellow-500 hover:text-yellow-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
