@@ -70,6 +70,10 @@ class DatabaseSeeder extends Seeder
         Sucursal::create(['nombre' => 'Cochabamba Central', 'direccion' => 'Av. Heroínas 123, Cochabamba, Bolivia', 'telefono' => '591 4 4251234', 'zona' => 'Centro', 'empresa_id' => 1]);
         Sucursal::create(['nombre' => 'Santa Cruz Norte', 'direccion' => 'Av. Banzer 456, Santa Cruz, Bolivia', 'telefono' => '591 3 3435678', 'zona' => 'Norte', 'empresa_id' => 1]);
         $sucursales = Sucursal::all();
+        $emailSucursal = ['cochabamba@mail.com','santacruzmail.com'];
+        foreach($sucursales as $index => $sucursal) {
+            $sucursal->email = $emailSucursal[$index] ?? null;
+        }
 
         $preformas = Preforma::factory(5)->create();
         $bases = Base::factory(5)->create();
@@ -168,7 +172,9 @@ class DatabaseSeeder extends Seeder
 
             // Asignacion de usuarios a la sucursal
 
-            $adminUser = User::factory()->create([
+            $adminUser = User::create([
+                'email' => $sucursal->email, // Administrador
+                'password' => bcrypt(12345678), // Administrador
                 'rol_id' => 2, // Administrador
             ]);
 
@@ -188,6 +194,7 @@ class DatabaseSeeder extends Seeder
             // Crear 3 usuarios Distribuidores
             $distribuidores = User::factory(3)->create([
                 'rol_id' => 3, // Distribuidor
+                'password' => bcrypt(12345678), // 
             ]);
 
             $distribuidores->each(function ($user) use ($sucursal) {
@@ -208,6 +215,7 @@ class DatabaseSeeder extends Seeder
             // Crear 2 usuarios Planta
             $plantas = User::factory(2)->create([
                 'rol_id' => 4, // Planta
+                'password' => bcrypt(12345678), // 
             ]);
 
             $plantas->each(function ($user) use ($sucursal) {
