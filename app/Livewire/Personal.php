@@ -113,19 +113,34 @@ class Personal extends Component
 
     public function guardarPersonal()
     {
-        // Adjust rules for edit
         if ($this->accion === 'edit') {
-            $this->rules['email'] = 'required|email|max:255|unique:users,email,' . ($this->personalSeleccionado?->user?->id ?? 0);
-            $this->rules['password'] = 'nullable|string|min:8';
+            // Validar solo campos personales, sin validar email ni password
+            $this->validate([
+                'nombres' => 'required|string|max:255',
+                'apellidos' => 'required|string|max:255',
+                'direccion' => 'nullable|string|max:255',
+                'celular' => 'required|string|max:15',
+                'estado' => 'required|boolean',
+                'rol_id' => 'required|exists:rols,id', // Si quieres validar rol_id siempre
+            ]);
+        } else {
+            // Validar todo al crear, incluido email único y password obligatorio
+            $this->validate([
+                'nombres' => 'required|string|max:255',
+                'apellidos' => 'required|string|max:255',
+                'direccion' => 'nullable|string|max:255',
+                'celular' => 'required|string|max:15',
+                'estado' => 'required|boolean',
+                'email' => 'required|email|max:255|unique:users,email',
+                'password' => 'required|string|min:8',
+                'rol_id' => 'required|exists:rols,id',
+            ]);
         }
-
-        $this->validate();
 
         try {
             DB::beginTransaction();
 
             if ($this->accion === 'edit' && $this->personalId) {
-                // Update Personal
                 $personal = ModelPersonal::findOrFail($this->personalId);
                 $personal->update([
                     'nombres' => $this->nombres,
@@ -135,28 +150,17 @@ class Personal extends Component
                     'estado' => $this->estado,
                 ]);
 
-                // Update or Create User
                 $user = $personal->user;
                 if ($user) {
                     $user->update([
-                        'email' => $this->email,
-                        'password' => $this->password ? Hash::make($this->password) : $user->password,
-                        'rol_id' => $this->rol_id, // Asegúrate de que siempre se actualice
+                        'rol_id' => $this->rol_id,
                         'estado' => $this->estado,
+                        // no cambiar email ni password
                     ]);
-                } else {
-                    $user = User::create([
-                        'email' => $this->email,
-                        'password' => Hash::make($this->password),
-                        'rol_id' => $this->rol_id, // Asegúrate de que siempre se incluya
-                        'estado' => $this->estado,
-                    ]);
-                    $personal->update(['user_id' => $user->id]);
                 }
 
-                LivewireAlert::title('Personal y usuario actualizados con éxito.')->success()->show();
+                LivewireAlert::title('Personal actualizado con éxito.')->success()->show();
             } else {
-                // Create Personal
                 $personal = ModelPersonal::create([
                     'nombres' => $this->nombres,
                     'apellidos' => $this->apellidos,
@@ -165,20 +169,13 @@ class Personal extends Component
                     'estado' => $this->estado,
                 ]);
 
-                // Verificar que rol_id tenga un valor antes de crear el usuario
-                if (empty($this->rol_id)) {
-                    throw new \Exception('El rol_id no puede estar vacío.');
-                }
-
-                // Create User
                 $user = User::create([
                     'email' => $this->email,
                     'password' => Hash::make($this->password),
-                    'rol_id' => $this->rol_id, // Asegúrate de que siempre se incluya
+                    'rol_id' => $this->rol_id,
                     'estado' => $this->estado,
                 ]);
 
-                // Link User to Personal
                 $personal->update(['user_id' => $user->id]);
 
                 LivewireAlert::title('Personal y usuario registrados con éxito.')->success()->show();
@@ -191,6 +188,7 @@ class Personal extends Component
             LivewireAlert::title('Ocurrió un error: ' . $e->getMessage())->error()->show();
         }
     }
+
 
     public function cerrarModal()
     {
