@@ -14,13 +14,13 @@
           </svg>
         </button>
 
-        <button title="Registrar Existencia" wire:click="abrirModalExistencia"
+        <!-- <button title="Registrar Existencia" wire:click="abrirModalExistencia"
           class="text-emerald-500 hover:text-emerald-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-full">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-category-plus">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M4 4h6v6h-6zm10 0h6v6h-6zm-10 10h6v6h-6zm10 3h6m-3 -3v6" />
           </svg>
-        </button>
+        </button> -->
 
         <button type="button" wire:click="abrirModalVerExistencias"
           class="text-emerald-500 hover:text-emerald-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-full">
@@ -345,16 +345,19 @@
                   <th class="text-left p-2 border-b">Sucursal</th>
                   <th class="text-left p-2 border-b">Producto</th>
                   <th class="text-left p-2 border-b">Cantidad</th>
-                  <th class="text-left p-2 border-b">Cantidad Mínima</th> <!-- Nueva columna -->
+                  <!-- <th class="text-left p-2 border-b">Cantidad Mínima</th> -->
                 </tr>
               </thead>
               <tbody>
                 @foreach ($todasExistencias as $existencia)
                 <tr>
                   <td class="p-2 border-b">{{ $existencia->sucursal->nombre ?? 'N/A' }}</td>
-                  <td class="p-2 border-b">{{ $existencia->existenciable->descripcion ?? 'Sin nombre' }}</td>
+                  <td class="p-2 border-b">
+                    {{ class_basename($existencia->existenciable_type) ?? 'Sin nombre' }} - {{ $existencia->existenciable->descripcion ?? 'Sin nombre' }}
+                  </td>
+
                   <td class="p-2 border-b">{{ $existencia->cantidad }}</td>
-                  <td class="p-2 border-b">{{ $existencia->cantidadMinima ?? 'No definida' }}</td> <!-- Mostrar cantidad mínima -->
+                  <!-- <td class="p-2 border-b">{{ $existencia->cantidadMinima ?? 'No definida' }}</td> -->
                 </tr>
                 @endforeach
               </tbody>
