@@ -125,14 +125,15 @@
                         <input type="text" wire:model.defer="celular" class="p-text input-g">
                         @error('celular') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
+           
                         <!-- Email -->
                         <h3 class="p-text">Email</h3>
-                        <input type="email" wire:model.defer="email" class="p-text input-g">
+                        <input type="email" wire:model.defer="email" class="p-text input-g" @if($accion==='edit' ) disabled @endif>
                         @error('email') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
                         <!-- Password -->
-                        <h3 class="p-text">Contraseña {{ $accion === 'edit' ? '(dejar en blanco para no cambiar)' : '' }}</h3>
-                        <input type="password" wire:model.defer="password" class="p-text input-g">
+                        <h3 class="p-text">Contraseña</h3>
+                        <input type="password" wire:model.defer="password" class="p-text input-g" @if($accion==='edit' ) disabled @endif>
                         @error('password') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
                         <!-- Rol -->
@@ -147,12 +148,26 @@
 
                         <!-- Estado -->
                         <h3 class="p-text">Estado</h3>
-                        <select wire:model.defer="estado" class="p-text input-g text-sm sm:text-base">
-                            <option value="">Seleccione estado</option>
-                            <option value="1">Activo</option>
-                            <option value="0">Inactivo</option>
-                        </select>
-                        @error('estado') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+                        <div class="flex space-x-6 justify-center">
+                            <!-- Botón para "Activo" -->
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" wire:model="estado" value="1" class="form-radio hidden peer" />
+                                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                                    Activo
+                                </span>
+                            </label>
+
+                            <!-- Botón para "Inactivo" -->
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" wire:model="estado" value="0" class="form-radio hidden peer" />
+                                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                                    Inactivo
+                                </span>
+                            </label>
+                        </div>
+                        @error('estado')
+                        <span class="text-red-600 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Botones -->

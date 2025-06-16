@@ -1,0 +1,8 @@
+APARTADO COMPRAS
+* al editar cualquier cosa muestra sucursal required hay que ver la conxion en el modelos
+* en ver detalles no muestra la sucursal del producto tampoco
+APARTADO EMBOTELLADO
+*falta ver detalleModal
+
+SUGERENCIAS
+*hay que cambiar algunas cosas el formato de mostrar descripcion mas en etiqueta usada , base , editarCompra
