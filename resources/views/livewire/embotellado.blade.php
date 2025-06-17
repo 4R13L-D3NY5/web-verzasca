@@ -177,5 +177,83 @@
     </div>
   </div>
   @endif
+  @if ($modalDetalle)
+  <div class="modal-first">
+    <div class="modal-center">
+      <div class="modal-hiden">
+        <div class="center-col">
+          <h3 class="text-base font-semibold p-text">Detalles del Embotellado</h3>
+
+          <div class="mt-4">
+            <dl class="grid grid-cols-2 gap-4">
+              <!-- Fecha de Embotellado -->
+              <div>
+                <dt class="text-sm font-medium p-text">Fecha de Embotellado</dt>
+                <dd class="mt-1 text-sm p-text">{{ $embotelladoSeleccionado->fecha_embotellado ?? '-' }}</dd>
+              </div>
+              <!-- Personal Encargado -->
+              <div>
+                <dt class="text-sm font-medium p-text">Encargado</dt>
+                <dd class="mt-1 text-sm p-text">{{ $embotelladoSeleccionado->personal->nombres ?? '-' }}</dd>
+              </div>
+              <!-- Existencia Base -->
+              <div>
+                <dt class="text-sm font-medium p-text">Existencia Base</dt>
+                <dd class="mt-1 text-sm p-text">
+                  ID #{{ $embotelladoSeleccionado->existencia_base_id ?? '-' }} -
+                  {{ optional($embotelladoSeleccionado->existenciaBase)->descripcion ?? 'Sin descripción' }}
+                </dd>
+              </div>
+              <!-- Existencia Tapa -->
+              <div>
+                <dt class="text-sm font-medium p-text">Existencia Tapa</dt>
+                <dd class="mt-1 text-sm p-text">
+                  ID #{{ $embotelladoSeleccionado->existencia_tapa_id ?? '-' }} -
+                  {{ optional($embotelladoSeleccionado->existenciaTapa)->descripcion ?? 'Sin descripción' }}
+                </dd>
+              </div>
+              <!-- Cantidad Base Usada -->
+              <div>
+                <dt class="text-sm font-medium p-text">Cantidad Base Usada</dt>
+                <dd class="mt-1 text-sm p-text">{{ $embotelladoSeleccionado->cantidad_base_usada ?? '-' }}</dd>
+              </div>
+              <!-- Cantidad Tapa Usada -->
+              <div>
+                <dt class="text-sm font-medium p-text">Cantidad Tapa Usada</dt>
+                <dd class="mt-1 text-sm p-text">{{ $embotelladoSeleccionado->cantidad_tapa_usada ?? '-' }}</dd>
+              </div>
+              <!-- Cantidad Generada -->
+              <div>
+                <dt class="text-sm font-medium p-text">Cantidad Generada</dt>
+                <dd class="mt-1 text-sm p-text">{{ $embotelladoSeleccionado->cantidad_generada ?? '-' }}</dd>
+              </div>
+              <!-- Observaciones -->
+              <div class="col-span-2">
+                <dt class="text-sm font-medium p-text">Observaciones</dt>
+                <dd class="mt-1 text-sm p-text">{{ $embotelladoSeleccionado->observaciones ?? 'Ninguna' }}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Botón cerrar -->
+          <div class="mt-6 flex justify-center">
+            <button type="button" wire:click="cerrarModalDetalle"
+              class="text-red-500 hover:text-red-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full"
+              aria-label="Cerrar detalle">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="icon icon-tabler icon-tabler-x">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M18 6l-12 12" />
+                <path d="M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  @endif
+
 
 </div>
