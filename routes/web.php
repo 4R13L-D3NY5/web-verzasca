@@ -1,10 +1,12 @@
 <?php
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\MapaClienteController;
+use App\Http\Controllers\Reportes\ReportestockController;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/reportestock/pdf', [ReportestockController::class, 'generarPdf'])->name('reportestock.pdf');
 Auth::routes();
 Route::get('/clientes', [MapaClienteController::class, 'index'])->name('clientes.index');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
