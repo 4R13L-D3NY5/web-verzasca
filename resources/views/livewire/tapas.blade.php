@@ -131,7 +131,14 @@
             @error('color') <span class="error-message text-red-500">{{ $message }}</span> @enderror
 
             <h3 class="p-text">Tipo</h3>
-            <input type="text" wire:model="tipo" class="p-text input-g" />
+            <select wire:model="tipo" class="p-text input-g">
+              <option value="">Seleccione un tipo</option>
+              <option value="Rosca">Rosca</option>
+              <option value="Rosca alta">Rosca alta</option>
+              <option value="Corona">Corona</option>
+              <option value="Flip-top">Flip-top</option>
+              <option value="Tapón de seguridad">Tapón de seguridad</option>
+            </select>
             @error('tipo') <span class="error-message text-red-500">{{ $message }}</span> @enderror
 
             <h3 class="p-text">Descripción</h3>
@@ -143,7 +150,8 @@
               <!-- Botón para "Activo" -->
               <label class="flex items-center space-x-2">
                 <input type="radio" wire:model="estado" value="1" class="form-radio hidden peer" />
-                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                <span
+                  class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
                   Activo
                 </span>
               </label>
@@ -151,7 +159,8 @@
               <!-- Botón para "Inactivo" -->
               <label class="flex items-center space-x-2">
                 <input type="radio" wire:model="estado" value="0" class="form-radio hidden peer" />
-                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                <span
+                  class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
                   Inactivo
                 </span>
               </label>

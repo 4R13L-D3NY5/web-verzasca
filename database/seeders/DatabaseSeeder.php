@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Livewire\Embotellado;
 use App\Models\Asignacion;
 use App\Models\Base;
 use App\Models\Coche;
@@ -288,7 +289,7 @@ class DatabaseSeeder extends Seeder
         // Prestamo::factory(10)->create();
         
         Elaboracion::factory(10)->create();
-        // Enbotellado::factory(10)->create();
+        Embotellado::factory(10)->create();
         // Reposicion::factory(10)->create();
         // Compra::factory(10)->create();
         // ItemCompra::factory(10)->create();

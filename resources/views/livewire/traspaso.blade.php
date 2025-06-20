@@ -14,7 +14,8 @@
             <path d="M12 5v14m7-7h-14" />
           </svg>
         </button>
-        <input type="text" wire:model.live="search" placeholder="Buscar por fecha o encargado..." class="input-g w-auto sm:w-64" />
+        <input type="text" wire:model.live="search" placeholder="Buscar por fecha o encargado..."
+          class="input-g w-auto sm:w-64" />
       </div>
 
       <!-- Tabla -->
@@ -32,7 +33,8 @@
               <td class="px-6 py-4 p-text text-left">
                 <div class="mb-2"><b>Fecha:</b> {{ $tr->fecha_traspaso }}</div>
                 <div class="mb-2"><b>Encargado:</b> {{ $tr->personal->apellidos }} {{ $tr->personal->nombres }}</div>
-                <div class="mb-2"><b>Desde:</b> ID {{ $tr->existencia_origen_id }} → <b>Hacia:</b> ID {{ $tr->existencia_destino_id }}</div>
+                <div class="mb-2"><b>Desde:</b> ID {{ $tr->existencia_origen_id }} → <b>Hacia:</b> ID {{
+                  $tr->existencia_destino_id }}</div>
                 <div class="mb-2"><b>Cantidad:</b> {{ $tr->cantidad }}</div>
                 @if ($tr->observaciones)
                 <div class="mb-2"><b>Observaciones:</b> {{ $tr->observaciones }}</div>
@@ -110,20 +112,33 @@
             <select wire:model.defer="existencia_origen_id" class="p-text input-g">
               <option value="">Seleccione</option>
               @foreach($existencias_origen as $existencia)
-              <option value="{{ $existencia->id }}">ID #{{ $existencia->id }} ({{ $existencia->cantidad }}) - Sucursal {{ $existencia->sucursal_id }}</option>
+              <option value="{{ $existencia->id }}">
+                ID #{{ $existencia->id }} ({{ $existencia->cantidad }}) -
+                {{ class_basename($existencia->existenciable_type) }} -
+                Sucursal: {{ $existencia->sucursal->nombre ?? $existencia->sucursal_id }}
+              </option>
               @endforeach
             </select>
-            @error('existencia_origen_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+            @error('existencia_origen_id')
+            <span class="text-red-600 text-xs">{{ $message }}</span>
+            @enderror
 
             <!-- Existencia Destino -->
             <h3 class="p-text">Existencia Destino</h3>
             <select wire:model.defer="existencia_destino_id" class="p-text input-g">
               <option value="">Seleccione</option>
               @foreach($existencias_destino as $existencia)
-              <option value="{{ $existencia->id }}">ID #{{ $existencia->id }} ({{ $existencia->cantidad }}) - Sucursal {{ $existencia->sucursal_id }}</option>
+              <option value="{{ $existencia->id }}">
+                ID #{{ $existencia->id }} ({{ $existencia->cantidad }}) -
+                {{ class_basename($existencia->existenciable_type) }} -
+                Sucursal: {{ $existencia->sucursal->nombre ?? $existencia->sucursal_id }}
+              </option>
               @endforeach
             </select>
-            @error('existencia_destino_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+            @error('existencia_destino_id')
+            <span class="text-red-600 text-xs">{{ $message }}</span>
+            @enderror
+
 
             <!-- Cantidad -->
             <h3 class="p-text">Cantidad a Traspasar</h3>

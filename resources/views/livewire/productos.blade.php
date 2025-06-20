@@ -21,7 +21,8 @@
 
             <!-- Tabla -->
             <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left border border-slate-200 dark:border-cyan-200 rounded-lg border-collapse">
+                <table
+                    class="w-full text-sm text-left border border-slate-200 dark:border-cyan-200 rounded-lg border-collapse">
                     <thead class="text-xs md:text-sm uppercase color-bg">
                         <tr class="bg-gray-100 dark:bg-gray-800">
                             <th scope="col" class="px-4 py-3 p-text text-left">DETALLES DEL PRODUCTO</th>
@@ -40,7 +41,7 @@
                                     <div class="text-sm space-y-1">
 
                                         <div><strong>Nombre:</strong> {{ $producto->nombre }}</div>
-                                        <div><strong>Tipo Producto:</strong> {{ $producto->tipoProducto }}</div>
+                                        <div><strong>Tipo Producto:</strong> {{ $producto->tipoProducto?'Con retorno':'Sin retorno' }}</div>
                                         <div><strong>Capacidad:</strong> {{ $producto->capacidad }} ml</div>
                                     </div>
                                 </div>
@@ -68,12 +69,14 @@
                                     <!-- Editar -->
                                     <button title="Editar Producto" wire:click="abrirModal('edit', {{ $producto->id }})"
                                         class="text-blue-500 hover:text-blue-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
                                             class="icon icon-tabler icon-tabler-edit">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                            <path
+                                                d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
                                             <path d="M16 5l3 3" />
                                         </svg>
                                     </button>
@@ -81,8 +84,9 @@
                                     <!-- Detalles -->
                                     <button title="Ver detalles" wire:click="modaldetalle({{ $producto->id }})"
                                         class="text-indigo-500 hover:text-indigo-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
                                             class="icon icon-tabler icon-tabler-info-circle">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
@@ -139,21 +143,23 @@
 
                         <!-- Unidad -->
                         <h3 class="p-text">Unidad</h3>
-                        <input type="text" wire:model="unidad" class="p-text input-g" />
+                        <select wire:model="unidad" class="p-text input-g">
+                            <option value="">Seleccione una unidad</option>
+                            <option value="L">L</option>
+                            <option value="ml">ml</option>
+                            <option value="g">g</option>
+                            <option value="Kg">Kg</option>
+                            <option value="unidad">unidad</option>
+                        </select>
                         @error('unidad') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
                         <h3 class="p-text">Tipo de Contenido</h3>
-                        <select id="tipoContenido" wire:model="tipoContenido"
-                            class="p-text input-g">
+                        <select id="tipoContenido" wire:model="tipoContenido" class="p-text input-g">
 
-                            <option value="0">Líquido</option>
-                            <option value="1">Sólido</option>
-                            <option value="2">Polvo</option>
-                            <option value="3">Pastillas</option>
-                            <option value="4">Gel</option>
-                            <option value="5">Aerosol</option>
+                            <option value="1">Líquido</option>
+                            <option value="2">Líquido con gas</option>
+                            <option value="3">Solido</option>
                         </select>
-
                         @error('tipoContenido')
                         <span class="text-red-600 text-xs">{{ $message }}</span>
                         @enderror
@@ -164,16 +170,20 @@
                         <div class="flex space-x-6 justify-center">
                             <!-- Botón de radio para "Con retorno" -->
                             <label class="flex items-center space-x-2">
-                                <input type="radio" wire:model="tipoProducto" value="1" class="form-radio hidden peer" />
-                                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                                <input type="radio" wire:model="tipoProducto" value="1"
+                                    class="form-radio hidden peer" />
+                                <span
+                                    class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
                                     Con retorno
                                 </span>
                             </label>
 
                             <!-- Botón de radio para "Sin retorno" -->
                             <label class="flex items-center space-x-2">
-                                <input type="radio" wire:model="tipoProducto" value="0" class="form-radio hidden peer" />
-                                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                                <input type="radio" wire:model="tipoProducto" value="0"
+                                    class="form-radio hidden peer" />
+                                <span
+                                    class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
                                     Sin retorno
                                 </span>
                             </label>
@@ -211,7 +221,8 @@
                             <!-- Botón para "Activo" -->
                             <label class="flex items-center space-x-2">
                                 <input type="radio" wire:model="estado" value="1" class="form-radio hidden peer" />
-                                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                                <span
+                                    class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
                                     Activo
                                 </span>
                             </label>
@@ -219,7 +230,8 @@
                             <!-- Botón para "Inactivo" -->
                             <label class="flex items-center space-x-2">
                                 <input type="radio" wire:model="estado" value="0" class="form-radio hidden peer" />
-                                <span class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
+                                <span
+                                    class="p-text inline-block py-2 px-4 rounded-lg cursor-pointer border border-gray-300 hover:bg-indigo-100 peer-checked:bg-cyan-950 peer-checked:text-white">
                                     Inactivo
                                 </span>
                             </label>
@@ -230,7 +242,8 @@
                         <select wire:model="base_id" class="p-text input-g">
                             @foreach($bases as $base)
                             <option value="{{ $base->id }}">
-                                {{ $base->capacidad }}{{ $base->unidad }} - {{ $base->preforma->insumo ?? 'Sin preforma' }}
+                                {{ $base->capacidad }}{{ $base->unidad }} - {{ $base->preforma->insumo ?? 'Sin preforma'
+                                }}
                             </option>
                             @endforeach
                         </select>
@@ -246,8 +259,9 @@
                     <div class="mt-6 flex justify-center w-full space-x-4">
                         <button type="button" wire:click="guardar"
                             class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
                                 class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
@@ -258,9 +272,9 @@
 
                         <button type="button" wire:click="cerrarModal"
                             class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M18 6l-12 12" />
                                 <path d="M6 6l12 12" />
@@ -285,7 +299,8 @@
                             <div>
                                 <dt class="text-sm font-semibold p-text">Base Asociada</dt>
                                 <dd class="mt-1 text-sm p-text">
-                                    {{ $productoSeleccionado?->base?->capacidad }}{{ $productoSeleccionado?->base?->unidad }}
+                                    {{ $productoSeleccionado?->base?->capacidad }}{{
+                                    $productoSeleccionado?->base?->unidad }}
                                     -
                                     {{ $productoSeleccionado?->base?->preforma?->insumo ?? 'Sin preforma' }}
                                 </dd>
@@ -301,11 +316,12 @@
                             <div>
                                 <dt class="text-sm font-semibold p-text">Tipo de Contenido</dt>
                                 <dd class="mt-1 text-sm p-text">
-                                    {{ $productoSeleccionado->tipoContenido === 0 ? 'Líquido' : ($productoSeleccionado->tipoContenido === 1 ? 'Sólido' : 
-        ($productoSeleccionado->tipoContenido === 2 ? 'Polvo' : 
-        ($productoSeleccionado->tipoContenido === 3 ? 'Pastillas' : 
-        ($productoSeleccionado->tipoContenido === 4 ? 'Gel' : 
-        ($productoSeleccionado->tipoContenido === 5 ? 'Aerosol' : 'No especificado'))))) }}
+                                    {{ $productoSeleccionado->tipoContenido === 0 ? 'Líquido' :
+                                    ($productoSeleccionado->tipoContenido === 1 ? 'Sólido' :
+                                    ($productoSeleccionado->tipoContenido === 2 ? 'Polvo' :
+                                    ($productoSeleccionado->tipoContenido === 3 ? 'Pastillas' :
+                                    ($productoSeleccionado->tipoContenido === 4 ? 'Gel' :
+                                    ($productoSeleccionado->tipoContenido === 5 ? 'Aerosol' : 'No especificado'))))) }}
                                 </dd>
                             </div>
 
@@ -314,11 +330,13 @@
                                 <dt class="text-sm font-semibold p-text">Tipo de Retorno</dt>
                                 <dd class="mt-1 text-sm p-text">
                                     @if (($productoSeleccionado['tipoProducto'] ?? false) == 1)
-                                    <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-600 text-white">
+                                    <span
+                                        class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-600 text-white">
                                         Con retorno
                                     </span>
                                     @else
-                                    <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-red-600 text-white">
+                                    <span
+                                        class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-red-600 text-white">
                                         Sin retorno
                                     </span>
                                     @endif

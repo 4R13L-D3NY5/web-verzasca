@@ -20,7 +20,7 @@ return new class extends Migration
             // $table->integer('cantidad'); // Cantidad en el lote
             $table->text('observaciones')->nullable(); // Observaciones (opcional)
             $table->foreignId('etiqueta_id')->constrained('etiquetas')->onDelete('cascade'); // Eliminando nullable()
-            $table->foreignId('sucursal_id')->constrained('sucursals')->onDelete('cascade'); // Eliminando nullable()
+            // $table->foreignId('sucursal_id')->constrained('sucursals')->onDelete('cascade'); // Eliminando nullable()
             
             $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade'); // Relación con Producto
          

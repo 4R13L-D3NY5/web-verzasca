@@ -50,7 +50,7 @@ class Stocks extends Component
         'observaciones' => 'nullable|string|max:255',
         'etiqueta_id' => 'nullable|exists:etiquetas,id',
         'producto_id' => 'nullable|exists:productos,id',
-        'sucursal_id' => 'nullable|exists:sucursals,id',
+        // 'sucursal_id' => 'nullable|exists:sucursals,id',
     ];
 
     public function mount()
@@ -63,7 +63,7 @@ class Stocks extends Component
 
     public function render()
     {
-        $stocks = Stock::with(['etiqueta', 'producto', 'sucursal'])
+        $stocks = Stock::with(['etiqueta', 'producto', 'sucursal','existencias'])
             ->when($this->search, function ($query) {
                 $query->where('observaciones', 'like', '%' . $this->search . '%');
             })
@@ -79,7 +79,7 @@ class Stocks extends Component
 
     public function abrirModal($accion = 'create', $id = null)
     {
-        $this->reset(['fechaElaboracion', 'fechaVencimiento', 'observaciones', 'etiqueta_id', 'producto_id', 'sucursal_id']);
+        $this->reset(['fechaElaboracion', 'fechaVencimiento', 'observaciones', 'etiqueta_id', 'producto_id']);
         $this->accion = $accion;
 
         if ($accion === 'edit' && $id) {
@@ -99,7 +99,7 @@ class Stocks extends Component
         $this->observaciones = $stock->observaciones;
         $this->etiqueta_id = $stock->etiqueta_id;
         $this->producto_id = $stock->producto_id;
-        $this->sucursal_id = $stock->sucursal_id;
+        // $this->sucursal_id = $stock->sucursal_id;
         $this->accion = 'edit';
     }
 
@@ -114,7 +114,7 @@ class Stocks extends Component
                 'observaciones' => $this->observaciones,
                 'etiqueta_id' => $this->etiqueta_id ?: null,
                 'producto_id' => $this->producto_id ?: null,
-                'sucursal_id' => $this->sucursal_id ?: null,
+                // 'sucursal_id' => $this->sucursal_id ?: null,
             ]);
 
             LivewireAlert::title($this->stock_id ? 'Stock actualizado con éxito.' : 'Stock creado con éxito.')
@@ -132,7 +132,7 @@ class Stocks extends Component
     public function cerrarModal()
     {
         $this->modal = false;
-        $this->reset(['fechaElaboracion', 'fechaVencimiento', 'observaciones', 'etiqueta_id', 'producto_id', 'sucursal_id', 'stock_id']);
+        $this->reset(['fechaElaboracion', 'fechaVencimiento', 'observaciones', 'etiqueta_id', 'producto_id', 'stock_id']);
         $this->resetErrorBag();
     }
 

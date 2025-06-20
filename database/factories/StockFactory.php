@@ -24,7 +24,7 @@ class StockFactory extends Factory
             'observaciones' => $this->faker->optional()->sentence,
             'producto_id' => Producto::inRandomOrder()->first()?->id,
             'etiqueta_id' => Etiqueta::inRandomOrder()->first()?->id,
-            'sucursal_id' => Sucursal::inRandomOrder()->first()?->id,
+            // 'sucursal_id' => Sucursal::inRandomOrder()->first()?->id,
             'created_at' => now(),
             'updated_at' => now(),
         ];

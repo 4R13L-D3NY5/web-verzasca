@@ -15,7 +15,7 @@ class Stock extends Model
         'observaciones',
         'etiqueta_id',
         'producto_id',
-        'sucursal_id', 
+        // 'sucursal_id', 
     ];
 
     /**
@@ -26,7 +26,7 @@ class Stock extends Model
     //     return $this->belongsTo(Producto::class);
     // }
 
-    public function existencia()
+    public function existencias()
     {
         return $this->morphMany(Existencia::class, 'existenciable');
     }
