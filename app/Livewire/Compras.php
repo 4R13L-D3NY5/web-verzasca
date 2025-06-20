@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Livewire;
-
+use App\Models\Sucursal;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Compra;
 use App\Models\Proveedor;
 use App\Models\Personal;
-use App\Models\Sucursal;
 use App\Models\Existencia;
 use App\Models\ItemCompra;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
@@ -26,17 +25,15 @@ class Compras extends Component
     public $observaciones;
     public $proveedor_id;
     public $personal_id;
-    public $sucursal_id;
     public $existencia_id;
     public $item_cantidad;
     public $item_precio;
     public $items = [];
     public $proveedors;
     public $personals;
-    public $sucursals;
     public $existenciasDisponibles = [];
     public $compraSeleccionada = null;
-
+    public $sucursals;
     protected $paginationTheme = 'tailwind';
 
     protected $rules = [
@@ -44,7 +41,6 @@ class Compras extends Component
         'observaciones' => 'nullable|string|max:500',
         'proveedor_id' => 'required|exists:proveedors,id',
         'personal_id' => 'required|exists:personals,id',
-        'sucursal_id' => 'required|exists:sucursals,id',
         'existencia_id' => 'required|exists:existencias,id',
         'item_cantidad' => 'required|integer|min:1',
         'item_precio' => 'required|numeric|min:0',
@@ -54,7 +50,7 @@ class Compras extends Component
     {
         $this->proveedors = Proveedor::all();
         $this->personals = Personal::all();
-        $this->sucursals = Sucursal::all();
+          $this->sucursals = Sucursal::all();
     }
 
     public function render()
@@ -76,7 +72,7 @@ class Compras extends Component
 
     public function abrirModal($accion, $id = null)
     {
-        $this->reset(['fecha', 'observaciones', 'proveedor_id', 'personal_id', 'sucursal_id', 'compraId', 'items', 'existencia_id', 'item_cantidad', 'item_precio']);
+        $this->reset(['fecha', 'observaciones', 'proveedor_id', 'personal_id', 'compraId', 'items', 'existencia_id', 'item_cantidad', 'item_precio']);
         $this->accion = $accion;
         if ($accion === 'edit' && $id) {
             $this->editarCompra($id);
@@ -89,13 +85,14 @@ class Compras extends Component
 
     public function editarCompra($id)
     {
-        $compra = Compra::with('itemCompras.existencia')->findOrFail($id);
+        $compra = Compra::with(['proveedor', 'personal', 'itemCompras.existencia'])->findOrFail($id);
+
         $this->compraId = $compra->id;
         $this->fecha = $compra->fecha;
         $this->observaciones = $compra->observaciones;
         $this->proveedor_id = $compra->proveedor_id;
         $this->personal_id = $compra->personal_id;
-        $this->sucursal_id = $compra->sucursal_id;
+
         $this->items = $compra->itemCompras->map(function ($item) {
             return [
                 'existencia' => $item->existencia,
@@ -103,6 +100,7 @@ class Compras extends Component
                 'precio' => $item->precio,
             ];
         })->toArray();
+
         $this->cargarExistencias();
         $this->accion = 'edit';
         $this->modal = true;
@@ -118,25 +116,24 @@ class Compras extends Component
 
     public function cargarExistencias()
     {
-        if ($this->proveedor_id && $this->sucursal_id) {
+        if ($this->proveedor_id) {
             $proveedor = Proveedor::find($this->proveedor_id);
             $tipo = $proveedor->tipo;
 
-            $this->existenciasDisponibles = Existencia::where('sucursal_id', $this->sucursal_id)
-                ->when($tipo, function ($query) use ($tipo) {
-                    $modelos = [
-                        'tapas' => \App\Models\Tapa::class,
-                        'preformas' => \App\Models\Preforma::class,
-                        'bases' => \App\Models\Base::class,
-                        'etiquetas' => \App\Models\Etiqueta::class,
-                    ];
+            $this->existenciasDisponibles = Existencia::when($tipo, function ($query) use ($tipo) {
+                $modelos = [
+                    'tapas' => \App\Models\Tapa::class,
+                    'preformas' => \App\Models\Preforma::class,
+                    'bases' => \App\Models\Base::class,
+                    'etiquetas' => \App\Models\Etiqueta::class,
+                ];
 
-                    if (isset($modelos[$tipo])) {
-                        $query->where('existenciable_type', $modelos[$tipo]);
-                    }
-                })
-                ->with('existenciable', 'sucursal')
-                ->get();
+                if (isset($modelos[$tipo])) {
+                    $query->where('existenciable_type', $modelos[$tipo]);
+                }
+            })
+            ->with('existenciable')
+            ->get();
         } else {
             $this->existenciasDisponibles = [];
         }
@@ -174,7 +171,6 @@ class Compras extends Component
             'observaciones' => 'nullable|string|max:500',
             'proveedor_id' => 'required|exists:proveedors,id',
             'personal_id' => 'required|exists:personals,id',
-            'sucursal_id' => 'required|exists:sucursals,id',
         ]);
 
         if (empty($this->items)) {
@@ -190,16 +186,14 @@ class Compras extends Component
                     'observaciones' => $this->observaciones,
                     'proveedor_id' => $this->proveedor_id,
                     'personal_id' => $this->personal_id,
-                    'sucursal_id' => $this->sucursal_id,
                 ]);
-                $compra->itemCompras()->delete(); // Eliminar ítems anteriores
+                $compra->itemCompras()->delete();
             } else {
                 $compra = Compra::create([
                     'fecha' => $this->fecha,
                     'observaciones' => $this->observaciones,
                     'proveedor_id' => $this->proveedor_id,
                     'personal_id' => $this->personal_id,
-                    'sucursal_id' => $this->sucursal_id,
                 ]);
             }
 
@@ -211,7 +205,6 @@ class Compras extends Component
                     'compra_id' => $compra->id,
                 ]);
 
-                // Actualizar la cantidad en la existencia
                 $existencia = Existencia::find($item['existencia']->id);
                 $existencia->increment('cantidad', $item['cantidad']);
             }
@@ -227,7 +220,7 @@ class Compras extends Component
     {
         $this->modal = false;
         $this->detalleModal = false;
-        $this->reset(['fecha', 'observaciones', 'proveedor_id', 'personal_id', 'sucursal_id', 'compraId', 'items', 'existencia_id', 'item_cantidad', 'item_precio', 'existenciasDisponibles', 'compraSeleccionada']);
+        $this->reset(['fecha', 'observaciones', 'proveedor_id', 'personal_id', 'compraId', 'items', 'existencia_id', 'item_cantidad', 'item_precio', 'existenciasDisponibles', 'compraSeleccionada']);
         $this->resetErrorBag();
     }
 }

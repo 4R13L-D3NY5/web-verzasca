@@ -108,15 +108,8 @@
             <input wire:model.defer="observaciones" class="p-text input-g" rows="3"></input>
             @error('observaciones') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-            <!-- Sucursal -->
-            <h3 class="p-text">Sucursal</h3>
-            <select wire:model.defer="sucursal_id" class="p-text text-sm sm:text-base input-g">
-              <option value="">Seleccione una sucursal</option>
-              @foreach ($sucursals as $sucursal)
-              <option value="{{ $sucursal->id }}">{{ $sucursal->nombre }}</option>
-              @endforeach
-            </select>
-            @error('sucursal_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+           
+           
 
             <!-- Proveedor -->
             <h3 class="p-text">Proveedor</h3>
@@ -235,13 +228,11 @@
         <div class="center-col">
           <h3 class="p-text">Detalles de la Compra</h3>
           <div class="over-col">
-            <p class="title3"><strong class="p-text">Fecha:</strong> {{ $compraSeleccionada->fecha }}</p>
-            <p class="title3"><strong class="p-text">Observaciones:</strong> {{ $compraSeleccionada->observaciones ?? 'Sin observaciones' }}</p>
-            <p class="title3"><strong class="p-text">Proveedor:</strong> {{ $compraSeleccionada->proveedor->razonSocial }}</p>
-            <p class="title3"><strong class="p-text">Personal:</strong> {{ $compraSeleccionada->personal->nombres }}</p>
-            <p class="title3"><strong class="p-text">Sucursal:</strong> </p>
-            {{-- <p class="title3"><strong class="p-text">Sucursal:</strong> {{ $compraSeleccionada->sucursal->nombre }}</p> --}}
-            <h4 class="p-text mt-4">Ítems de Compra</h4>
+            <p class="p-text"><strong class="p-text">Fecha:</strong> {{ $compraSeleccionada->fecha }}</p>
+            <p class="p-text"><strong class="p-text">Observaciones:</strong> {{ $compraSeleccionada->observaciones ?? 'Sin observaciones' }}</p>
+            <p class="p-text"><strong class="p-text">Proveedor:</strong> {{ $compraSeleccionada->proveedor->razonSocial }}</p>
+            <p class="p-text"><strong class="p-text">Personal:</strong> {{ $compraSeleccionada->personal->nombres }}</p>
+            <h4 class="p-text mt-2">Ítems de Compra</h4>
             @if ($compraSeleccionada->itemCompras->isNotEmpty())
             <table class="w-full text-sm">
               <thead>

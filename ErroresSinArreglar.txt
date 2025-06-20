@@ -2,7 +2,9 @@ APARTADO COMPRAS
 * al editar cualquier cosa muestra sucursal required hay que ver la conxion en el modelos
 * en ver detalles no muestra la sucursal del producto tampoco
 APARTADO EMBOTELLADO
-*falta ver detalleModal
-
+*falta ver detalleModal(hecho)
+APARTADO PEDIDOS 
+*Call to undefined method App\Models\Base::producto() el problema esta en la reclacion polimorfica de base con exitencia o del stock
+*que hay que hacer exactamente ?
 SUGERENCIAS
 *hay que cambiar algunas cosas el formato de mostrar descripcion mas en etiqueta usada , base , editarCompra
