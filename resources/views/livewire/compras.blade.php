@@ -41,7 +41,7 @@
                 </div>
                 <div class="mb-2">
                   <span class="font-semibold block">Personal:</span>
-                  <span>{{ $compra->personal->apellidos }}</span>
+                  <span>{{ $compra->personal->nombres }}-{{ $compra->personal->apellidos }}</span>
                 </div>
                 <div>
                   <span class="font-semibold block">Observaciones:</span>
@@ -108,8 +108,14 @@
             <input wire:model.defer="observaciones" class="p-text input-g" rows="3"></input>
             @error('observaciones') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-           
-           
+            <h3 class="p-text">Personal</h3>
+            <select wire:model.defer="personal_id" class="p-text text-sm sm:text-base input-g">
+              <option value="">Seleccione un personal</option>
+              @foreach ($personals as $personal)
+              <option value="{{ $personal->id }}">{{ $personal->nombres }}-{{ $personal->apellidos }}</option>
+              @endforeach
+            </select>
+            @error('personal_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
             <!-- Proveedor -->
             <h3 class="p-text">Proveedor</h3>
@@ -121,44 +127,50 @@
             </select>
             @error('proveedor_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-            <!-- Personal -->
-            <h3 class="p-text">Personal</h3>
-            <select wire:model.defer="personal_id" class="p-text text-sm sm:text-base input-g">
-              <option value="">Seleccione un personal</option>
-              @foreach ($personals as $personal)
-              <option value="{{ $personal->id }}">{{ $personal->nombres }}</option>
+
+
+            <!-- Select: ítem -->
+            <label class="p-text">Ítem disponible</label>
+            <select wire:model="existencia_id" class="p-text text-sm sm:text-base input-g">
+              <option value="">Seleccione un ítem</option>
+              @foreach ($existenciasDisponibles as $existencia)
+              <option value="{{ $existencia->id }}">
+                {{ ($existencia->existenciable?->descripcion ?? 'Sin descripción') . ' - ' . (($existencia->existenciable?->estado ?? false) ? 'Activo' : 'Inactivo') }}
+
+                (Sucursal: {{ $existencia->sucursal->nombre }})
+              </option>
               @endforeach
             </select>
-            @error('personal_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+            @error('existencia_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-            <!-- Selección de ítems -->
-            <h3 class="p-text">Ítems de Compra</h3>
-            <div class="mb-4">
-              <select wire:model="existencia_id" class="p-text input-g">
-                <option value="">Seleccione un ítem</option>
-                @foreach ($existenciasDisponibles as $existencia)
-                <option value="{{ $existencia->id }}">
-                  {{ $existencia->existenciable->insumo ?? $existencia->existenciable->imagen ?? 'Ítem' }} (Sucursal: {{ $existencia->sucursal->nombre }})
-                  {{-- {{ $existencia->existenciable->insumo ?? $existencia->existenciable->imagen ?? 'Ítem' }} (Sucursal: {{ $existencia->sucursal->nombre }}) --}}
-                </option>
-                @endforeach
-              </select>
-              @error('existencia_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-              <input type="number" wire:model="item_cantidad" placeholder="Cantidad" class="p-text input-g mt-2" min="1">
-              @error('item_cantidad') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+            <!-- Cantidad / Precio / Botón -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label class="p-text block mb-1">Cantidad</label>
+                <input type="number" wire:model="item_cantidad" placeholder="Cantidad" class="p-text input-g w-full" min="1">
+                @error('item_cantidad') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+              </div>
 
-              <input type="number" wire:model="item_precio" placeholder="Precio unitario" class="p-text input-g mt-2" step="0.01" min="0">
-              @error('item_precio') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+              <div>
+                <label class="p-text block mb-1">Precio unitario (Bs)</label>
+                <input type="number" wire:model="item_precio" placeholder="Precio" class="p-text input-g w-full" step="0.01" min="0">
+                @error('item_precio') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+              </div>
 
-              <button wire:click="agregarItem" class="text-indigo-500 hover:text-indigo-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icon-tabler-plus">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M12 5v14m-7 -7h14" />
-                </svg></button>
+              <div class="flex items-end justify-start">
+                <button wire:click="agregarItem" title="Agregar ítem"
+                  class="text-indigo-500 hover:text-indigo-600 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="icon icon-tabler icon-tabler-plus">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 5v14m-7 -7h14" />
+                  </svg>
+                </button>
+              </div>
             </div>
+
 
             <!-- Lista de ítems -->
             @if (!empty($items))
@@ -180,7 +192,14 @@
                     <td class="p-text">{{ $item['cantidad'] }}</td>
                     <td class="p-text">{{ number_format($item['precio'], 2) }}</td>
                     <td>
-                      <button wire:click="eliminarItem({{ $index }})" class="text-red-500">Eliminar</button>
+                      <button wire:click="eliminarItem({{ $index }})" class="text-red-500 hover:text-red-600 mx-1 transition-transform duration-200 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash-x">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M4 7h16" />
+                          <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                          <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                          <path d="M10 12l4 4m0 -4l-4 4" />
+                        </svg></button>
                     </td>
                   </tr>
                   @endforeach
