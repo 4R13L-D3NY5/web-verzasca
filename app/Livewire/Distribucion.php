@@ -11,10 +11,12 @@ use App\Models\Venta;
 use App\Models\Stock;
 use App\Models\Existencia;
 use App\Models\ItemVenta;
+
 use App\Models\Sucursal;
 use App\Models\Producto;
 use Illuminate\Support\Collection;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
+use Illuminate\Support\Facades\DB;
 
 class Distribucion extends Component
 {
@@ -34,7 +36,7 @@ class Distribucion extends Component
     public $observaciones = '';
     public $asignacion_id;
     public $asignaciones;
-    
+
     // Propiedades para manejar ventas
     public $venta_id;
     public $ventasContado;
@@ -42,23 +44,23 @@ class Distribucion extends Component
     public $stocksVenta;
     public $itemsVentaDisponibles = [];
     public $stocksSucursal;
-    
+
     // Propiedades para manejar stocks sueltos
     public $stocksDisponibles;
     public $selectedSucursal;
     public $sucursales;
     public $modoSeleccion = 'venta'; // 'venta' o 'stock'
-    
+
     // Propiedades para items de distribución
     public $itemsDistribucion = [];
-    
+
     // Propiedades para item manual
     public $productoSeleccionado;
     public $stocksProducto;
     public $stockManualId;
     public $cantidadManualNuevo = 0;
     public $cantidadManualUsados = 0;
-    
+
     // Propiedades para detalles
     public $distribucionSeleccionada = null;
 
@@ -96,10 +98,10 @@ class Distribucion extends Component
     {
         $distribucions = ModeloDistribucion::when($this->search, function ($query) {
             $query->where('fecha', 'like', '%' . $this->search . '%')
-                  ->orWhere('observaciones', 'like', '%' . $this->search . '%');
+                ->orWhere('observaciones', 'like', '%' . $this->search . '%');
         })->with(['asignacion.personal', 'itemdistribucions.stock.producto'])
-        ->orderBy('created_at', 'desc')
-        ->paginate(5);
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
 
         // Cargar productos para selector de items manuales
         $productos = Producto::orderBy('nombre')->get();
@@ -120,7 +122,7 @@ class Distribucion extends Component
     public function cambiarModoSeleccion($modo)
     {
         $this->modoSeleccion = $modo;
-        
+
         if ($modo === 'stock') {
             $this->cargarStocksDisponibles();
             $this->reset(['venta_id', 'stocksVenta', 'itemsVentaDisponibles']);
@@ -132,10 +134,10 @@ class Distribucion extends Component
     public function cargarStocksDisponibles()
     {
         if ($this->selectedSucursal) {
-            $this->stocksDisponibles = Stock::whereHas('existencia', function($query) {
+            $this->stocksDisponibles = Stock::whereHas('existencias', function ($query) {
                 $query->where('sucursal_id', $this->selectedSucursal)
-                      ->where('cantidad', '>', 0);
-            })->with(['producto', 'existencia', 'etiqueta'])->get();
+                    ->where('cantidad', '>', 0);
+            })->with(['producto', 'existencias', 'etiqueta'])->get();
         } else {
             $this->stocksDisponibles = collect();
         }
@@ -147,49 +149,53 @@ class Distribucion extends Component
             $this->alert('error', 'Debe seleccionar una venta primero.');
             return;
         }
-        
+
         $this->ventaSeleccionada = Venta::with([
-            'cliente', 
-            'itemVentas.existencia.existenciable', 
+            'cliente',
+            'itemVentas.existencia.existenciable',
             'personal'
         ])->find($this->venta_id);
-        
+
         if (!$this->ventaSeleccionada) {
             $this->alert('error', 'No se encontró la venta seleccionada.');
             return;
         }
-        
+
         $this->previewVentaModal = true;
     }
 
     public function cargarStocksVenta()
     {
         $this->itemsVentaDisponibles = [];
-        
+
         if (!$this->venta_id || !$this->selectedSucursal) {
             $this->stocksVenta = null;
             return;
         }
-        
+
         $venta = Venta::with(['itemVentas.existencia.existenciable', 'cliente'])->find($this->venta_id);
-        
+
         if (!$venta) {
             $this->alert('error', 'No se encontró la venta seleccionada.');
             return;
         }
-        
+
         // Cargar los items de venta y verificar su disponibilidad en la sucursal
         foreach ($venta->itemVentas as $itemVenta) {
             if ($itemVenta->existencia && $itemVenta->existencia->existenciable_type === 'App\\Models\\Stock') {
                 $stock_id = $itemVenta->existencia->existenciable_id;
-                $stock = Stock::with(['producto', 'existencia' => function($query) {
-                    $query->where('sucursal_id', $this->selectedSucursal);
-                }])->find($stock_id);
-                
+                $stock = Stock::with([
+                    'producto',
+                    'existencias' => function ($query) {
+                        $query->where('sucursal_id', $this->selectedSucursal);
+                    }
+                ])->find($stock_id);
+
                 if ($stock) {
-                    $cantidadDisponible = $stock->existencia ? $stock->existencia->cantidad : 0;
+                    $existencia = $stock->existencias->first(); // ⬅️ tomar solo una, si hay
+                    $cantidadDisponible = $existencia ? $existencia->cantidad : 0;
                     $faltante = $itemVenta->cantidad - $cantidadDisponible;
-                    
+
                     $this->itemsVentaDisponibles[] = [
                         'item_venta_id' => $itemVenta->id,
                         'stock_id' => $stock_id,
@@ -203,22 +209,22 @@ class Distribucion extends Component
                 }
             }
         }
-        
+
         $this->stocksVenta = $venta;
     }
 
     public function agregarItemVenta($itemVentaIndex)
     {
         $itemVenta = $this->itemsVentaDisponibles[$itemVentaIndex];
-        
+
         if (!$itemVenta['disponible']) {
             $this->alert('error', 'No hay suficiente stock disponible para este ítem.');
             return;
         }
-        
+
         // Verificar si ya existe este stock en los items de distribución
         $existeIndex = $this->buscarItemDistribucionPorStockId($itemVenta['stock_id']);
-        
+
         if ($existeIndex !== false) {
             // Actualizar cantidades
             $this->itemsDistribucion[$existeIndex]['cantidadNuevo'] += $itemVenta['cantidad_pedida'];
@@ -233,32 +239,32 @@ class Distribucion extends Component
                 'item_venta_id' => $itemVenta['item_venta_id']
             ];
         }
-        
+
         // Marcar como agregado para no permitir agregar dos veces
         $this->itemsVentaDisponibles[$itemVentaIndex]['agregado'] = true;
-        
+
         $this->alert('success', 'Ítem agregado a la distribución.');
     }
 
     public function agregarStockSuelto($stockId, $cantidad = 1)
     {
         $stock = $this->stocksDisponibles->firstWhere('id', $stockId);
-        
+
         if (!$stock) {
             $this->alert('error', 'No se encontró el stock seleccionado.');
             return;
         }
-        
+
         $cantidadDisponible = $stock->existencia ? $stock->existencia->cantidad : 0;
-        
+
         if ($cantidadDisponible < $cantidad) {
             $this->alert('error', 'No hay suficiente stock disponible.');
             return;
         }
-        
+
         // Verificar si ya existe este stock en los items de distribución
         $existeIndex = $this->buscarItemDistribucionPorStockId($stockId);
-        
+
         if ($existeIndex !== false) {
             // Actualizar cantidades
             $this->itemsDistribucion[$existeIndex]['cantidadNuevo'] += $cantidad;
@@ -272,7 +278,7 @@ class Distribucion extends Component
                 'origen' => 'stock'
             ];
         }
-        
+
         $this->alert('success', 'Stock agregado a la distribución.');
     }
 
@@ -287,13 +293,13 @@ class Distribucion extends Component
     public function updatedProductoSeleccionado()
     {
         if ($this->productoSeleccionado && $this->selectedSucursal) {
-            $this->stocksProducto = Stock::whereHas('existencia', function($query) {
+            $this->stocksProducto = Stock::whereHas('existencia', function ($query) {
                 $query->where('sucursal_id', $this->selectedSucursal)
-                      ->where('cantidad', '>', 0);
+                    ->where('cantidad', '>', 0);
             })
-            ->where('producto_id', $this->productoSeleccionado)
-            ->with(['producto', 'existencia', 'etiqueta'])
-            ->get();
+                ->where('producto_id', $this->productoSeleccionado)
+                ->with(['producto', 'existencia', 'etiqueta'])
+                ->get();
         } else {
             $this->stocksProducto = collect();
         }
@@ -306,30 +312,30 @@ class Distribucion extends Component
             $this->alert('error', 'Debe seleccionar un stock.');
             return;
         }
-        
+
         if ($this->cantidadManualNuevo <= 0 && $this->cantidadManualUsados <= 0) {
             $this->alert('error', 'Debe ingresar al menos una cantidad.');
             return;
         }
-        
+
         $stock = Stock::with('producto', 'existencia')->find($this->stockManualId);
-        
+
         if (!$stock) {
             $this->alert('error', 'No se encontró el stock seleccionado.');
             return;
         }
-        
+
         $cantidadDisponible = $stock->existencia ? $stock->existencia->cantidad : 0;
         $cantidadTotal = $this->cantidadManualNuevo + $this->cantidadManualUsados;
-        
+
         if ($cantidadDisponible < $cantidadTotal) {
             $this->alert('error', 'No hay suficiente stock disponible. Disponible: ' . $cantidadDisponible);
             return;
         }
-        
+
         // Verificar si ya existe este stock en los items de distribución
         $existeIndex = $this->buscarItemDistribucionPorStockId($this->stockManualId);
-        
+
         if ($existeIndex !== false) {
             // Actualizar cantidades
             $this->itemsDistribucion[$existeIndex]['cantidadNuevo'] += $this->cantidadManualNuevo;
@@ -344,7 +350,7 @@ class Distribucion extends Component
                 'origen' => 'manual'
             ];
         }
-        
+
         $this->itemManualModal = false;
         $this->alert('success', 'Item agregado manualmente a la distribución.');
     }
@@ -352,12 +358,14 @@ class Distribucion extends Component
     public function eliminarItemDistribucion($index)
     {
         // Si el ítem viene de una venta, restaurar su estado para poder volver a agregarlo
-        if (isset($this->itemsDistribucion[$index]['origen']) && 
+        if (
+            isset($this->itemsDistribucion[$index]['origen']) &&
             $this->itemsDistribucion[$index]['origen'] === 'venta' &&
-            isset($this->itemsDistribucion[$index]['item_venta_id'])) {
-            
+            isset($this->itemsDistribucion[$index]['item_venta_id'])
+        ) {
+
             $itemVentaId = $this->itemsDistribucion[$index]['item_venta_id'];
-            
+
             foreach ($this->itemsVentaDisponibles as $idx => $item) {
                 if ($item['item_venta_id'] === $itemVentaId) {
                     $this->itemsVentaDisponibles[$idx]['agregado'] = false;
@@ -365,11 +373,11 @@ class Distribucion extends Component
                 }
             }
         }
-        
+
         // Eliminar el ítem
         unset($this->itemsDistribucion[$index]);
         $this->itemsDistribucion = array_values($this->itemsDistribucion);
-        
+
         $this->alert('info', 'Ítem eliminado de la distribución.');
     }
 
@@ -385,24 +393,32 @@ class Distribucion extends Component
                 return $index;
             }
         }
-        
+
         return false;
     }
 
     public function abrirModal($accion, $id = null)
     {
-        $this->reset(['fecha', 'estado', 'observaciones', 'asignacion_id', 'venta_id', 
-                     'stocksVenta', 'distribucionId', 'itemsDistribucion',
-                     'itemsVentaDisponibles']);
-                     
+        $this->reset([
+            'fecha',
+            'estado',
+            'observaciones',
+            'asignacion_id',
+            'venta_id',
+            'stocksVenta',
+            'distribucionId',
+            'itemsDistribucion',
+            'itemsVentaDisponibles'
+        ]);
+
         $this->accion = $accion;
         $this->fecha = now()->format('Y-m-d');
         $this->estado = 1;
-        
+
         if ($accion === 'edit' && $id) {
             $this->editarDistribucion($id);
         }
-        
+
         $this->modal = true;
         $this->detalleModal = false;
         $this->previewVentaModal = false;
@@ -412,13 +428,13 @@ class Distribucion extends Component
     public function editarDistribucion($id)
     {
         $distribucion = ModeloDistribucion::with(['itemdistribucions', 'itemdistribucions.stock.producto'])->findOrFail($id);
-        
+
         $this->distribucionId = $distribucion->id;
         $this->fecha = $distribucion->fecha;
         $this->estado = $distribucion->estado;
         $this->observaciones = $distribucion->observaciones;
         $this->asignacion_id = $distribucion->asignacion_id;
-        
+
         // Cargar los items de distribución
         $this->itemsDistribucion = [];
         foreach ($distribucion->itemdistribucions as $item) {
@@ -435,10 +451,10 @@ class Distribucion extends Component
     public function verDetalle($id)
     {
         $distribucion = ModeloDistribucion::with([
-            'asignacion.personal', 
+            'asignacion.personal',
             'itemdistribucions.stock.producto'
         ])->findOrFail($id);
-        
+
         $this->distribucionSeleccionada = $distribucion->toArray();
         $this->modal = false;
         $this->detalleModal = true;
@@ -450,10 +466,10 @@ class Distribucion extends Component
     {
         // Validar que haya al menos un item en la distribución
         if (empty($this->itemsDistribucion)) {
-            $this->alert('error', 'Debe agregar al menos un ítem a la distribución.');
+            LivewireAlert::error('Error', 'Debe agregar al menos un ítem a la distribución.')->show();
             return;
         }
-        
+
         // Validar datos básicos
         $this->validate([
             'fecha' => 'required|date',
@@ -461,10 +477,10 @@ class Distribucion extends Component
             'observaciones' => 'nullable|string|max:500',
             'asignacion_id' => 'required|exists:asignacions,id',
         ]);
-        
+
         // Iniciar transacción
         \DB::beginTransaction();
-        
+
         try {
             if ($this->accion === 'edit' && $this->distribucionId) {
                 $distribucion = ModeloDistribucion::findOrFail($this->distribucionId);
@@ -474,7 +490,7 @@ class Distribucion extends Component
                     'observaciones' => $this->observaciones,
                     'asignacion_id' => $this->asignacion_id,
                 ]);
-                
+
                 // Eliminar items anteriores
                 ItemDistribucion::where('distribucion_id', $distribucion->id)->delete();
             } else {
@@ -485,7 +501,7 @@ class Distribucion extends Component
                     'asignacion_id' => $this->asignacion_id,
                 ]);
             }
-            
+
             // Crear los nuevos items de distribución
             foreach ($this->itemsDistribucion as $item) {
                 ItemDistribucion::create([
@@ -494,15 +510,15 @@ class Distribucion extends Component
                     'stock_id' => $item['stock_id'],
                     'distribucion_id' => $distribucion->id,
                 ]);
-                
+
                 // Actualizar existencias si la distribución está en estado "En distribución"
                 if ($this->estado == 1) {
                     $stock = Stock::findOrFail($item['stock_id']);
                     $existencia = Existencia::where('existenciable_type', 'App\\Models\\Stock')
-                                           ->where('existenciable_id', $stock->id)
-                                           ->where('sucursal_id', $this->selectedSucursal)
-                                           ->first();
-                    
+                        ->where('existenciable_id', $stock->id)
+                        ->where('sucursal_id', $this->selectedSucursal)
+                        ->first();
+
                     if ($existencia) {
                         $cantidadTotal = $item['cantidadNuevo'] + $item['cantidadUsados'];
                         $existencia->cantidad -= $cantidadTotal;
@@ -510,19 +526,23 @@ class Distribucion extends Component
                     }
                 }
             }
-            
+
             \DB::commit();
-            
-            $this->alert('success', $this->accion === 'edit' 
-                ? 'Distribución actualizada con éxito.' 
-                : 'Distribución registrada con éxito.');
-                
+
+            LivewireAlert::success(
+                'Éxito',
+                $this->accion === 'edit'
+                    ? 'Distribución actualizada con éxito.'
+                    : 'Distribución registrada con éxito.'
+            )->show();
+
             $this->cerrarModal();
         } catch (\Exception $e) {
             \DB::rollBack();
-            $this->alert('error', 'Ocurrió un error: ' . $e->getMessage());
+            LivewireAlert::error('Error', 'Ocurrió un error: ' . $e->getMessage())->show();
         }
     }
+
 
     public function confirmarGuardarDistribucion()
     {
@@ -532,37 +552,37 @@ class Distribucion extends Component
     public function retornarStock($id)
     {
         $distribucion = ModeloDistribucion::with(['itemdistribucions.stock'])->findOrFail($id);
-        
+
         // Solo permitir retornar si está en distribución
         if ($distribucion->estado != 1) {
             $this->alert('error', 'Solo se puede retornar stock de distribuciones en estado "En distribución".');
             return;
         }
-        
+
         try {
             \DB::beginTransaction();
-            
+
             // Actualizar estado de la distribución
             $distribucion->estado = 0; // Cancelado/retornado
             $distribucion->save();
-            
+
             // Devolver stock a existencias
             foreach ($distribucion->itemdistribucions as $item) {
                 $stock = $item->stock;
                 $existencia = Existencia::where('existenciable_type', 'App\\Models\\Stock')
-                                       ->where('existenciable_id', $stock->id)
-                                       ->where('sucursal_id', $stock->sucursal_id)
-                                       ->first();
-                
+                    ->where('existenciable_id', $stock->id)
+                    ->where('sucursal_id', $stock->sucursal_id)
+                    ->first();
+
                 if ($existencia) {
                     $cantidadTotal = $item->cantidadNuevo + $item->cantidadUsados;
                     $existencia->cantidad += $cantidadTotal;
                     $existencia->save();
                 }
             }
-            
+
             \DB::commit();
-            
+
             $this->alert('success', 'Stock retornado con éxito para la Distribución #' . $distribucion->id);
         } catch (\Exception $e) {
             \DB::rollBack();
@@ -577,11 +597,21 @@ class Distribucion extends Component
         $this->previewVentaModal = false;
         $this->itemManualModal = false;
         $this->reset([
-            'fecha', 'estado', 'observaciones', 'asignacion_id', 'venta_id', 
-            'stocksVenta', 'distribucionId', 'itemsDistribucion', 
-            'itemsVentaDisponibles', 'distribucionSeleccionada',
-            'productoSeleccionado', 'stocksProducto', 'stockManualId', 
-            'cantidadManualNuevo', 'cantidadManualUsados'
+            'fecha',
+            'estado',
+            'observaciones',
+            'asignacion_id',
+            'venta_id',
+            'stocksVenta',
+            'distribucionId',
+            'itemsDistribucion',
+            'itemsVentaDisponibles',
+            'distribucionSeleccionada',
+            'productoSeleccionado',
+            'stocksProducto',
+            'stockManualId',
+            'cantidadManualNuevo',
+            'cantidadManualUsados'
         ]);
         $this->resetErrorBag();
     }

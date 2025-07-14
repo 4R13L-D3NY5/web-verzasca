@@ -1056,16 +1056,16 @@
         },
         {
             "name": "jantinnerezo/livewire-alert",
-            "version": "v4.0.3",
+            "version": "4.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jantinnerezo/livewire-alert.git",
-                "reference": "d087c277b19ecbf12a28e9eddcaa0577b7127bc7"
+                "reference": "4bab76cba849da2f783c82103edb37165e646897"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jantinnerezo/livewire-alert/zipball/d087c277b19ecbf12a28e9eddcaa0577b7127bc7",
-                "reference": "d087c277b19ecbf12a28e9eddcaa0577b7127bc7",
+                "url": "https://api.github.com/repos/jantinnerezo/livewire-alert/zipball/4bab76cba849da2f783c82103edb37165e646897",
+                "reference": "4bab76cba849da2f783c82103edb37165e646897",
                 "shasum": ""
             },
             "require": {
@@ -1114,9 +1114,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jantinnerezo/livewire-alert/issues",
-                "source": "https://github.com/jantinnerezo/livewire-alert/tree/v4.0.3"
+                "source": "https://github.com/jantinnerezo/livewire-alert/tree/4.0.5"
             },
-            "time": "2025-03-07T14:01:32+00:00"
+            "time": "2025-04-21T10:09:52+00:00"
         },
         {
             "name": "laravel/framework",
