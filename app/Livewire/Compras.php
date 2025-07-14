@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use App\Models\Sucursal;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -10,6 +11,7 @@ use App\Models\Personal;
 use App\Models\Existencia;
 use App\Models\ItemCompra;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
+use Illuminate\Support\Facades\DB;
 
 class Compras extends Component
 {
@@ -50,7 +52,7 @@ class Compras extends Component
     {
         $this->proveedors = Proveedor::all();
         $this->personals = Personal::all();
-          $this->sucursals = Sucursal::all();
+        $this->sucursals = Sucursal::all();
     }
 
     public function render()
@@ -179,40 +181,52 @@ class Compras extends Component
         }
 
         try {
-            if ($this->accion === 'edit' && $this->compraId) {
-                $compra = Compra::findOrFail($this->compraId);
-                $compra->update([
-                    'fecha' => $this->fecha,
-                    'observaciones' => $this->observaciones,
-                    'proveedor_id' => $this->proveedor_id,
-                    'personal_id' => $this->personal_id,
-                ]);
-                $compra->itemCompras()->delete();
-            } else {
-                $compra = Compra::create([
-                    'fecha' => $this->fecha,
-                    'observaciones' => $this->observaciones,
-                    'proveedor_id' => $this->proveedor_id,
-                    'personal_id' => $this->personal_id,
-                ]);
-            }
+            // Usar una transacción para asegurar consistencia
+            DB::transaction(function () {
+                // Crear o actualizar la compra
+                if ($this->accion === 'edit' && $this->compraId) {
+                    $compra = Compra::findOrFail($this->compraId);
+                    $compra->update([
+                        'fecha' => $this->fecha,
+                        'observaciones' => $this->observaciones,
+                        'proveedor_id' => $this->proveedor_id,
+                        'personal_id' => $this->personal_id,
+                    ]);
+                    // Eliminar ítems anteriores en modo edición
+                    $compra->itemCompras()->delete();
+                } else {
+                    $compra = Compra::create([
+                        'fecha' => $this->fecha,
+                        'observaciones' => $this->observaciones,
+                        'proveedor_id' => $this->proveedor_id,
+                        'personal_id' => $this->personal_id,
+                    ]);
+                }
 
-            foreach ($this->items as $item) {
-                ItemCompra::create([
-                    'cantidad' => $item['cantidad'],
-                    'precio' => $item['precio'],
-                    'existencia_id' => $item['existencia']->id,
-                    'compra_id' => $compra->id,
-                ]);
+                // Procesar cada ítem y actualizar existencias
+                foreach ($this->items as $item) {
+                    $existencia = Existencia::find($item['existencia']->id);
+                    if (!$existencia) {
+                        throw new \Exception('Existencia no encontrada para el ítem con ID: ' . $item['existencia']->id);
+                    }
 
-                $existencia = Existencia::find($item['existencia']->id);
-                $existencia->increment('cantidad', $item['cantidad']);
-            }
+                    // Crear el ítem de la compra
+                    ItemCompra::create([
+                        'cantidad' => $item['cantidad'],
+                        'precio' => $item['precio'],
+                        'existencia_id' => $item['existencia']->id,
+                        'compra_id' => $compra->id,
+                    ]);
+
+                    // Incrementar la cantidad en la existencia
+                    $existencia->increment('cantidad', $item['cantidad']);
+                }
+            });
 
             LivewireAlert::title($this->accion === 'edit' ? 'Compra actualizada con éxito.' : 'Compra registrada con éxito.')->success()->show();
             $this->cerrarModal();
         } catch (\Exception $e) {
-            LivewireAlert::title('Error: ' . $e->getMessage())->error()->show();
+            LivewireAlert::title('Error al guardar la compra: ' . $e->getMessage())->error()->show();
         }
     }
 
