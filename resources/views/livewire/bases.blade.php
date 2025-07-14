@@ -46,18 +46,23 @@
 
               <!-- Columna 2: Sucursal + Stock -->
               <td class="px-4 py-4 text-left align-top text-sm">
-                <strong class="block mb-1">Sucursal:</strong>
-                @forelse ($base->existencias as $existencia)
-                <span class="block">
-                  {{ number_format($existencia->cantidad) }}:
-                  {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 18, '...') }}
-                </span>
-                @empty
-                <span class="text-xs text-gray-500">Sin stock registrado</span>
-                @endforelse
-                <strong class="p-text block mt-2">
-                  {{ number_format($base->existencias->sum('cantidad')) }}: Total bases
-                </strong>
+                  <strong class="block mb-1">Sucursal:</strong>
+                  @forelse ($base->existencias as $existencia)
+                  <span class="block">
+                      <span class="@if ($existencia->cantidad > ($existencia->cantidadMinima * 2)) text-green-500
+                                  @elseif ($existencia->cantidad >= $existencia->cantidadMinima && $existencia->cantidad <= ($existencia->cantidadMinima * 2)) text-yellow-500
+                                  @else text-red-500 @endif">
+                          {{ number_format($existencia->cantidad) . '/' . $existencia->cantidadMinima }}:
+                      </span>
+                      {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 18, '...') }}
+                  </span>
+                  @empty
+                  <span class="text-xs text-gray-500">Sin stock registrado</span>
+                  @endforelse
+
+                  <strong class="p-text block mt-2">
+                      {{ number_format($base->existencias->sum('cantidad')) }}: Total bases
+                  </strong>
               </td>
 
               <!-- Columna 3: Acciones -->

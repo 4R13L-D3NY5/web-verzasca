@@ -138,7 +138,7 @@
                 <option value="">Seleccione un ítem</option>
                 @foreach ($existenciasDisponibles as $existencia)
                 <option value="{{ $existencia->id }}">
-                  {{ $existencia->existenciable->insumo ?? $existencia->existenciable->imagen ?? 'Ítem' }} (Sucursal: {{ $existencia->sucursal->nombre }})
+                  [{{ class_basename($existencia->existenciable_type) }}] {{ $existencia->existenciable->insumo ?? $existencia->existenciable->imagen ?? 'Ítem' }} (Sucursal: {{ $existencia->sucursal->nombre }})
                   {{-- {{ $existencia->existenciable->insumo ?? $existencia->existenciable->imagen ?? 'Ítem' }} (Sucursal: {{ $existencia->sucursal->nombre }}) --}}
                 </option>
                 @endforeach

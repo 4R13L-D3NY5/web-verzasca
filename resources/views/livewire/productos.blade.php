@@ -52,16 +52,23 @@
                                 <strong class="block mb-1">Sucursal:</strong>
                                 @forelse ($producto->existencias as $existencia)
                                 <span class="block">
-                                    {{ number_format($existencia->cantidad) }}:
+                                    <span class="@if ($existencia->cantidad > ($existencia->cantidadMinima * 2)) text-green-500
+                                                @elseif ($existencia->cantidad >= $existencia->cantidadMinima && $existencia->cantidad <= ($existencia->cantidadMinima * 2)) text-yellow-500
+                                                @else text-red-500 @endif">
+                                        {{ number_format($existencia->cantidad) . '/' . $existencia->cantidadMinima }}:
+                                    </span>
                                     {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 18, '...') }}
                                 </span>
                                 @empty
                                 <span class="text-xs text-gray-500">Sin stock registrado</span>
                                 @endforelse
+
                                 <strong class="p-text block mt-2">
                                     {{ number_format($producto->existencias->sum('cantidad')) }}: Total productos
                                 </strong>
                             </td>
+
+                            
 
                             <!-- Columna 3: Acciones -->
                             <td class="px-4 py-4 text-right align-middle">

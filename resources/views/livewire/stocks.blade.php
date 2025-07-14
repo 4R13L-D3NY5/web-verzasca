@@ -96,7 +96,11 @@
                 <strong class="block mb-1">Sucursal:</strong>
                 @forelse ($stock->existencias as $existencia)
                 <span class="block">
-                  {{ number_format($existencia->cantidad) }}:
+                  <span class="@if ($existencia->cantidad > ($existencia->cantidadMinima * 2)) text-green-500
+                     @elseif ($existencia->cantidad >= $existencia->cantidadMinima && $existencia->cantidad <= ($existencia->cantidadMinima * 2)) text-yellow-500
+                     @else text-red-500 @endif">
+                    {{ number_format($existencia->cantidad).'/'.$existencia->cantidadMinima }}:
+                  </span>
                   {{ Str::limit($existencia->sucursal->nombre ?? 'Sucursal Desconocida', 18, '...') }}
                 </span>
                 @empty
@@ -106,22 +110,6 @@
                 <strong class="block mt-2">
                   {{ number_format($stock->existencias->sum('cantidad')) }}: Total unidades
                 </strong>
-
-                {{-- <div class="mt-2"><strong>Etiqueta:</strong>
-                  @if ($stock->etiqueta_id)
-                  {{ $stock->etiqueta->capacidad ?? '' }} -
-                  {{ $stock->etiqueta->cliente->empresa ?? $stock->etiqueta->cliente->nombre ?? 'Cliente desconocido' }}
-                  @else
-                  Sin etiqueta
-                  @endif
-                </div>
-
-                <div><strong>Precio de referencia:</strong> {{ $stock->producto->precioReferencia ?? 'No definido' }}
-                </div>
-                <div><strong>Precio de referencia 2:</strong> {{ $stock->producto->precioReferencia2 ?? 'No definido' }}
-                </div>
-                <div><strong>Precio de referencia 3:</strong> {{ $stock->producto->precioReferencia3 ?? 'No definido' }}
-                </div> --}}
               </td>
 
 
