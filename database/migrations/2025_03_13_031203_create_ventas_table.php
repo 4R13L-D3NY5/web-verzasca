@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('fechaMaxima')->nullable(); // Fecha máxima para crédito            
             $table->tinyInteger('estadoPedido')->default(1); // Estado (0: cancelado, 1: pedido, 2: vendido o entregado)
             $table->tinyInteger('estadoPago')->default(1); // Estado (0: parcial, 1: completo)
+            $table->foreignId('sucursal_id')->constrained('sucursals')->onDelete('cascade'); // Relación con Cliente
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade'); // Relación con Cliente
             $table->foreignId('personal_id')->constrained('personals')->onDelete('cascade'); // Relación con Personal
             $table->foreignId('personalEntrega_id')->nullable()->constrained('personals')->onDelete('cascade'); // Relación con Personal

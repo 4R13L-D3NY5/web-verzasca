@@ -13,6 +13,7 @@ class Venta extends Model
         'fechaPedido',
         'fechaEntrega',
         'fechaMaxima',
+        'sucursal_id', 
         'cliente_id', 
         'personal_id',
         'personalEntrega_id',
@@ -46,6 +47,10 @@ class Venta extends Model
     public function distribucion()
     {
         return $this->belongsTo(Distribucion::class);
+    }
+    public function sucursal()
+    {
+        return $this->belongsTo(Sucursal::class);
     }
 
     /**

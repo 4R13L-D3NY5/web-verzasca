@@ -33,7 +33,11 @@ class Sucursal extends Model
         return $this->hasMany(Stock::class);
     }
     public function existencias()
-{
-    return $this->hasMany(Existencia::class);
-}
+    {
+        return $this->hasMany(Existencia::class);
+    }
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class);
+    }
 }

@@ -4,6 +4,7 @@ namespace Database\Factories;
 use App\Models\Cliente; // Importa el modelo relacionado
 use App\Models\Distribucion;
 use App\Models\Personal;
+use App\Models\Sucursal;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,6 +23,7 @@ class VentaFactory extends Factory
             'fechaPedido' => $this->faker->date('Y-m-d', 'now'), // Fecha aleatoria hasta hoy
             'fechaEntrega' => $this->faker->optional()->date('Y-m-d', '+1 month'), // Opcional: dentro del próximo mes
             'fechaMaxima' => $this->faker->optional()->date('Y-m-d', '+2 months'), // Opcional: dentro de los próximos dos meses
+            'sucursal_id' => Sucursal::get()->random()->id, // Relación con Sucursal
             'cliente_id' => Cliente::get()->random()->id, // Relación con Cliente
             'estadoPedido' => $this->faker->randomElement([1, 2, 0]), // Estado aleatorio (1: pedido, 2: vendido, 3: cancelado)
             'estadoPago' => $this->faker->randomElement([0, 1]), // Pago completo (1) o parcial (0)

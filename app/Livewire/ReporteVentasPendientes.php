@@ -28,14 +28,18 @@ class ReporteVentasPendientes extends Component
         })
         ->with(['ventas' => function ($query) {
             $query->where('estadoPago', 0)
-                  ->with(['sucursal', 'personal', 'personalEntrega', 'pagos'])
+                  ->with(['sucursal', 'personal', 'personalEntrega', 'pagos', 'itemventas'])
                   ->orderBy('fechaMaxima', 'asc'); // Sort sales by fechaMaxima
         }])
         ->get()
         ->map(function ($cliente) {
             // Calculate total pending amount for each client
             $cliente->totalPendiente = $cliente->ventas->sum(function ($venta) {
-                return $venta->total - $venta->pagos->sum('monto');
+                $totalVenta = $venta->itemventas->sum(function ($item) {
+                    return $item->cantidad * $item->precio;
+                });
+                $totalPagado = $venta->pagos->sum('monto');
+                return $totalVenta - $totalPagado;
             });
             return $cliente;
         });

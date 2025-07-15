@@ -289,7 +289,7 @@ class DatabaseSeeder extends Seeder
         // Prestamo::factory(10)->create();
         
         Elaboracion::factory(10)->create();
-        Embotellado::factory(10)->create();
+        // Embotellado::factory(10)->create();
         // Reposicion::factory(10)->create();
         // Compra::factory(10)->create();
         // ItemCompra::factory(10)->create();

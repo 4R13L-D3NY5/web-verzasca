@@ -635,7 +635,7 @@
                             <span class="text-custom">REPORTE STOCK</span>
                         </a>
                     </li>
-                    <!-- REPORTE CREDITO (1,2) -->
+                    <!-- REPORTE CREDITOS PENDIENTES (1,2) -->
                     <li class="nav-item @if($seleccion == 'Reportecredito') bg-indigo-950  @endif">
                         <a wire:click="$set('seleccion', 'Reportecredito')" class="flex items-center space-x-2">
                             <span class="icon">
@@ -648,7 +648,7 @@
                                     <path d="M10 15h2" />
                                 </svg>
                             </span>
-                            <span class="text-custom">REPORTE CREDITO</span>
+                            <span class="text-custom">REPORTE CREDITOS PENDIENTES</span>
                         </a>
                     </li>
                 </div>
@@ -750,7 +750,7 @@
             @livewire('reportestock')
             @endif
             @if ($seleccion == 'Reportecredito')
-            @livewire('reportecredito')
+            @livewire('reporte-ventas-pendientes')
             @endif
             @if ($seleccion == 'Pruebaestilo')
             @livewire('pruebaestilo')
