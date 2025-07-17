@@ -22,6 +22,7 @@ class Producto extends Model
         'precioReferencia3',
         'observaciones',
         'estado',
+        'paquete',
         'base_id',
         'tapa_id',
     ];

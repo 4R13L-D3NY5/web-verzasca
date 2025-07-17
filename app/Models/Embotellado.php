@@ -19,6 +19,8 @@ class Embotellado extends Model
         'cantidad_generada',
         'fecha_embotellado',
         'observaciones',
+        'mermaTapa',
+        'mermaBase',
     ];
 
     public function existenciaBase() {

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('cantidad_entrada'); // Preformas usadas
             $table->integer('cantidad_salida')->nullable(); // Bases generadas
             $table->date('fecha_elaboracion');
+            $table->integer('merma')->default(0); // Cantidad de perdidos
             $table->text('observaciones')->nullable();       
 
             $table->timestamps(); // Campos created_at y updated_at

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('cantidad_etiqueta_usada');
             $table->integer('cantidad_generada')->nullable();
             $table->date('fecha_etiquetado');
+            $table->integer('mermaProducto')->default(0); // Cantidad de perdidos
+            $table->integer('mermaEtiqueta')->default(0); // Cantidad de perdidos
             $table->text('observaciones')->nullable();
             $table->timestamps();
         });

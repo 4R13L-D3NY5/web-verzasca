@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('cantidad_tapa_usada');
             $table->integer('cantidad_generada')->nullable();
             $table->date('fecha_embotellado');
+            $table->integer('mermaTapa')->default(0); // Cantidad de perdidos
+            $table->integer('mermaBase')->default(0); // Cantidad de perdidos
             $table->text('observaciones')->nullable();
             $table->timestamps(); // created_at y updated_at
         });

@@ -19,6 +19,8 @@ class Prestamo extends Model
         'cliente_id',
         'prestador',
         'recuperador',
+        'gramaje',
+        'cuello',
     ];
 
     /**

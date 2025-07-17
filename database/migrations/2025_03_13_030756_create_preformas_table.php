@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('imagen')->nullable();
             $table->string('detalle')->nullable();
             $table->string('insumo'); // Insumo utilizado en la preforma
+            $table->string('gramaje'); // Insumo utilizado en la preforma
+            $table->string('cuello')->default('Bajo'); // Insumo utilizado en la preforma
             $table->text('descripcion')->nullable(); // Descripción opcional
             $table->integer('capacidad'); // Capacidad de la preforma
             $table->string('color'); // Color de la preforma
