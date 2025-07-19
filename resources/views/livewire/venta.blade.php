@@ -92,7 +92,7 @@
                                 </div>
                                 <div>
                                     <span class="font-semibold block">Cliente:</span>
-                                    <span>{{ $venta->cliente->nombre ?? 'Cliente no registrado' }}</span>
+                                    <span>{{ $venta->cliente->empresa ? $venta->cliente->empresa :($venta->cliente->nombre ?? 'Cliente no registrado') }}</span>
                                 </div>
                             </td>
                             <td class="px-6 py-4 text-right">

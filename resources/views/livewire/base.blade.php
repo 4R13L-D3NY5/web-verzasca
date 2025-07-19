@@ -750,7 +750,7 @@
             @livewire('reportestock')
             @endif
             @if ($seleccion == 'Reportecredito')
-            @livewire('reporte-ventas-pendientes')
+            @livewire('reportecredito')
             @endif
             @if ($seleccion == 'Pruebaestilo')
             @livewire('pruebaestilo')
