@@ -3,121 +3,150 @@
     <div>
       <h6 class="text-xl font-bold mb-4 px-4 p-text">Reporte de Movimiento de Inventario</h6>
 
-      <!-- Date Filters -->
-      <div class="flex justify-center items-center gap-4 w-full max-w-2xl mx-auto mb-4">
-        <input type="date" wire:model.live="fechaInicio" class="input-g w-auto sm:w-64" />
-        <input type="date" wire:model.live="fechaFinal" class="input-g w-auto sm:w-64" />
+      <!-- Date and Sucursal Filters -->
+      <div class="flex flex-col sm:flex-row justify-center items-center gap-4 w-full max-w-2xl mx-auto mb-4">
+        <input type="date" wire:model.live="fechaInicio" class="input-g w-full sm:w-64" />
+        <input type="date" wire:model.live="fechaFinal" class="input-g w-full sm:w-64" />
+        <select wire:model.live="sucursalId" class="input-g w-full sm:w-64">
+          <option value="">Seleccione una sucursal</option>
+          @foreach ($sucursales as $sucursal)
+            <option value="{{ $sucursal->id }}">{{ $sucursal->nombre }}</option>
+          @endforeach
+        </select>
+        <button wire:click="generarReporte()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+          Generar Reporte
+        </button>
       </div>
 
-      <!-- Initial and Final Quantities -->
-      <div class="mb-4 p-4 bg-gray-100 rounded-lg">
-        <h6 class="text-lg font-semibold">Cantidades Iniciales y Finales (Periodo: {{ $fechaInicio }} a {{ $fechaFinal }})</h6>
-        <div class="grid grid-cols-2 gap-4 mt-2">
-          <div>Preformas: Inicial: {{ $initialPreformas }} - Final: {{ $finalPreformas }}</div>
-          <div>Bases: Inicial: {{ $initialBases }} - Final: {{ $finalBases }}</div>
-          <div>Tapas: Inicial: {{ $initialTapas }} - Final: {{ $finalTapas }}</div>
-          <div>Productos: Inicial: {{ $initialProductos }} - Final: {{ $finalProductos }}</div>
-          <div>Etiquetas: Inicial: {{ $initialEtiquetas }} - Final: {{ $finalEtiquetas }}</div>
-          <div>Stocks: Inicial: {{ $initialStocks }} - Final: {{ $finalStocks }}</div>
+      @if ($mostrarReporte && $sucursalId)
+        <!-- Depuración: Mostrar conteo de datos -->
+        <div class="mb-4 p-4 bg-gray-100 rounded-lg">
+          {{-- <p>Elaboraciones: {{ count($elaboraciones) }}</p>
+          <p>Embotellados: {{ count($embotellados) }}</p>
+          <p>Etiquetados: {{ count($etiquetados) }}</p> --}}
         </div>
-      </div>
 
-      <!-- Tables for Each Process (Based on Existencias) -->
-      <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
-        <h6 class="text-lg font-semibold mb-2">Proceso de Soplado</h6>
-        <table class="w-full text-sm text-left border border-slate-200 rounded-lg border-collapse">
-          <thead class="text-x uppercase color-bg">
-            <tr>
-              <th class="px-6 py-3 p-text">Preforma</th>
-              <th class="px-6 py-3 p-text">Cant. Entrada</th>
-              <th class="px-6 py-3 p-text">Merma</th>
-              <th class="px-6 py-3 p-text">Base (Salida)</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse ($existenciasPreformas as $existencia)
-              <tr class="color-bg border border-slate-200">
-                <td class="px-6 py-4">{{ $existencia->existenciable->insumo ?? 'N/A' }}</td> <!-- Usamos insumo para Preforma -->
-                <td class="px-6 py-4">{{ $existencia->cantidad }}</td>
-                <td class="px-6 py-4">0</td> <!-- Merma no disponible -->
-                <td class="px-6 py-4">{{ $existencia->existenciable->base->insumo ?? 'N/A' }}</td> <!-- Relación aproximada -->
-              </tr>
-            @empty
-              <tr>
-                <td colspan="4" class="text-center py-4 text-gray-600">No hay movimientos de soplado.</td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
-      </div>
+        
+        <!-- Tabla Proceso de Soplado -->
+        @if (($elaboraciones))
+          <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
+            <h6 class="text-lg font-semibold mb-2">Proceso de Soplado</h6>
+            <table class="w-full text-sm text-left border border-slate-200 rounded-lg border-collapse">
+              <thead class="text-x uppercase color-bg">
+                <tr>
+                  <th class="px-6 py-3 p-text">Preforma</th>
+                  <th class="px-6 py-3 p-text">Cant. Entrada</th>
+                  <th class="px-6 py-3 p-text">Merma</th>
+                  <th class="px-6 py-3 p-text">Cant. Salida</th>
+                  <th class="px-6 py-3 p-text">Base (Salida)</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($elaboraciones as $elaboracion)
+                  <tr class="color-bg border border-slate-200">
+                     <td class="px-6 py-4">[{{ $elaboracion->existenciaEntrada->existenciable->id }}] {{ $elaboracion->existenciaEntrada->existenciable->insumo }}</td>
+                     <td class="px-6 py-4">{{ $elaboracion->cantidad_entrada }}</td>
+                     <td class="px-6 py-4">{{ number_format($elaboracion->merma) }}</td>
+                     <td class="px-6 py-4">{{ $elaboracion->cantidad_salida }}</td>
+                    <td class="px-6 py-4">[{{ $elaboracion->existenciaSalida->existenciable->id }}] {{ $elaboracion->existenciaSalida->existenciable->descripcion }}</td>
+                  </tr>
+                @endforeach
+                @if (empty($elaboraciones))
+                  <tr>
+                    <td colspan="4" class="text-center py-4 text-gray-600">No hay movimientos de soplado.</td>
+                  </tr>
+                @endif
+              </tbody>
+            </table>
+          </div>
+        @else
+          <p class="text-red-500">No se encontraron datos para el proceso de soplado.</p>
+        @endif
 
-      <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
-        <h6 class="text-lg font-semibold mb-2">Proceso de Embotellado</h6>
-        <table class="w-full text-sm text-left border border-slate-200 rounded-lg border-collapse">
-          <thead class="text-x uppercase color-bg">
-            <tr>
-              <th class="px-6 py-3 p-text">Base</th>
-              <th class="px-6 py-3 p-text">Cant. Entrada</th>
-              <th class="px-6 py-3 p-text">Merma</th>
-              <th class="px-6 py-3 p-text">Tapa</th>
-              <th class="px-6 py-3 p-text">Cant.</th>
-              <th class="px-6 py-3 p-text">Merma</th>
-              <th class="px-6 py-3 p-text">Producto (Salida)</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse ($existenciasBases as $existencia)
-              <tr class="color-bg border border-slate-200">
-                <td class="px-6 py-4">{{ $existencia->existenciable->insumo ?? 'N/A' }}</td>
-                <td class="px-6 py-4">{{ $existencia->cantidad }}</td>
-                <td class="px-6 py-4">0</td>
-                <td class="px-6 py-4">{{ $existencia->existenciable->tapa->insumo ?? 'N/A' }}</td>
-                <td class="px-6 py-4">0</td> <!-- Cantidad tapa no disponible -->
-                <td class="px-6 py-4">0</td>
-                <td class="px-6 py-4">{{ $existencia->existenciable->producto->insumo ?? 'N/A' }}</td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="7" class="text-center py-4 text-gray-600">No hay movimientos de embotellado.</td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
-      </div>
+        <!-- Tabla Proceso de Embotellado -->
+        @if (!empty($embotellados))
+          <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
+            <h6 class="text-lg font-semibold mb-2">Proceso de Embotellado</h6>
+            <table class="w-full text-sm text-left border border-slate-200 rounded-lg border-collapse">
+              <thead class="text-x uppercase color-bg">
+                <tr>
+                  <th class="px-6 py-3 p-text">Base</th>
+                  <th class="px-6 py-3 p-text">Cant. Entrada</th>
+                  <th class="px-6 py-3 p-text">Merma</th>
+                  <th class="px-6 py-3 p-text">Tapa</th>
+                  <th class="px-6 py-3 p-text">Cant. Entrada</th>
+                  <th class="px-6 py-3 p-text">Merma</th>
+                  <th class="px-6 py-3 p-text">Cant. Salida</th>
+                  <th class="px-6 py-3 p-text">Producto (Salida)</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($embotellados as $embotellado)
+                  <tr class="color-bg border border-slate-200">
+                    <td class="px-6 py-4">[{{ $embotellado->existenciaBase->existenciable->id }}] {{ $embotellado->existenciaBase->existenciable->descripcion }}</td>
+                    <td class="px-6 py-4">{{ $embotellado->cantidad_base_usada }}</td>
+                    <td class="px-6 py-4">{{ number_format($embotellado->merma_base) }}</td>
+                    <td class="px-6 py-4">[{{ $embotellado->existenciaTapa->existenciable->id }}] {{ $embotellado->existenciaTapa->existenciable->color. '-' . $embotellado->existenciaTapa->existenciable->tipo}}</td>
+                    <td class="px-6 py-4">{{ $embotellado->cantidad_tapa_usada }}</td>
+                    <td class="px-6 py-4">{{ number_format($embotellado->merma_tapa) }}</td>
+                    <td class="px-6 py-4">{{ $embotellado->cantidad_generada }}</td>
+                    <td class="px-6 py-4">[{{ $embotellado->existenciaProducto->existenciable->id }}] {{ $embotellado->existenciaProducto->existenciable->nombre }}</td>
+                  </tr>
+                @endforeach
+                @if (empty($embotellados))
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-gray-600">No hay movimientos de embotellado.</td>
+                  </tr>
+                @endif
+              </tbody>
+            </table>
+          </div>
+        @else
+          <p class="text-red-500">No se encontraron datos para el proceso de embotellado.</p>
+        @endif
 
-      <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
-        <h6 class="text-lg font-semibold mb-2">Proceso de Etiquetado</h6>
-        <table class="w-full text-sm text-left border border-slate-200 rounded-lg border-collapse">
-          <thead class="text-x uppercase color-bg">
-            <tr>
-              <th class="px-6 py-3 p-text">Producto</th>
-              <th class="px-6 py-3 p-text">Cant. Entrada</th>
-              <th class="px-6 py-3 p-text">Merma</th>
-              <th class="px-6 py-3 p-text">Etiqueta</th>
-              <th class="px-6 py-3 p-text">Cant.</th>
-              <th class="px-6 py-3 p-text">Merma</th>
-              <th class="px-6 py-3 p-text">Stock (Salida)</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse ($existenciasProductos as $existencia)
-              <tr class="color-bg border border-slate-200">
-                <td class="px-6 py-4">{{ $existencia->existenciable->insumo ?? 'N/A' }}</td>
-                <td class="px-6 py-4">{{ $existencia->cantidad }}</td>
-                <td class="px-6 py-4">0</td>
-                <td class="px-6 py-4">{{ $existencia->existenciable->etiqueta->insumo ?? 'N/A' }}</td>
-                <td class="px-6 py-4">0</td>
-                <td class="px-6 py-4">0</td>
-                <td class="px-6 py-4">{{ $existencia->existenciable->stock->insumo ?? 'N/A' }}</td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="7" class="text-center py-4 text-gray-600">No hay movimientos de etiquetado.</td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
-      </div>
+        <!-- Tabla Proceso de Etiquetado -->
+        @if (!empty($etiquetados))
+          <div class="relative mt-3 w-full overflow-x-auto shadow-md sm:rounded-lg">
+            <h6 class="text-lg font-semibold mb-2">Proceso de Etiquetado</h6>
+            <table class="w-full text-sm text-left border border-slate-200 rounded-lg border-collapse">
+              <thead class="text-x uppercase color-bg">
+                <tr>
+                  <th class="px-6 py-3 p-text">Producto</th>
+                  <th class="px-6 py-3 p-text">Cant. Entrada</th>
+                  <th class="px-6 py-3 p-text">Merma</th>
+                  <th class="px-6 py-3 p-text">Etiqueta</th>
+                  <th class="px-6 py-3 p-text">Cant. Entrada</th>
+                  <th class="px-6 py-3 p-text">Merma</th>
+                  <th class="px-6 py-3 p-text">Cant. Salida</th>
+                  <th class="px-6 py-3 p-text">Stock (Salida)</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($etiquetados as $etiquetado)
+                  <tr class="color-bg border border-slate-200">
+                    <td class="px-6 py-4">[{{ $etiquetado->existenciaProducto->existenciable->id }}] {{ $etiquetado->existenciaProducto->existenciable->nombre }}</td>
+                    <td class="px-6 py-4">{{ $etiquetado->cantidad_producto_usado }}</td>
+                    <td class="px-6 py-4">{{ number_format($etiquetado->merma_producto) }}</td>
+                    <td class="px-6 py-4">[{{ $etiquetado->existenciaEtiqueta->existenciable->id }}] {{ $etiquetado->existenciaEtiqueta->existenciable->empresa }}</td>
+                    <td class="px-6 py-4">{{ $etiquetado->cantidad_etiqueta_usada }}</td>
+                    <td class="px-6 py-4">{{ number_format($etiquetado->merma_etiqueta) }}</td>
+                    <td class="px-6 py-4">{{ $etiquetado->cantidad_generada }}</td>
+                    <td class="px-6 py-4">[{{ $etiquetado->existenciaStock->existenciable->id }}] {{ $etiquetado->existenciaStock->existenciable->fechaVencimiento }}</td>
+                  </tr>
+                @endforeach
+                @if (empty($etiquetados))
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-gray-600">No hay movimientos de etiquetado.</td>
+                  </tr>
+                @endif
+              </tbody>
+            </table>
+          </div>
+        @else
+          <p class="text-red-500">No se encontraron datos para el proceso de etiquetado.</p>
+        @endif
+      @endif
     </div>
   </div>
 </div>

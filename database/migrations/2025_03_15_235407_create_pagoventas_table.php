@@ -1,50 +1,33 @@
 <?php
 
-namespace App\Livewire;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use Livewire\Component;
-use Livewire\WithPagination;
-use App\Models\Venta;
-use App\Models\Cliente;
-
-class ReporteVentasPendientes extends Component
+return new class extends Migration
 {
-    use WithPagination;
-
-    public $search = '';
-    protected $paginationTheme = 'tailwind';
-
-    public function render()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
-        // Fetch clients with pending sales (estadoPago = 0)
-        $clientes = Cliente::whereHas('ventas', function ($query) {
-            $query->where('estadoPago', 0)
-                  ->when($this->search, function ($subQuery) {
-                      $subQuery->whereHas('cliente', function ($q) {
-                          $q->where('nombres', 'like', '%' . $this->search . '%')
-                            ->orWhere('apellidos', 'like', '%' . $this->search . '%');
-                      });
-                  });
-        })
-        ->with(['ventas' => function ($query) {
-            $query->where('estadoPago', 0)
-                  ->with(['sucursal', 'personal', 'personalEntrega', 'pagos'])
-                  ->orderBy('fechaMaxima', 'asc'); // Sort sales by fechaMaxima
-        }])
-        ->get()
-        ->map(function ($cliente) {
-            // Calculate total pending amount for each client
-            $cliente->totalPendiente = $cliente->ventas->sum(function ($venta) {
-                return $venta->total - $venta->pagos->sum('monto');
-            });
-            return $cliente;
+        Schema::create('pagoventas', function (Blueprint $table) {
+            $table->id(); // Clave primaria
+            $table->string('tipo'); // Tipo de pago: QR, contado, cheque
+            $table->double('monto'); // Monto a cuenta
+            $table->string('codigo')->nullable(); // Código asociado al crédito (opcional)
+            $table->date('fechaPago'); // Fecha del pago
+            $table->text('observaciones')->nullable(); // Observaciones (opcional)
+            $table->foreignId('venta_id')->constrained('ventas')->onDelete('cascade'); // Relación con la tabla ventas
+            $table->timestamps(); // Campos created_at y updated_at
         });
-
-        return view('livewire.reporte-ventas-pendientes', compact('clientes'));
     }
 
-    public function updatingSearch()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
-        $this->resetPage();
+        Schema::dropIfExists('pagoventas');
     }
-}
+};

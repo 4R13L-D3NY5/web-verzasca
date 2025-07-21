@@ -17,8 +17,7 @@ class Etiqueta extends Model
         'unidad',
         'descripcion',
         'cliente_id',
-        'mermaProducto',
-        'mermaEtiqueta',
+        
     ];
 
     /**

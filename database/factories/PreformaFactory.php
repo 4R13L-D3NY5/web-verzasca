@@ -20,6 +20,7 @@ class PreformaFactory extends Factory
             'insumo' => $this->faker->word,
             'descripcion' => $this->faker->optional()->sentence,
             'capacidad' => $this->faker->numberBetween(500, 2000),
+            'gramaje' => $this->faker->numberBetween(500, 2000),
             'color' => $this->faker->safeColorName,
             'estado' => $this->faker->boolean,
             'observaciones' => $this->faker->optional()->sentence,

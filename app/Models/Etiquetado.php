@@ -20,6 +20,8 @@ class Etiquetado extends Model
         'cantidad_generada',
         'fecha_etiquetado',
         'observaciones',
+        'mermaProducto',
+        'mermaEtiqueta',
     ];
 
     public function existenciaProducto(): BelongsTo {

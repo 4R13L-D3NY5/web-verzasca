@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Livewire\Embotellado;
+use App\Models\Embotellado;
 use App\Models\Asignacion;
 use App\Models\Base;
 use App\Models\Coche;
@@ -15,6 +15,7 @@ use App\Models\Cliente;
 use App\Models\Compra;
 use App\Models\Elaboracion;
 use App\Models\Etiqueta;
+use App\Models\Etiquetado;
 use App\Models\Existencia;
 use App\Models\Itemcompra;
 use App\Models\Itemventa;
@@ -289,7 +290,8 @@ class DatabaseSeeder extends Seeder
         // Prestamo::factory(10)->create();
         
         Elaboracion::factory(10)->create();
-        // Embotellado::factory(10)->create();
+        Embotellado::factory(10)->create();
+        Etiquetado::factory(10)->create();
         // Reposicion::factory(10)->create();
         // Compra::factory(10)->create();
         // ItemCompra::factory(10)->create();

@@ -24,6 +24,9 @@ return new class extends Migration
             $table->integer('mermaTapa')->default(0); // Cantidad de perdidos
             $table->integer('mermaBase')->default(0); // Cantidad de perdidos
             $table->text('observaciones')->nullable();
+
+            $table->unsignedBigInteger('sucursal_id')->default(1);
+            $table->foreign('sucursal_id')->references('id')->on('sucursals');
             $table->timestamps(); // created_at y updated_at
         });
     }
