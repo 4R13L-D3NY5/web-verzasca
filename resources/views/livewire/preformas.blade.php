@@ -36,7 +36,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
                   <!-- Imagen -->
                   <img src="{{ asset('storage/' . $preforma->imagen) }}" alt="Preforma"
-                    class="h-20 w-20 sm:h-24 sm:w-24 object-cover rounded mb-2 sm:mb-0">
+                    class="sm:h-24 sm:w-12 object-cover rounded mb-2 sm:mb-0">
 
                   <!-- Información -->
                   <div class="text-sm">

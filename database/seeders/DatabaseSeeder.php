@@ -77,11 +77,950 @@ class DatabaseSeeder extends Seeder
             $sucursal->email = $emailSucursal[$index] ?? null;
         }
 
-        $preformas = Preforma::factory(5)->create();
-        $bases = Base::factory(5)->create();
-        $tapas = Tapa::factory(5)->create();
-        $productos = Producto::factory(5)->create();
-        $etiquetas = Etiqueta::factory(5)->create();
+        
+        $preformas = [
+            [
+                'imagen' => 'preformas/ppet002.jpg',
+                'detalle' => 'mls',
+                'insumo' => 'botella',
+                'gramaje' => '250 - 330',
+                'cuello' => 'corto',
+                'descripcion' => 'normal',
+                'capacidad' => 5000,
+                'color' => 'transparente',
+                'estado' => 1,
+                'observaciones' => null,
+            ],
+            [
+                'imagen' => 'preformas/ppet001.jpg',
+                'detalle' => 'mls',
+                'insumo' => 'botella',
+                'gramaje' => '250',
+                'cuello' => 'largo',
+                'descripcion' => 'normal',
+                'capacidad' => 5000,
+                'color' => 'transparente',
+                'estado' => 1,
+                'observaciones' => null,
+            ],
+            [
+                'imagen' => 'preformas/ppet004.jpg',
+                'detalle' => 'mls',
+                'insumo' => 'botella',
+                'gramaje' => '500-600-750',
+                'cuello' => 'corto',
+                'descripcion' => 'normal, con gas, tornado bicentenario, everest',
+                'capacidad' => 5000,
+                'color' => 'transparente',
+                'estado' => 1,
+                'observaciones' => null,
+            ],
+            [
+                'imagen' => 'preformas/ppet005.jpg',
+                'detalle' => 'mls',
+                'insumo' => 'botella',
+                'gramaje' => '500-600-750',
+                'cuello' => 'corto',
+                'descripcion' => 'normal, con gas, tornado bicentenario, everest',
+                'capacidad' => 5000,
+                'color' => 'azul',
+                'estado' => 1,
+                'observaciones' => null,
+            ],
+            [
+                'imagen' => 'preformas/ppet006.jpg',
+                'detalle' => 'Lts',
+                'insumo' => 'botella',
+                'gramaje' => '1 - 1,5',
+                'cuello' => 'Bajo', // Valor predeterminado
+                'descripcion' => 'normal',
+                'capacidad' => 5000,
+                'color' => 'transparente',
+                'estado' => 1,
+                'observaciones' => null,
+            ],
+            [
+                'imagen' => 'preformas/ppet007.jpg',
+                'detalle' => 'Lts',
+                'insumo' => 'botella',
+                'gramaje' => '1 - 1,5',
+                'cuello' => 'Bajo', // Valor predeterminado
+                'descripcion' => 'normal',
+                'capacidad' => 5000,
+                'color' => 'azul',
+                'estado' => 1,
+                'observaciones' => null,
+            ],
+            [
+                'imagen' => 'preformas/ppet008.jpg',
+                'detalle' => 'Lts',
+                'insumo' => 'botellon',
+                'gramaje' => '20',
+                'cuello' => 'Bajo', // Valor predeterminado
+                'descripcion' => 'normal',
+                'capacidad' => 300,
+                'color' => 'azul',
+                'estado' => 1,
+                'observaciones' => null,
+            ],
+            [
+                'imagen' => 'preformas/ppet003.jpg',
+                'detalle' => 'mls',
+                'insumo' => 'botella',
+                'gramaje' => '400',
+                'cuello' => 'Bajo', // Valor predeterminado
+                'descripcion' => 'normal',
+                'capacidad' => 5000,
+                'color' => 'transparente',
+                'estado' => 1,
+                'observaciones' => null,
+            ],
+        ];
+
+        foreach ($preformas as $preforma) {
+            Preforma::create($preforma);
+        }
+
+
+         // Sembrar datos para la tabla bases
+        $bases = [
+            [
+                'imagen' => 'bases/ppref001.jpg',
+                'descripcion' => 'mls',
+                'capacidad' => 250,
+                'estado' => 1,
+                'observaciones' => 'normal, cuello corto',
+                'preforma_id' => 2, // ppet002
+            ],
+            [
+                'imagen' => 'bases/ppref002.jpg',
+                'descripcion' => 'mls',
+                'capacidad' => 250,
+                'estado' => 1,
+                'observaciones' => 'normal, cuello largo',
+                'preforma_id' => 1, // ppet001
+            ],
+            [
+                'imagen' => 'bases/ppref003.jpg',
+                'descripcion' => 'mls',
+                'capacidad' => 330,
+                'estado' => 1,
+                'observaciones' => 'normal, cuello corto',
+                'preforma_id' => 2, // ppet002
+            ],
+            [
+                'imagen' => 'bases/ppref004.jpg',
+                'descripcion' => 'mls',
+                'capacidad' => 400,
+                'estado' => 1,
+                'observaciones' => 'normal',
+                'preforma_id' => 8, // ppet003
+            ],
+            [
+                'imagen' => 'bases/ppref005.jpg',
+                'descripcion' => 'mls',
+                'capacidad' => 500,
+                'estado' => 1,
+                'observaciones' => 'normal, cuello corto',
+                'preforma_id' => 3, // ppet004
+            ],
+            [
+                'imagen' => 'bases/ppref006.jpg',
+                'descripcion' => 'mls',
+                'capacidad' => 530,
+                'estado' => 1,
+                'observaciones' => 'con gas, cuello corto',
+                'preforma_id' => 3, // ppet004
+            ],
+            [
+                'imagen' => 'bases/ppref007.jpg',
+                'descripcion' => 'mls',
+                'capacidad' => 500,
+                'estado' => 1,
+                'observaciones' => 'normal, cuello corto',
+                'preforma_id' => 4, // ppet005
+            ],
+            [
+                'imagen' => 'bases/ppref008.jpg',
+                'descripcion' => 'mls',
+                'capacidad' => 530,
+                'estado' => 1,
+                'observaciones' => 'con gas, cuello corto',
+                'preforma_id' => 4, // ppet005
+            ],
+            [
+                'imagen' => 'bases/ppref009.jpg',
+                'descripcion' => 'mls',
+                'capacidad' => 600,
+                'estado' => 1,
+                'observaciones' => 'normal',
+                'preforma_id' => 3, // ppet004
+            ],
+            [
+                'imagen' => 'bases/ppref010.jpg',
+                'descripcion' => 'mls',
+                'capacidad' => 600,
+                'estado' => 1,
+                'observaciones' => 'alcalina',
+                'preforma_id' => 4, // ppet005
+            ],
+            [
+                'imagen' => 'bases/ppref011.jpg',
+                'descripcion' => 'mls',
+                'capacidad' => 750,
+                'estado' => 1,
+                'observaciones' => 'normal',
+                'preforma_id' => 3, // ppet004
+            ],
+            [
+                'imagen' => 'bases/ppref012.jpg',
+                'descripcion' => 'mls',
+                'capacidad' => 750,
+                'estado' => 1,
+                'observaciones' => 'alcalina',
+                'preforma_id' => 4, // ppet005
+            ],
+            [
+                'imagen' => 'bases/ppref013.jpg',
+                'descripcion' => 'Lt',
+                'capacidad' => 1000,
+                'estado' => 1,
+                'observaciones' => 'normal',
+                'preforma_id' => 5, // ppet006
+            ],
+            [
+                'imagen' => 'bases/ppref014.jpg',
+                'descripcion' => 'Lt',
+                'capacidad' => 1000,
+                'estado' => 1,
+                'observaciones' => 'alcalina',
+                'preforma_id' => 6, // ppet007
+            ],
+            [
+                'imagen' => 'bases/ppref015.jpg',
+                'descripcion' => 'Lts',
+                'capacidad' => 1500,
+                'estado' => 1,
+                'observaciones' => 'normal',
+                'preforma_id' => 5, // ppet006
+            ],
+            [
+                'imagen' => 'bases/ppref016.jpg',
+                'descripcion' => 'Lts',
+                'capacidad' => 1500,
+                'estado' => 1,
+                'observaciones' => 'alcalina',
+                'preforma_id' => 6, // ppet007
+            ],
+            [
+                'imagen' => 'bases/ppref017.jpg',
+                'descripcion' => 'Lts',
+                'capacidad' => 20000,
+                'estado' => 1,
+                'observaciones' => 'normal',
+                'preforma_id' => 7, // ppet008
+            ],
+        ];
+
+        foreach ($bases as $base) {
+            Base::create($base);
+        }
+
+        // Sembrar datos para la tabla tapas
+        $tapas = [
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'transparente',
+                'tipo' => 'normal',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'blanco',
+                'tipo' => 'normal',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'verde',
+                'tipo' => 'normal',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'rosado',
+                'tipo' => 'normal',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'rojo',
+                'tipo' => 'normal',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'azul',
+                'tipo' => 'normal',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'negro',
+                'tipo' => 'normal',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'rojo',
+                'tipo' => 'deportivas',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'azul',
+                'tipo' => 'deportivas',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'negro',
+                'tipo' => 'deportivas',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'transparente',
+                'tipo' => 'deportivas',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'blanco',
+                'tipo' => 'deportivas',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'azul',
+                'tipo' => 'push up',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'rojo',
+                'tipo' => 'push up',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'azul',
+                'tipo' => 'rosca',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'blanco',
+                'tipo' => 'rosca',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => null,
+                'color' => 'negro',
+                'tipo' => 'rosca',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'cuello largo',
+                'color' => 'transparente',
+                'tipo' => 'normal',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'cuello largo',
+                'color' => 'blanco',
+                'tipo' => 'normal',
+                'estado' => 1,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'cuello largo',
+                'color' => 'negro',
+                'tipo' => 'normal',
+                'estado' => 1,
+            ],
+        ];
+
+        foreach ($tapas as $tapa) {
+            Tapa::create($tapa);
+        }
+
+// Sembrar datos para la tabla etiquetas
+        $etiquetas = [
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '250',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '330',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '400',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '500',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'con gas',
+                'capacidad' => '530',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '600',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'alcalina',
+                'capacidad' => '600',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'bicentenario normal',
+                'capacidad' => '600',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'bicentenario alcalina',
+                'capacidad' => '600',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '750',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'alcalina',
+                'capacidad' => '750',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '1',
+                'unidad' => 'L',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'alcalina',
+                'capacidad' => '1',
+                'unidad' => 'L',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '1.5',
+                'unidad' => 'L',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'alcalina',
+                'capacidad' => '1.5',
+                'unidad' => 'L',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'dispenser',
+                'capacidad' => '20',
+                'unidad' => 'L',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '250',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '330',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '400',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '500',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'con gas',
+                'capacidad' => '530',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '600',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'alcalina',
+                'capacidad' => '600',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'bicentenario normal',
+                'capacidad' => '600',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'bicentenario alcalina',
+                'capacidad' => '600',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '750',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'alcalina',
+                'capacidad' => '750',
+                'unidad' => 'ml',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '1',
+                'unidad' => 'L',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'alcalina',
+                'capacidad' => '1',
+                'unidad' => 'L',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '1.5',
+                'unidad' => 'L',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'alcalina',
+                'capacidad' => '1.5',
+                'unidad' => 'L',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+            [
+                'imagen' => null,
+                'descripcion' => 'normal',
+                'capacidad' => '20',
+                'unidad' => 'L',
+                'estado' => 1,
+                'cliente_id' => null,
+            ],
+        ];
+
+        foreach ($etiquetas as $etiqueta) {
+            Etiqueta::create($etiqueta);
+        }
+
+        // Sembrar datos para la tabla productos
+        $productos = [
+            [
+                'nombre' => 'Botella 250 mls',
+                'imagen' => null,
+                'tipoContenido' => 1, // agua normal
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 250,
+                'unidad' => 'ml',
+                'precioReferencia' => 3.20,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '35 unidades, Plastico',
+                'base_id' => 2, // ppref002
+                'tapa_id' => 1, // t0001
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 250 mls',
+                'imagen' => null,
+                'tipoContenido' => 1, // agua normal
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 250,
+                'unidad' => 'ml',
+                'precioReferencia' => 3.20,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '35 unidades, Plastico',
+                'base_id' => 1, // ppref001
+                'tapa_id' => 19, // t0019
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 330 mls',
+                'imagen' => null,
+                'tipoContenido' => 1, // agua normal
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 330,
+                'unidad' => 'ml',
+                'precioReferencia' => 3.60,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '30 unidades, Plastico',
+                'base_id' => 3, // ppref003
+                'tapa_id' => 1, // t0001
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 400 mls',
+                'imagen' => null,
+                'tipoContenido' => 1, // agua normal
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 400,
+                'unidad' => 'ml',
+                'precioReferencia' => 6.00,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '20 unidades, Plastico',
+                'base_id' => 4, // ppref004
+                'tapa_id' => 15, // t0015
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 400 mls',
+                'imagen' => null,
+                'tipoContenido' => 1, // agua normal
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 400,
+                'unidad' => 'ml',
+                'precioReferencia' => 6.00,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '20 unidades, Plastico',
+                'base_id' => 5, // ppref005
+                'tapa_id' => 17, // t0017
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 500 mls',
+                'imagen' => null,
+                'tipoContenido' => 1, // agua normal
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 500,
+                'unidad' => 'ml',
+                'precioReferencia' => 4.00,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '20 unidades, Plastico',
+                'base_id' => 6, // ppref006
+                'tapa_id' => 1, // t0001
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 530 mls',
+                'imagen' => null,
+                'tipoContenido' => 2, // agua con gas
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 530,
+                'unidad' => 'ml',
+                'precioReferencia' => 4.20,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '20 unidades, Plastico',
+                'base_id' => 7, // ppref007
+                'tapa_id' => 1, // t0001
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 600 mls',
+                'imagen' => null,
+                'tipoContenido' => 1, // agua normal
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 600,
+                'unidad' => 'ml',
+                'precioReferencia' => 22.50,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '20 unidades, Vidrio',
+                'base_id' => 8, // ppref008
+                'tapa_id' => 1, // t0001
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 600 mls',
+                'imagen' => null,
+                'tipoContenido' => 3, // agua alcalina
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 600,
+                'unidad' => 'ml',
+                'precioReferencia' => 4.80,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '20 unidades, Plastico',
+                'base_id' => 9, // ppref009
+                'tapa_id' => 1, // t0001
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 600 mls',
+                'imagen' => null,
+                'tipoContenido' => 1, // agua normal
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 600,
+                'unidad' => 'ml',
+                'precioReferencia' => 4.50,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '20 unidades, Plastico',
+                'base_id' => 10, // ppref010
+                'tapa_id' => 1, // t0001
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 750 mls',
+                'imagen' => null,
+                'tipoContenido' => 1, // agua normal
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 750,
+                'unidad' => 'ml',
+                'precioReferencia' => 5.00,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '15 unidades, Plastico',
+                'base_id' => 11, // ppref011
+                'tapa_id' => 1, // t0001
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 1 lt',
+                'imagen' => null,
+                'tipoContenido' => 1, // agua normal
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 1000,
+                'unidad' => 'L',
+                'precioReferencia' => 5.50,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '10 unidades, Plastico',
+                'base_id' => 13, // ppref013
+                'tapa_id' => 1, // t0001
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 1 lt',
+                'imagen' => null,
+                'tipoContenido' => 3, // agua alcalina
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 1000,
+                'unidad' => 'L',
+                'precioReferencia' => 5.70,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '10 unidades, Plastico',
+                'base_id' => 14, // ppref014
+                'tapa_id' => 1, // t0001
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 1,5 lts',
+                'imagen' => null,
+                'tipoContenido' => 1, // agua normal
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 1500,
+                'unidad' => 'L',
+                'precioReferencia' => 5.80,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '8 unidades, Plastico',
+                'base_id' => 15, // ppref015
+                'tapa_id' => 1, // t0001
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botella 1,5 lts',
+                'imagen' => null,
+                'tipoContenido' => 3, // agua alcalina
+                'tipoProducto' => 0, // botella (sin retorno)
+                'capacidad' => 1500,
+                'unidad' => 'L',
+                'precioReferencia' => 6.00,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => '8 unidades, Plastico',
+                'base_id' => 16, // ppref016
+                'tapa_id' => 1, // t0001
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Botellon 20 lts',
+                'imagen' => null,
+                'tipoContenido' => 1, // agua normal
+                'tipoProducto' => 1, // botellon (con retorno)
+                'capacidad' => 20000,
+                'unidad' => 'L',
+                'precioReferencia' => 16.00,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => 'Plastico',
+                'base_id' => 17, // ppref017
+                'tapa_id' => null,
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Hielo 2,5',
+                'imagen' => null,
+                'tipoContenido' => 4, // hielo
+                'tipoProducto' => 0, // sin retorno
+                'capacidad' => 2500,
+                'unidad' => 'kg',
+                'precioReferencia' => 4.00,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => null,
+                'base_id' => 1, // ppref001 (temporal, ajustar según necesidad)
+                'tapa_id' => null,
+                'estado' => 1,
+            ],
+            [
+                'nombre' => 'Hielo 5',
+                'imagen' => null,
+                'tipoContenido' => 4, // hielo
+                'tipoProducto' => 0, // sin retorno
+                'capacidad' => 5000,
+                'unidad' => 'kg',
+                'precioReferencia' => 7.00,
+                'precioReferencia2' => null,
+                'precioReferencia3' => null,
+                'observaciones' => null,
+                'base_id' => 1, // ppref001 (temporal, ajustar según necesidad)
+                'tapa_id' => null,
+                'estado' => 1,
+            ],
+        ];
+
+        foreach ($productos as $producto) {
+            Producto::create($producto);
+        }
+
+        $preformas = Preforma::get();
+        $bases = Base::get();
+        $tapas = Tapa::get();
+        $productos = Producto::get();
+        $etiquetas = Etiqueta::get();
         $stocks = Stock::factory(5)->create();
 
   
