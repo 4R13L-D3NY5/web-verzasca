@@ -6,9 +6,12 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use App\Models\Cliente as ModeloCliente;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class Cliente extends Component
 {
+    use WithFileUploads;
     use WithPagination;
 
     public $search = '';
@@ -24,7 +27,7 @@ class Cliente extends Component
     public $correo = '';
     public $latitud = '';
     public $longitud = '';
-    public $foto = '';
+    public $foto = null;
     public $estado = 1;
     public $clienteSeleccionado = null;
     public $coordenadas;
@@ -39,8 +42,8 @@ class Cliente extends Component
                 ->orWhere('telefono', 'like', '%' . $this->search . '%')
                 ->orWhere('correo', 'like', '%' . $this->search . '%');
         })
-        ->orderBy('id','desc')
-        ->paginate(5);
+            ->orderBy('id', 'desc')
+            ->paginate(5);
 
         return view('livewire.cliente', compact('clientes'));
     }
@@ -108,15 +111,31 @@ class Cliente extends Component
             'correo' => 'nullable|email|max:255',
             'latitud' => 'nullable|numeric|between:-90,90',
             'longitud' => 'nullable|numeric|between:-180,180',
-            'foto' => 'nullable|string|max:255',
+            'foto' => $this->accion === 'edit' && !is_object($this->foto)
+                ? 'nullable|string|max:255'
+                : 'nullable|image|max:2048', // Acepta imagen de hasta 2MB
             'estado' => 'required|boolean',
         ];
 
         $this->validate($rules);
 
         try {
+            // 📌 EDITAR CLIENTE
             if ($this->accion === 'edit' && $this->clienteId) {
                 $cliente = ModeloCliente::findOrFail($this->clienteId);
+
+                // Si subieron nueva foto
+                if (is_object($this->foto)) {
+                    $rutaFoto = $this->foto->store('clientes', 'public');
+
+                    // Opcional: borrar foto anterior si existía
+                    if ($cliente->foto && \Illuminate\Support\Facades\Storage::disk('public')->exists($cliente->foto)) {
+                        \Illuminate\Support\Facades\Storage::disk('public')->delete($cliente->foto);
+                    }
+                } else {
+                    $rutaFoto = $this->foto; // Mantener la misma foto
+                }
+
                 $cliente->update([
                     'nombre' => $this->nombre,
                     'empresa' => $this->empresa,
@@ -126,7 +145,7 @@ class Cliente extends Component
                     'correo' => $this->correo,
                     'latitud' => $this->latitud,
                     'longitud' => $this->longitud,
-                    'foto' => $this->foto,
+                    'foto' => $rutaFoto,
                     'estado' => $this->estado,
                 ]);
 
@@ -134,6 +153,12 @@ class Cliente extends Component
                     ->success()
                     ->show();
             } else {
+                // 📌 CREAR CLIENTE NUEVO
+                $rutaFoto = null;
+                if ($this->foto) {
+                    $rutaFoto = $this->foto->store('clientes', 'public');
+                }
+
                 ModeloCliente::create([
                     'nombre' => $this->nombre,
                     'empresa' => $this->empresa,
@@ -143,7 +168,7 @@ class Cliente extends Component
                     'correo' => $this->correo,
                     'latitud' => $this->latitud,
                     'longitud' => $this->longitud,
-                    'foto' => $this->foto,
+                    'foto' => $rutaFoto,
                     'estado' => $this->estado,
                 ]);
 
@@ -159,6 +184,7 @@ class Cliente extends Component
                 ->show();
         }
     }
+
     public function toggleVerificado($clienteId)
     {
         try {
