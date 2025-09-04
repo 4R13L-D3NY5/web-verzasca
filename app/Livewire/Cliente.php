@@ -7,6 +7,8 @@ use Livewire\WithPagination;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use App\Models\Cliente as ModeloCliente;
 use Livewire\WithFileUploads;
+use App\Models\User;
+use App\Models\Rol;
 use Illuminate\Support\Facades\Storage;
 
 class Cliente extends Component
@@ -30,6 +32,11 @@ class Cliente extends Component
     public $foto = null;
     public $estado = 1;
     public $clienteSeleccionado = null;
+    // User fields
+    public $email = '';
+    public $password = '';
+    public $rol_id = '';
+
     public $coordenadas;
     protected $paginationTheme = 'tailwind';
 
@@ -113,9 +120,17 @@ class Cliente extends Component
             'longitud' => 'nullable|numeric|between:-180,180',
             'foto' => $this->accion === 'edit' && !is_object($this->foto)
                 ? 'nullable|string|max:255'
-                : 'nullable|image|max:2048', // Acepta imagen de hasta 2MB
+                : 'nullable|image|max:2048',
             'estado' => 'required|boolean',
         ];
+
+        // 📌 Solo validar email y password al crear
+        if ($this->accion === 'create') {
+            $rules = array_merge($rules, [
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:6',
+            ]);
+        }
 
         $this->validate($rules);
 
@@ -124,16 +139,14 @@ class Cliente extends Component
             if ($this->accion === 'edit' && $this->clienteId) {
                 $cliente = ModeloCliente::findOrFail($this->clienteId);
 
-                // Si subieron nueva foto
                 if (is_object($this->foto)) {
                     $rutaFoto = $this->foto->store('clientes', 'public');
 
-                    // Opcional: borrar foto anterior si existía
-                    if ($cliente->foto && \Illuminate\Support\Facades\Storage::disk('public')->exists($cliente->foto)) {
-                        \Illuminate\Support\Facades\Storage::disk('public')->delete($cliente->foto);
+                    if ($cliente->foto && Storage::disk('public')->exists($cliente->foto)) {
+                        Storage::disk('public')->delete($cliente->foto);
                     }
                 } else {
-                    $rutaFoto = $this->foto; // Mantener la misma foto
+                    $rutaFoto = $this->foto;
                 }
 
                 $cliente->update([
@@ -154,11 +167,22 @@ class Cliente extends Component
                     ->show();
             } else {
                 // 📌 CREAR CLIENTE NUEVO
+
+                // 1. Crear usuario con rol fijo = 5 (Cliente)
+                $user = User::create([
+                    'email' => $this->email,
+                    'password' => bcrypt($this->password),
+                    'rol_id' => 5,
+                    'estado' => 1,
+                ]);
+
+                // 2. Guardar foto si existe
                 $rutaFoto = null;
                 if ($this->foto) {
                     $rutaFoto = $this->foto->store('clientes', 'public');
                 }
 
+                // 3. Crear cliente asociado al usuario
                 ModeloCliente::create([
                     'nombre' => $this->nombre,
                     'empresa' => $this->empresa,
@@ -170,6 +194,7 @@ class Cliente extends Component
                     'longitud' => $this->longitud,
                     'foto' => $rutaFoto,
                     'estado' => $this->estado,
+                    'user_id' => $user->id,
                 ]);
 
                 LivewireAlert::title('Cliente registrado con éxito.')
@@ -184,6 +209,7 @@ class Cliente extends Component
                 ->show();
         }
     }
+
 
     public function toggleVerificado($clienteId)
     {

@@ -66,18 +66,19 @@ class DatabaseSeeder extends Seeder
 
         // User::factory(10)->create();
         Cliente::factory(10)->create();
+
         $this->call(ClienteSeeder::class);
         Proveedor::factory(10)->create();
         $empresa = Empresa::factory(1)->create();
         Sucursal::create(['nombre' => 'Cochabamba Central', 'direccion' => 'Av. Heroínas 123, Cochabamba, Bolivia', 'telefono' => '591 4 4251234', 'zona' => 'Centro', 'empresa_id' => 1]);
         Sucursal::create(['nombre' => 'Santa Cruz Norte', 'direccion' => 'Av. Banzer 456, Santa Cruz, Bolivia', 'telefono' => '591 3 3435678', 'zona' => 'Norte', 'empresa_id' => 1]);
         $sucursales = Sucursal::all();
-        $emailSucursal = ['cochabamba@mail.com','santacruzmail.com'];
-        foreach($sucursales as $index => $sucursal) {
+        $emailSucursal = ['cochabamba@mail.com', 'santacruzmail.com'];
+        foreach ($sucursales as $index => $sucursal) {
             $sucursal->email = $emailSucursal[$index] ?? null;
         }
 
-        
+
         $preformas = [
             [
                 'imagen' => 'preformas/ppet002.jpg',
@@ -182,7 +183,7 @@ class DatabaseSeeder extends Seeder
         }
 
 
-         // Sembrar datos para la tabla bases
+        // Sembrar datos para la tabla bases
         $bases = [
             [
                 'imagen' => 'bases/ppref001.jpg',
@@ -474,7 +475,7 @@ class DatabaseSeeder extends Seeder
             Tapa::create($tapa);
         }
 
-// Sembrar datos para la tabla etiquetas
+        // Sembrar datos para la tabla etiquetas
         $etiquetas = [
             [
                 'imagen' => null,
@@ -1023,7 +1024,7 @@ class DatabaseSeeder extends Seeder
         $etiquetas = Etiqueta::get();
         $stocks = Stock::factory(5)->create();
 
-  
+
 
         Coche::factory(5)->create()->each(function ($coche) {
             // Crear una asignación para el coche
@@ -1036,7 +1037,7 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        
+
             // Crear una distribución para la asignación recién creada
             Distribucion::factory()->create([
                 'asignacion_id' => $asignacion->id,
@@ -1045,7 +1046,7 @@ class DatabaseSeeder extends Seeder
                 'observaciones' => "Distribución generada automáticamente.",
             ]);
         });
-        
+
         // Asignar existencias a cada sucursal
         foreach ($sucursales as $sucursal) {
             // Asignar preformas a la sucursal
@@ -1054,7 +1055,7 @@ class DatabaseSeeder extends Seeder
                     'existenciable_id' => $preforma->id,
                     'existenciable_type' => Preforma::class,
                     'sucursal_id' => $sucursal->id,
-                    'cantidad' => rand(10,50),
+                    'cantidad' => rand(10, 50),
                 ]);
             }
 
@@ -1062,9 +1063,9 @@ class DatabaseSeeder extends Seeder
             foreach ($bases as $base) {
                 Existencia::create([
                     'existenciable_id' => $base->id,
-                    'existenciable_type' =>Base::class,
+                    'existenciable_type' => Base::class,
                     'sucursal_id' => $sucursal->id,
-                    'cantidad' => rand(10,50),
+                    'cantidad' => rand(10, 50),
                 ]);
             }
 
@@ -1072,9 +1073,9 @@ class DatabaseSeeder extends Seeder
             foreach ($tapas as $tapa) {
                 Existencia::create([
                     'existenciable_id' => $tapa->id,
-                    'existenciable_type' =>Tapa::class,
+                    'existenciable_type' => Tapa::class,
                     'sucursal_id' => $sucursal->id,
-                    'cantidad' => rand(10,50),
+                    'cantidad' => rand(10, 50),
                 ]);
             }
 
@@ -1084,7 +1085,7 @@ class DatabaseSeeder extends Seeder
                     'existenciable_id' => $producto->id,
                     'existenciable_type' => Producto::class,
                     'sucursal_id' => $sucursal->id,
-                    'cantidad' => rand(10,50),
+                    'cantidad' => rand(10, 50),
                 ]);
             }
 
@@ -1094,7 +1095,7 @@ class DatabaseSeeder extends Seeder
                     'existenciable_id' => $etiqueta->id,
                     'existenciable_type' => Etiqueta::class,
                     'sucursal_id' => $sucursal->id,
-                    'cantidad' => rand(10,50),
+                    'cantidad' => rand(10, 50),
                 ]);
             }
 
@@ -1104,7 +1105,7 @@ class DatabaseSeeder extends Seeder
                     'existenciable_id' => $stock->id,
                     'existenciable_type' => Stock::class,
                     'sucursal_id' => $sucursal->id,
-                    'cantidad' => rand(10,50),
+                    'cantidad' => rand(10, 50),
                 ]);
             }
 
@@ -1173,9 +1174,8 @@ class DatabaseSeeder extends Seeder
                     'estado' => 1, // Activo
                 ]);
             });
-
         }
-        
+
         // Compra::factory(10)->create()->each(function ($compra) {
         //     // Obtener existencias aleatorias para vincularlas a los itemcompras
         //     $existencias = Existencia::inRandomOrder()->limit(rand(1, 3))->get();
@@ -1192,7 +1192,7 @@ class DatabaseSeeder extends Seeder
 
         //Generar 10 ventas
         Venta::factory(10)->create([
-            'personalEntrega_id' => null, 
+            'personalEntrega_id' => null,
             'personal_id' => Personal::get()->random()->id
         ])->each(function ($venta) {
             // Generar entre 1 y 4 items por venta
@@ -1202,7 +1202,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
             // Calcular el total de los items
-            $totalVenta = $items->sum(fn ($item) => $item->cantidad * $item->precio);
+            $totalVenta = $items->sum(fn($item) => $item->cantidad * $item->precio);
 
             // Si estadoPago es 1 o 2 (completo o vendido), el pago es igual al total
             if ($venta->estadoPago == 1 || $venta->estadoPago == 2) {
@@ -1212,7 +1212,7 @@ class DatabaseSeeder extends Seeder
                     'fechaPago' => now(),
                     // 'estado' => 1, // Pago completado
                 ]);
-            } 
+            }
             // Si estadoPago es 0 (parcial), el pago es menor al total
             else {
                 Pagoventa::factory()->create([
@@ -1227,14 +1227,14 @@ class DatabaseSeeder extends Seeder
 
 
         // Prestamo::factory(10)->create();
-        
+
         Elaboracion::factory(10)->create();
         Embotellado::factory(10)->create();
         Etiquetado::factory(10)->create();
         // Reposicion::factory(10)->create();
         // Compra::factory(10)->create();
         // ItemCompra::factory(10)->create();
-        
+
         // Trabajo::factory(10)->create();
         // Venta::factory(10)->create();
         // ItemVenta::factory(10)->create();

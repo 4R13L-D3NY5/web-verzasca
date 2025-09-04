@@ -17,18 +17,15 @@ return new class extends Migration {
             $table->string('nitCi')->unique()->nullable(); // NIT/CI único
             $table->string('razonSocial')->nullable(); // Razón social
             $table->string('celular', 50)->nullable(); // Teléfono
-            $table->string('telefono', 50)->nullable(); // Teléfono
-            $table->string('correo')->nullable(); // Correo electrónico único
-            $table->tinyInteger('categoria')->default(1); // 1) normal, 2) regular, 3) antiguo o frecuente
-
-            $table->decimal('latitud', 10, 8)->nullable(); // Latitud (10 dígitos, 8 decimales)
-            $table->decimal('longitud', 11, 8)->nullable(); // Longitud (11 dígitos, 8 decimales)
-
-            // Campo para foto
-            $table->string('foto')->nullable(); // Ruta o URL de la foto (opcional)
-
+            $table->string('telefono', 50)->nullable();
+            $table->string('correo')->nullable();
+            $table->tinyInteger('categoria')->default(1);
+            $table->decimal('latitud', 10, 8)->nullable();
+            $table->decimal('longitud', 11, 8)->nullable();
+            $table->string('foto')->nullable();
             $table->boolean('estado')->default(1); // Estado (1: activo, 0: inactivo)
             $table->boolean('verificado')->default(1); // Estado (1: activo, 0: inactivo)
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps(); // created_at y updated_at
         });
     }

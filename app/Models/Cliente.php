@@ -21,6 +21,8 @@ class Cliente extends Model
         'longitud',
         'foto',
         'estado',
+        'verificado',
+        'user_id',
     ];
 
     /**
@@ -30,5 +32,8 @@ class Cliente extends Model
     {
         return $this->hasMany(Venta::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
-

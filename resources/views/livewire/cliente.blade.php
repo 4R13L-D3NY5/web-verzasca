@@ -169,6 +169,18 @@
                         <input type="email" wire:model="correo" class="p-text input-g">
                         @error('correo') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
+                        <!-- Usuario (correo) -->
+                        <!-- Usuario (correo de acceso / login) -->
+                        <h3 class="p-text">Correo de acceso</h3>
+                        <input type="email" wire:model="email" class="p-text input-g">
+                        @error('email') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
+
+                        <!-- Contraseña -->
+                        <h3 class="p-text">Contraseña</h3>
+                        <input type="password" wire:model="password" class="p-text input-g">
+                        @error('password') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+
                         <!-- Latitud -->
                         <h3 class="p-text">Coordenadas (Latitud, Longitud)</h3>
                         <input type="text" wire:model="coordenadas" wire:change="separarCoordenadas"
@@ -181,17 +193,17 @@
                         @error('foto') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
                         <!-- Vista previa de la imagen -->
-                      @if ($foto)
-    <div class="mt-2">
-        @if (is_object($foto))
-            <!-- Si es archivo subido -->
-            <img src="{{ $foto->temporaryUrl() }}" alt="Vista previa" class="w-24 h-24 object-cover rounded">
-        @else
-            <!-- Si es ruta guardada en BD -->
-            <img src="{{ asset('storage/' . $foto) }}" alt="Foto cliente" class="w-24 h-24 object-cover rounded">
-        @endif
-    </div>
-@endif
+                        @if ($foto)
+                        <div class="mt-2">
+                            @if (is_object($foto))
+                            <!-- Si es archivo subido -->
+                            <img src="{{ $foto->temporaryUrl() }}" alt="Vista previa" class="w-24 h-24 object-cover rounded">
+                            @else
+                            <!-- Si es ruta guardada en BD -->
+                            <img src="{{ asset('storage/' . $foto) }}" alt="Foto cliente" class="w-24 h-24 object-cover rounded">
+                            @endif
+                        </div>
+                        @endif
 
 
                         <!-- Estado -->
