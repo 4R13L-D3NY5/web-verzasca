@@ -33,7 +33,21 @@
                 </svg>
                 <!-- <img src="{{ asset('images/ejemplo.jpg') }}" alt="Logo" class="h-5 md:h-5"> -->
 
-                &nbsp;<small class="text-white">{{ $roles[Auth::user()->rol_id] }}: <br>{{Auth::user()->personal->nombres}} </small>
+                &nbsp;<small class="text-white">
+                    {{ $roles[Auth::user()->rol_id] ?? 'Sin rol' }}: <br>
+
+                    {{-- Nombre del personal si existe --}}
+                    {{ Auth::user()->personal?->nombres ?? '' }}
+
+                    {{-- Separador solo si hay nombre de personal y de cliente --}}
+                    @if(Auth::user()->personal && Auth::user()->cliente)
+                    <br>
+                    @endif
+
+                    {{-- Nombre del cliente si existe --}}
+                    {{ Auth::user()->cliente?->nombre ?? 'Sin nombre de cliente' }}
+                </small>
+
             </div>
 
             <!-- Botón de Logout -->

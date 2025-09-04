@@ -169,16 +169,12 @@
                         <input type="email" wire:model="correo" class="p-text input-g">
                         @error('correo') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-                        <!-- Usuario (correo) -->
-                        <!-- Usuario (correo de acceso / login) -->
                         <h3 class="p-text">Correo de acceso</h3>
-                        <input type="email" wire:model="email" class="p-text input-g">
+                        <input type="email" wire:model="email" class="p-text input-g" readonly>
                         @error('email') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
-
-                        <!-- Contraseña -->
                         <h3 class="p-text">Contraseña</h3>
-                        <input type="password" wire:model="password" class="p-text input-g">
+                        <input type="password" wire:model="password" placeholder="Nueva contraseña (opcional)" class="p-text input-g">
                         @error('password') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
 
                         <!-- Latitud -->

@@ -98,7 +98,15 @@ class Cliente extends Component
         $this->accion = 'edit';
         $this->modal = true;
         $this->detalleModal = false;
+
+        // ⚡ Cargar email del usuario asociado
+        // ⚡ Mostrar email en el modal pero solo lectura
+        $this->email = $cliente->user ? $cliente->user->email : '';
+
+        // ⚡ Limpiar password para que el admin pueda poner una nueva si desea
+        $this->password = '';
     }
+
 
     public function verDetalle($id)
     {
@@ -139,9 +147,18 @@ class Cliente extends Component
             if ($this->accion === 'edit' && $this->clienteId) {
                 $cliente = ModeloCliente::findOrFail($this->clienteId);
 
+                // Actualizar contraseña solo si se ingresó algo
+                if ($this->password) {
+                    if ($cliente->user) {
+                        $cliente->user->update([
+                            'password' => bcrypt($this->password),
+                        ]);
+                    }
+                }
+
+                // Actualizar datos del cliente
                 if (is_object($this->foto)) {
                     $rutaFoto = $this->foto->store('clientes', 'public');
-
                     if ($cliente->foto && Storage::disk('public')->exists($cliente->foto)) {
                         Storage::disk('public')->delete($cliente->foto);
                     }
@@ -165,42 +182,8 @@ class Cliente extends Component
                 LivewireAlert::title('Cliente actualizado con éxito.')
                     ->success()
                     ->show();
-            } else {
-                // 📌 CREAR CLIENTE NUEVO
-
-                // 1. Crear usuario con rol fijo = 5 (Cliente)
-                $user = User::create([
-                    'email' => $this->email,
-                    'password' => bcrypt($this->password),
-                    'rol_id' => 5,
-                    'estado' => 1,
-                ]);
-
-                // 2. Guardar foto si existe
-                $rutaFoto = null;
-                if ($this->foto) {
-                    $rutaFoto = $this->foto->store('clientes', 'public');
-                }
-
-                // 3. Crear cliente asociado al usuario
-                ModeloCliente::create([
-                    'nombre' => $this->nombre,
-                    'empresa' => $this->empresa,
-                    'razonSocial' => $this->razonSocial,
-                    'nitCi' => $this->nitCi,
-                    'telefono' => $this->telefono,
-                    'correo' => $this->correo,
-                    'latitud' => $this->latitud,
-                    'longitud' => $this->longitud,
-                    'foto' => $rutaFoto,
-                    'estado' => $this->estado,
-                    'user_id' => $user->id,
-                ]);
-
-                LivewireAlert::title('Cliente registrado con éxito.')
-                    ->success()
-                    ->show();
             }
+
 
             $this->cerrarModal();
         } catch (\Exception $e) {
